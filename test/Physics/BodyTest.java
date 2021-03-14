@@ -13,7 +13,7 @@ class BodyTest {
     void getSet() {
         Vector p = new Vector(1,1,1);
         Vector v = new Vector(2,2,2);
-        Body b = new Body(10,p,v);
+        Body b = new Body(10,p,v, 100);
 
 
     }
