@@ -7,6 +7,13 @@ public class Vector implements Vector3dInterface {
     private double y;
     private double z;
 
+    public Vector(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    public Vector(){ }
+
     @Override
     public double getX() {
         return x;
