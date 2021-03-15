@@ -92,16 +92,16 @@ public class SolarSystem implements FunctionInterface {
         StdDraw.setYscale(-scale * AU, scale * AU);
         // TODO: Calculate all planet positions and store them
 
-        for (int i = 0; i < maxSteps; i++) {
+        for (int i = 0; i < maxSteps;) { // i++ is missing for testing reasons
             StdDraw.clear(Color.black);
             for (int j = 0; j < bodies.length; j++) {
                 bodies[j].draw();
                 forceOnBody[j] = new Vector(0, 0, 0); // reset force
                 for (Body body : bodies) {
-                    forceOnBody[j].add(body.getGravitationalForce(bodies[j]));
+                    // forceOnBody[j].add(body.getGravitationalForce(bodies[j]));
                 }
                 // body.getVelocity().add(gravitational force);
-                bodies[j].getPosition().add(bodies[j].getVelocity());
+                // bodies[j].getPosition().add(bodies[j].getVelocity());
             }
             StdDraw.show(); // show the current system
         }
