@@ -11,6 +11,7 @@ public class SolarSystem implements FunctionInterface {
     // One AU is approximately the average distance between the Earth and the Sun
     // value taken from https://cneos.jpl.nasa.gov/glossary/au.html
     public static final double AU = 1.495978707e11;
+    private static int maxSteps = 1000;
 
     public static void main(String[] args) {
         // radius taken from
@@ -23,7 +24,7 @@ public class SolarSystem implements FunctionInterface {
 
         Body earth = new Body("Earth", 5.97219e24,
                 new Vector(-1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06),
-                new Vector(5.427193405797901e+03, -2.931056622265021e+04, 6.575428158157592e-01), 6371e3, Color.green);
+                new Vector(5.427193405797901e+03, -2.931056622265021e+04, 6.575428158157592e-01), 6.371e6, Color.green);
 
         Body saturn = new Body("Saturn", 5.6834e26,
                 new Vector(6.328646641500651e+11, -1.358172804527507e+12, -1.578520137930810e+09),
@@ -32,7 +33,7 @@ public class SolarSystem implements FunctionInterface {
 
         Body titan = new Body("Titan", 1.34553e23,
                 new Vector(6.332873118527889e+11, -1.357175556995868e+12, -2.134637041453660e+09),
-                new Vector(3.056877965721629e+03, 6.125612956428791e+03, -9.523587380845593e+02), 2575.5e3,
+                new Vector(3.056877965721629e+03, 6.125612956428791e+03, -9.523587380845593e+02), 2.5755e6,
                 Color.yellow);
 
         // create arrays of bodies and corresponding forces
@@ -41,17 +42,27 @@ public class SolarSystem implements FunctionInterface {
         Vector[] forceOnBody = new Vector[bodies.length];
 
         // setting up scale for easier calculations
-        StdDraw.setXscale(-AU, AU);
-        StdDraw.setYscale(-AU, AU);
+
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
-        StdDraw.clear(Color.black);
+        int scale = 10;
+        StdDraw.setXscale(-scale * AU, scale * AU);
+        StdDraw.setYscale(-scale * AU, scale * AU);
+        // TODO: Calculate all planet positions and store them
 
-        for (Body body : bodies) {
-            body.draw();
+        for (int i = 0; i < maxSteps; i++) {
+            StdDraw.clear(Color.black);
+            for (int j = 0; j < bodies.length; j++) {
+                bodies[j].draw();
+                forceOnBody[j] = new Vector(0, 0, 0); // reset force
+                for (Body body : bodies) {
+                    forceOnBody[j].add(body.getGravitationalForce(bodies[j]));
+                }
+                // body.getVelocity().add(gravitational force);
+                bodies[j].getPosition().add(bodies[j].getVelocity());
+            }
+            StdDraw.show(); // show the current system
         }
-
-        StdDraw.show(); // show the current system
 
     }
 
