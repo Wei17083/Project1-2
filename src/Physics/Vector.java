@@ -96,16 +96,6 @@ public class Vector implements Vector3dInterface {
         return Math.sqrt(Math.pow(x - other.getX(), 2) + Math.pow(y - other.getY(), 2) + Math.pow(z - other.getZ(), 2));
     }
 
-    /** Returns unit vector pointing from the end of vector v to this
-     *
-     * @param v Vector that is the start point of the unit vector
-     * @return unit vector from v to this
-     */
-    public Vector3dInterface unitVector(Vector v) {
-        Vector3dInterface difference = this.sub(v);
-        return difference.mul(1/ difference.norm());
-    }
-
 
     /**
      * This method draws a circle on this vectors position with the given parameters

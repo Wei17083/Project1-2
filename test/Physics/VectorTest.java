@@ -73,4 +73,11 @@ class VectorTest {
         Vector v2 = new Vector(3,4,0);
         assertEquals(5, v1.dist(v2));
     }
+
+    @org.junit.jupiter.api.Test
+    void directionUnitVector() {
+        Vector v1 = new Vector(0,0,0);
+        Vector v2 = new Vector(3,4,0);
+      //  Vector3dInterface v3 = v1.directionUnitVector(v2);
+    }
 }

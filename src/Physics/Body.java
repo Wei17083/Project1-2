@@ -91,10 +91,9 @@ public class Body {
 
         // TODO: Implement physics calculations on force here
         double distance = this.position.dist(body.getPosition());
-
-        Vector3dInterface forceVector = new Vector();
-
-        return null;
+        Vector3dInterface forceDirection = VectorTools.directionVector(this.getPosition(),body.getPosition());
+        double force = this.getMass()* body.getMass()/Math.pow(distance,2);
+        return forceDirection.mul(force);
     }
 
     /**
