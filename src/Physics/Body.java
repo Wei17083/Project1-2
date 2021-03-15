@@ -78,6 +78,49 @@ public class Body {
     }
 
     /**
+     * Changes the mass of the body
+     *
+     * @param mass set the mass of the body to this value
+     */
+    public void setMass(double mass) {
+        this.mass = mass;
+    }
+
+    /**
+     * Changes the position vector of the body
+     *
+     * @param position set the position vector of the body to this value
+     */
+    public void setPosition(Vector position) {
+        this.position = position;
+    }
+
+    /**
+     * changes the velocity vector of the body
+     *
+     * @param velocity set the velocity
+     */
+    public void setVelocity(Vector velocity) {
+        this.velocity = velocity;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    /**
      * Constructor of the body class
      *
      * @param name     sets the name of the object
@@ -116,47 +159,6 @@ public class Body {
         return forceDirection.mul(force);
     }
 
-    /**
-     * Changes the mass of the body
-     * 
-     * @param mass set the mass of the body to this value
-     */
-    public void setMass(double mass) {
-        this.mass = mass;
-    }
 
-    /**
-     * Changes the position vector of the body
-     * 
-     * @param position set the position vector of the body to this value
-     */
-    public void setPosition(Vector position) {
-        this.position = position;
-    }
-
-    /**
-     * changes the velocity vector of the body
-     * 
-     * @param velocity set the velocity
-     */
-    public void setVelocity(Vector velocity) {
-        this.velocity = velocity;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
 
 }
