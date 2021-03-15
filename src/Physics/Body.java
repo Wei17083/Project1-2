@@ -15,6 +15,13 @@ public class Body {
     private Color color; // color to visualise
 
     /**
+     * This method draws the body using its position, radius and color
+     */
+    public void draw() {
+        position.drawBody(radius, color);
+    }
+
+    /**
      * returns the mass of the object
      * 
      * @return mass of the object
@@ -114,4 +121,5 @@ public class Body {
     public void setColor(Color color) {
         this.color = color;
     }
+
 }

@@ -1,4 +1,4 @@
-package GUI;
+package Physics;
 
 /******************************************************************************
  *  Compilation:  javac StdDraw.java
