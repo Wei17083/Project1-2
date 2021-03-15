@@ -88,7 +88,12 @@ public class Body {
     public Vector3dInterface getGravitationalForce(Body body) {
         if (this == body) // a body doesnt have force on itself
             return new Vector(0, 0, 0);
+
         // TODO: Implement physics calculations on force here
+        double distance = this.position.dist(body.getPosition());
+
+        Vector3dInterface forceVector = new Vector();
+
         return null;
     }
 
