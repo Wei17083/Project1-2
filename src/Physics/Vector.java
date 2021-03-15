@@ -1,4 +1,5 @@
 package Physics;
+
 import titan.*;
 import java.lang.Math;
 
@@ -12,7 +13,6 @@ public class Vector implements Vector3dInterface {
         this.y = y;
         this.z = z;
     }
-    public Vector(){ }
 
     @Override
     public double getX() {
@@ -41,7 +41,7 @@ public class Vector implements Vector3dInterface {
 
     @Override
     public void setZ(double z) {
-        this.z=z;
+        this.z = z;
     }
 
     @Override
@@ -65,28 +65,28 @@ public class Vector implements Vector3dInterface {
     @Override
     public Vector3dInterface mul(double scalar) {
         Vector3dInterface v = new Vector();
-        v.setX(x*scalar);
-        v.setY(y*scalar);
-        v.setZ(z*scalar);
+        v.setX(x * scalar);
+        v.setY(y * scalar);
+        v.setZ(z * scalar);
         return v;
     }
 
     @Override
     public Vector3dInterface addMul(double scalar, Vector3dInterface other) {
         Vector3dInterface v = new Vector();
-        v.setX(x + other.getX()*scalar);
-        v.setY(y + other.getY()*scalar);
-        v.setZ(z + other.getZ()*scalar);
+        v.setX(x + other.getX() * scalar);
+        v.setY(y + other.getY() * scalar);
+        v.setZ(z + other.getZ() * scalar);
         return v;
     }
 
     @Override
     public double norm() {
-        return Math.sqrt(Math.pow(x,2) + Math.pow(y,2) + Math.pow(z,2));
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
     }
 
     @Override
     public double dist(Vector3dInterface other) {
-        return Math.sqrt(Math.pow(x - other.getX(),2) + Math.pow(y - other.getY(),2) + Math.pow(z- other.getZ(),2));
+        return Math.sqrt(Math.pow(x - other.getX(), 2) + Math.pow(y - other.getY(), 2) + Math.pow(z - other.getZ(), 2));
     }
 }
