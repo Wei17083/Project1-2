@@ -72,36 +72,34 @@ public class SolarSystem implements FunctionInterface {
                 new Color(163, 191, 89)); // yellow+green
 
         // create arrays of bodies and corresponding forces
-        Body[] bodies = new Body[] { sun, earth, saturn, titan, neptune, uranus, jupiter, mars, moon, venus, mercury }; // sort
-                                                                                                                        // bodies
-                                                                                                                        // by
-                                                                                                                        // distance
-                                                                                                                        // from
-                                                                                                                        // sun
-                                                                                                                        // {sun,
-                                                                                                                        // planet,
-        // moons, next planet}
+        Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus, neptune };
         Vector[] forceOnBody = new Vector[bodies.length];
-
-        // setting up scale for easier calculations
 
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
+        // setting up scale in order to display whole solar system
         int scale = 10;
         StdDraw.setXscale(-scale * AU, scale * AU);
         StdDraw.setYscale(-scale * AU, scale * AU);
-        // TODO: Calculate all planet positions and store them
 
+        // TODO: Calculate all planet positions in advance and store them.
+        // that way we can skip most of the following loop, and only calculate the
+        // forces acting on the probe
+
+        // go through every step
         for (int i = 0; i < maxSteps;) { // i++ is missing for testing reasons
-            StdDraw.clear(Color.black);
+            StdDraw.clear(Color.black); // reset canvas
             for (int j = 0; j < bodies.length; j++) {
-                bodies[j].draw();
+                bodies[j].draw(); // draw every body
                 forceOnBody[j] = new Vector(0, 0, 0); // reset force
                 for (Body body : bodies) {
+                    // add all external forces acting on body
                     // forceOnBody[j].add(body.getGravitationalForce(bodies[j]));
                 }
-                // body.getVelocity().add(gravitational force);
-                // bodies[j].getPosition().add(bodies[j].getVelocity());
+                // add force to current velocity
+                // bodies[j].setVelocity(getVelocity().add(forceOnBody[j]));
+                // update position of body
+                // bodies[j].setPosition(getPosition().add(bodies[j].getVelocity()));
             }
             StdDraw.show(); // show the current system
         }
