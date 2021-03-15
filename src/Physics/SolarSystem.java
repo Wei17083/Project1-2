@@ -1,6 +1,8 @@
 package Physics;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import titan.FunctionInterface;
 import titan.Vector3dInterface;

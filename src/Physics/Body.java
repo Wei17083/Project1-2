@@ -13,6 +13,7 @@ public class Body {
     private Vector velocity;
     private final double radius;
     private Color color; // color to visualise
+    private Path path;
 
     public final double GRAV_CONSTANT = 6.674E-11;
 
@@ -57,6 +58,14 @@ public class Body {
      */
     public double getRadius() {
         return radius;
+    }
+
+    /** returns the path of the body
+     *
+     * @return path of the body
+     */
+    public Path getPath() {
+        return path;
     }
 
     /**
