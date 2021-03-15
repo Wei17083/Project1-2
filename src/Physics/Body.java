@@ -80,6 +80,19 @@ public class Body {
     }
 
     /**
+     * This method returns the force this body has on the input body
+     * 
+     * @param body the body on which this force is acting
+     * @return the resulting force
+     */
+    public Vector3dInterface getGravitationalForce(Body body) {
+        if (this == body) // a body doesnt have force on itself
+            return new Vector(0, 0, 0);
+        // TODO: Implement physics calculations on force here
+        return null;
+    }
+
+    /**
      * Changes the mass of the body
      * 
      * @param mass set the mass of the body to this value
