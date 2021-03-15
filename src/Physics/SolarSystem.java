@@ -12,6 +12,8 @@ public class SolarSystem implements FunctionInterface {
     // value taken from https://cneos.jpl.nasa.gov/glossary/au.html
     public static final double AU = 1.495978707e11;
     private static int maxSteps = 1000;
+    private static double stepSize = 0.1;
+    private List<Vector> positions = new ArrayList<Vector>();
 
     public static void main(String[] args) {
         // radius taken from
@@ -116,5 +118,27 @@ public class SolarSystem implements FunctionInterface {
      */
     public void reCenter() {
 
+    }
+    public List<Vector> positionEuler (double initialTime, Vector initialVelocity, Vector initialPosition){
+        double xderivative = initialVelocity.getX();
+        double yderivative  = initialVelocity.getY();
+        double time;
+        double xposition;
+        double yposition;
+        double xinitialposition = initialPosition.getX();
+        double yinitialposition = initialPosition.getY();
+        
+        for (int j = 0; j <= maxSteps; j++){
+            xposition = xinitialposition + stepSize*xderivative;
+            yposition = yinitialposition + stepSize*yderivative;
+            time = initialTime + stepSize;
+            Vector updatedposition = new Vector(xposition, yposition, 0);
+            positions.add(updatedposition);
+            initialTime = time;
+            xinitialposition = xposition;
+            yinitialposition = yposition;
+        }
+
+        return positions;
     }
 }
