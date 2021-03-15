@@ -8,6 +8,9 @@ import titan.Vector3dInterface;
 public class SolarSystem implements FunctionInterface {
 
     public final double GRAV_CONSTANT = 5;
+    // One au is approximately the average distance between the Earth and the Sun
+    // value taken from https://cneos.jpl.nasa.gov/glossary/au.html
+    public static final double au = 1.495978707e11;
 
     public static void main(String[] args) {
         // radius taken from
