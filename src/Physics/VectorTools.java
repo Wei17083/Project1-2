@@ -12,7 +12,7 @@ public class VectorTools {
      */
     public static Vector3dInterface directionVector(Vector3dInterface start, Vector3dInterface end ) {
         Vector3dInterface difference = end.sub(start);
-        return difference.mul(1/ difference.norm());
+        return VectorTools.getUnitVector(difference);
     }
 
     /** Compares two vectors and returns true if they are the same, false otherwise
@@ -32,6 +32,15 @@ public class VectorTools {
      */
     public static String vectorToString(Vector3dInterface v) {
         return "X: " + v.getX() + " Y: " + v.getY() + " Z: " + v.getZ();
+    }
+
+    /** returns unit vector with same direction as given vector
+     *
+     * @param v vector to turn into unit vector
+     * @return unit vector with same direction as v
+     */
+    public static Vector3dInterface getUnitVector(Vector3dInterface v){
+        return v.mul(1/v.norm());
     }
 
 }
