@@ -7,7 +7,7 @@ import titan.Vector3dInterface;
 
 public class SolarSystem implements FunctionInterface {
 
-    public final double GRAV_CONSTANT = 5;
+    public final double GRAV_CONSTANT = 6.674E-11;
     // One AU is approximately the average distance between the Earth and the Sun
     // value taken from https://cneos.jpl.nasa.gov/glossary/au.html
     public static final double AU = 1.495978707e11;
@@ -95,5 +95,12 @@ public class SolarSystem implements FunctionInterface {
     @Override
     public Vector3dInterface call(double t, Vector3dInterface s) {
         return null;
+    }
+
+    /** Calculates the barycenter and changes all vectors to have the barycenter as source
+     *
+     */
+    public void reCenter() {
+
     }
 }

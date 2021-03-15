@@ -11,7 +11,7 @@ public class Body {
     private double mass;
     private Vector position;
     private Vector velocity;
-    private double radius;
+    private final double radius;
     private Color color; // color to visualise
 
     /**
