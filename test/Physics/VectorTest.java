@@ -76,8 +76,10 @@ class VectorTest {
 
     @org.junit.jupiter.api.Test
     void directionUnitVector() {
-        Vector v1 = new Vector(0,0,0);
-        Vector v2 = new Vector(3,4,0);
-      //  Vector3dInterface v3 = v1.directionUnitVector(v2);
+        Vector v1 = new Vector(1,0,1);
+        Vector v2 = new Vector(1,9,1);
+        Vector3dInterface v3 = VectorTools.directionVector(v1, v2);
+        assertEquals(1, v3.getY());
+
     }
 }
