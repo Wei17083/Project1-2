@@ -1,9 +1,12 @@
 package Physics;
 
 import titan.*;
+
+import java.awt.Color;
 import java.lang.Math;
 
 public class Vector implements Vector3dInterface {
+    private static final boolean DEBUG = true;
     private double x;
     private double y;
     private double z;
@@ -12,6 +15,9 @@ public class Vector implements Vector3dInterface {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public Vector() {
     }
 
     @Override
@@ -88,5 +94,18 @@ public class Vector implements Vector3dInterface {
     @Override
     public double dist(Vector3dInterface other) {
         return Math.sqrt(Math.pow(x - other.getX(), 2) + Math.pow(y - other.getY(), 2) + Math.pow(z - other.getZ(), 2));
+    }
+
+    /**
+     * This method draws a circle on this vectors position with the given parameters
+     * 
+     * @param radius radius of the circle
+     * @param color  color of the circle
+     */
+    public void drawBody(double radius, Color color) {
+        if (DEBUG)
+            System.out.println("X: " + this.x + " Y:" + this.y + " Radius: " + radius);
+        StdDraw.setPenColor(color);
+        StdDraw.filledCircle(0.5, 0.5, 0.1);
     }
 }
