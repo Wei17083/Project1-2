@@ -103,9 +103,10 @@ public class Vector implements Vector3dInterface {
      * @param color  color of the circle
      */
     public void drawBody(double radius, Color color) {
-        if (DEBUG)
-            System.out.println("X: " + this.x + " Y:" + this.y + " Radius: " + radius);
+        // if (DEBUG)
+        // System.out.println("X: " + this.x + " Y:" + this.y + " Radius: " + radius);
         StdDraw.setPenColor(color);
-        StdDraw.filledCircle(0.5, 0.5, 0.1);
+        StdDraw.filledCircle(this.x, this.y, 5e9 * Math.log10(radius));
+        StdDraw.line(this.x, this.y, 0, 0);
     }
 }
