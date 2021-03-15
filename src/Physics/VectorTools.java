@@ -15,5 +15,12 @@ public class VectorTools {
         return difference.mul(1/ difference.norm());
     }
 
+    public static boolean equals(Vector3dInterface v1, Vector3dInterface v2) {
+        return v1.getX() == v2.getX() && v1.getY() == v2.getY() && v1.getZ() == v2.getZ();
+    }
+
+    public static String vectorToString(Vector3dInterface v) {
+        return "X: " + v.getX() + " Y: " + v.getY() + " Z: " + v.getZ();
+    }
 
 }

@@ -14,6 +14,8 @@ public class Body {
     private final double radius;
     private Color color; // color to visualise
 
+    public final double GRAV_CONSTANT = 6.674E-11;
+
     /**
      * This method draws the body using its position, radius and color
      */
@@ -80,19 +82,19 @@ public class Body {
     }
 
     /**
-     * This method returns the force this body has on the input body
+     * This method returns the gravitational pull this Body has on another one
      * 
      * @param body the body on which this force is acting
-     * @return the resulting force
+     * @return the resulting puling force
      */
-    public Vector3dInterface getGravitationalForce(Body body) {
+    public Vector3dInterface gravitationalPull(Body body) {
         if (this == body) // a body doesnt have force on itself
             return new Vector(0, 0, 0);
 
         // TODO: Implement physics calculations on force here
         double distance = this.position.dist(body.getPosition());
         Vector3dInterface forceDirection = VectorTools.directionVector(body.getPosition(), this.getPosition());
-        double force = this.getMass()* body.getMass()/Math.pow(distance,2);
+        double force = GRAV_CONSTANT*this.getMass()* body.getMass()/Math.pow(distance,2);
         return forceDirection.mul(force);
     }
 
