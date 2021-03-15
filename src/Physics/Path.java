@@ -20,6 +20,16 @@ public class Path {
         path.add(initialPosition);
     }
 
+    /** Constructor takes in the stepSize and an ArrayList storing a path of position vectors
+     *
+      * @param stepSize stepSize size of the time intervals corresponding to the positions
+     * @param path ArrayList containing path comprised of position vectors
+     */
+    public Path(double stepSize, ArrayList<Vector3dInterface> path) {
+        this.stepSize = stepSize;
+        this.path = path;
+    }
+
     /** adds next position to the path
      *
      * @param position vector to be added to the path
