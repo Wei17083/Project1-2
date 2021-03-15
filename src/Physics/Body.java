@@ -2,6 +2,7 @@ package Physics;
 
 import titan.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,7 +14,7 @@ public class Body {
     private Vector velocity;
     private final double radius;
     private Color color; // color to visualise
-    private Path pathObject;
+    private Path path;
 
     public final double GRAV_CONSTANT = 6.674E-11;
 
@@ -65,7 +66,15 @@ public class Body {
      * @return path of the body
      */
     public Path getPath() {
-        return pathObject;
+        return path;
+    }
+
+    /** Sets the path of the body
+     *
+     * @param path path consisting of VectorPositions and corresponding stepSize
+     */
+    public void setPath(Path path) {
+        this.path = path;
     }
 
     /**

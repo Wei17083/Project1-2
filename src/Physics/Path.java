@@ -43,7 +43,7 @@ public class Path {
      * @param t time for which we want to find the position
      */
     public Vector3dInterface getPosition(double t) {
-        int index = (int) (t/stepSize);
+        int index = (int) Math.round(t/stepSize);
         if(index >= path.size()) throw new RuntimeException("path ends before: " + t);
         return path.get(index);
     }
