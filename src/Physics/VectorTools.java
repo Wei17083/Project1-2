@@ -15,10 +15,21 @@ public class VectorTools {
         return difference.mul(1/ difference.norm());
     }
 
+    /** Compares two vectors and returns true if they are the same, false otherwise
+     *
+     * @param v1 first vector to compare
+     * @param v2 second vector to compare
+     * @return true if vectors are the same, false otherwise
+     */
     public static boolean equals(Vector3dInterface v1, Vector3dInterface v2) {
         return v1.getX() == v2.getX() && v1.getY() == v2.getY() && v1.getZ() == v2.getZ();
     }
 
+    /** Returns string with x, y and z values of a given vector
+     *
+     * @param v vector to turn into a string
+     * @return string with x, y and z coordinates of v
+     */
     public static String vectorToString(Vector3dInterface v) {
         return "X: " + v.getX() + " Y: " + v.getY() + " Z: " + v.getZ();
     }
