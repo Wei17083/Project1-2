@@ -34,6 +34,10 @@ public class Body {
         return mass;
     }
 
+    public int getID() {
+        return ID;
+    }
+
     /**
      * returns the velocity of the object
      * 

@@ -10,8 +10,19 @@ public class State implements StateInterface {
     ArrayList<Vector3dInterface> velocityList;
     double tState;
 
+    public ArrayList<Vector3dInterface> getPositionList() {
+        return positionList;
+    }
 
-    public State( double t0, ArrayList<Vector3dInterface> positionList, ArrayList<Vector3dInterface> velocityList) {
+    public ArrayList<Vector3dInterface> getVelocityList() {
+        return velocityList;
+    }
+
+    public double gettState() {
+        return tState;
+    }
+
+    public State(double t0, ArrayList<Vector3dInterface> positionList, ArrayList<Vector3dInterface> velocityList) {
         this.positionList = positionList;
         this.velocityList = velocityList;
         tState = t0;

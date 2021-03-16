@@ -8,16 +8,6 @@ import java.util.Random;
 
 public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
 
-        public final double GRAV_CONSTANT = 6.674E-11;
-        // One AU is approximately the average distance between the Earth and the Sun
-        // value taken from https://cneos.jpl.nasa.gov/glossary/au.html
-        public static final double AU = 1.495978707e11;
-        private static final int msPerFrame = 1000;
-        private static int maxSteps = 1000;
-        private static double stepSize = 0.1;
-        private static double zoomOffsetX = 0;
-        private static double zoomOffsetY = 0;
-        private List<Vector> positions = new ArrayList<Vector>();
 
         public static void main(String[] args) throws InterruptedException {
                 // radius taken from
@@ -140,6 +130,22 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
 
         }
 
+        public final double GRAV_CONSTANT = 6.674E-11;
+        // One AU is approximately the average distance between the Earth and the Sun
+        // value taken from https://cneos.jpl.nasa.gov/glossary/au.html
+        public static final double AU = 1.495978707e11;
+        private static final int msPerFrame = 1000;
+        private static int maxSteps = 1000;
+        private static double stepSize = 0.1;
+        private static double zoomOffsetX = 0;
+        private static double zoomOffsetY = 0;
+
+        private final Body[] bodies;
+
+        public SolarSystem(Body[] bodies) {
+                this.bodies = bodies;
+        }
+
         /**
          * Calculates the barycenter and changes all vectors to have the barycenter as
          * source
@@ -208,6 +214,17 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
          */
         @Override
         public RateInterface call(double t, StateInterface y) {
+                State y1 = (State) y;
+                ChangeRate rate = new ChangeRate();
+                for (Body b : bodies) {
+                        rate.addVelocityChange(y1.getVelocityList().get(b.getID()));
+
+                        ArrayList<Vector3dInterface> forces = new ArrayList<>();
+                        for (Body b2: bodies) {
+                                ArrayList.add();
+                        }
+                        rate.addPositionChange(positionChange);
+                }
                 return null;
         }
 
