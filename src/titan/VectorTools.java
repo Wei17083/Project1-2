@@ -1,5 +1,7 @@
 package titan;
 
+import static org.junit.jupiter.api.DynamicTest.stream;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -68,14 +70,44 @@ public class VectorTools {
      * @param radius radius of the circle
      * @param color  color of the circle
      */
-    public static void drawBody(Vector3dInterface position, double radius, Color color) {
+    public static void drawBody(String name, Vector3dInterface position, double radius, Color color) {
         StdDraw.setPenColor(color);
         // using real scale of planets wouldnt give us a good overview
         // one can play around with the radius so that it looks presentable
+        double rad = 1e9 * Math.log(radius);
         StdDraw.filledCircle(position.getX() - SolarSystem.getZoomOffsetX(),
-                position.getY() - SolarSystem.getZoomOffsetY(), 5e9 * Math.log10(radius));
-        // line is just to help find offscreen planets
-        // StdDraw.line(position.getX(), position.getY(), 0, 0);
+                position.getY() - SolarSystem.getZoomOffsetY(), radius);
+
+        // divide bodies into 3 categories:
+        // big (sun), small (moons + mercury), medium (planets)
+        if (radius > 6e8) {
+            StdDraw.circle(position.getX() - SolarSystem.getZoomOffsetX(),
+                    position.getY() - SolarSystem.getZoomOffsetY(), 2 * rad);
+        } else if (radius < 3e6) {
+            StdDraw.circle(position.getX() - SolarSystem.getZoomOffsetX(),
+                    position.getY() - SolarSystem.getZoomOffsetY(), rad);
+        } else {
+            StdDraw.circle(position.getX() - SolarSystem.getZoomOffsetX(),
+                    position.getY() - SolarSystem.getZoomOffsetY(), 1.5 * rad);
+        }
+
+        // draw names
+        StdDraw.setPenColor(color.white);
+        if (radius > 6e8) {
+            StdDraw.text(position.getX() - SolarSystem.getZoomOffsetX() + 2 * rad,
+                    position.getY() - SolarSystem.getZoomOffsetY() + 2 * rad, name);
+        } else if (radius < 3e6) {
+            StdDraw.text(position.getX() - SolarSystem.getZoomOffsetX() + radius,
+                    position.getY() - SolarSystem.getZoomOffsetY() + radius, name);
+        } else {
+            StdDraw.text(position.getX() - SolarSystem.getZoomOffsetX() + 1.5 * rad,
+                    position.getY() - SolarSystem.getZoomOffsetY() + 1.5 * rad, name);
+        }
+
+        // line is just to help find planets
+        // StdDraw.line(position.getX() - SolarSystem.getZoomOffsetX(), position.getY()
+        // - SolarSystem.getZoomOffsetY(), 0,
+        // 0);
     }
 
 }
