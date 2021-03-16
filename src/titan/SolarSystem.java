@@ -185,16 +185,17 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
          */
         @Override
         public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double[] ts) {
-                double stepSize = 1000;
-                int iterations = (int) (Math.round(ts[ts.length -1]) + 1);
+                double stepSize = 10000;
+                int iterations = (int) (Math.round(ts[ts.length -1]/stepSize) + 1);
                 StateInterface[] stateList = new StateInterface[ts.length];
                 stateList[0] = y0;
                 StateInterface state = y0;
                 int index = 1;
-                for (int i = 1; i < iterations ; i++) {
+                for (int i = 1; i < iterations && index < ts.length; i++) {
                         if (Math.abs((i-1)*stepSize - ts[index]) < Math.abs(i*stepSize - ts[index])) {
                            stateList[index] = state;
                            index++;
+                                System.out.println("it happened");
                         }
                         state = step(f, stepSize*i, state, stepSize);
                 }

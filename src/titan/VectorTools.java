@@ -57,7 +57,7 @@ public class VectorTools {
     public static Vector3dInterface sumAll(ArrayList<Vector3dInterface> vectorList) {
         Vector3dInterface sum = new Vector(0, 0, 0);
         for (Vector3dInterface v : vectorList) {
-            sum.add(v);
+            sum = sum.add(v);
         }
         return sum;
     }
