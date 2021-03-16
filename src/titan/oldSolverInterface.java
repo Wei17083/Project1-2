@@ -10,7 +10,7 @@ package titan;
 import titan.Vector3dInterface;
 import titan.FunctionInterface;
 
-public interface SolverInterface {
+public interface oldSolverInterface {
     
     /*
      * Update rule for multiple steps. Time will start at zero.
