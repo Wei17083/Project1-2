@@ -1,6 +1,8 @@
-package Physics;
+package titan.Physics;
 
+import titan.Vector;
 import titan.Vector3dInterface;
+import titan.VectorTools;
 
 import static org.junit.jupiter.api.Assertions.*;
 

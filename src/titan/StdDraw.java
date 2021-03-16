@@ -1,4 +1,4 @@
-package Physics;
+package titan;
 
 /******************************************************************************
  *  Compilation:  javac StdDraw.java
