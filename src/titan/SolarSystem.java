@@ -106,7 +106,7 @@ public class SolarSystem {
                                 .add(new Vector(1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06)));
 
                 // create list of position lists to iterate over
-                // list<list<vector> positions = new list
+                // list<list<vector> positions = getPositions
 
                 // draw initial positions
                 StdDraw.clear(StdDraw.BLACK);
@@ -116,20 +116,24 @@ public class SolarSystem {
                 // TODO: Implement list of lists to draw all bodies
                 for (Vector3dInterface pos : earthPositions) {
                         StdDraw.clear(StdDraw.BLACK);
-                        // earth.setPosition((Vector) pos);
-                        earth.draw();
+                        for (Body body : bodies) {
+                                body.draw();
+                                // set body to new pos
+
+                        }
+                        earth.setPosition((Vector) pos);
+
                         StdDraw.show();
 
+                        // this focusses on earth -> we can replace it with probe
                         zoomOffsetX = earth.getPosition().getX();
                         zoomOffsetY = earth.getPosition().getY();
 
-                        // zoom in
+                        // zoom in (make scale smaller to zoom in)
                         scale /= 2;
                         StdDraw.setXscale(-scale * AU, scale * AU);
                         StdDraw.setYscale(-scale * AU, scale * AU);
 
-                        // change scale, but zoom should be enough
-                        // Vector.setBodyScale(Vector.getBodyScale() * 1.5);
                         Thread.sleep(msPerFrame);
                 }
 
