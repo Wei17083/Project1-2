@@ -165,7 +165,20 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
          */
         @Override
         public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double[] ts) {
-                return new StateInterface[0];
+                double stepSize = 1000;
+                int iterations = (int) (Math.round(ts[ts.length -1]) + 1);
+                StateInterface[] stateList = new StateInterface[ts.length];
+                stateList[0] = y0;
+                StateInterface state = y0;
+                int index = 1;
+                for (int i = 1; i < iterations ; i++) {
+                        if (Math.abs((i-1)*stepSize - ts[index]) < Math.abs(i*stepSize - ts[index])) {
+                           stateList[index] = state;
+                           index++;
+                        }
+                        state = step(f, stepSize*i, state, stepSize);
+                }
+                return stateList;
         }
 
         /*
@@ -180,7 +193,13 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
          */
         @Override
         public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double tf, double h) {
-                return new StateInterface[0];
+                int size = (int) Math.round(tf/h + 1);
+                StateInterface[] stateList = new StateInterface[size];
+                stateList[0] = y0;
+                for (int i = 1; i <stateList.length ; i++) {
+                        stateList[i] = step(f, h*i, stateList[i-1] ,h);
+                }
+                return stateList;
         }
 
         /*
@@ -194,8 +213,7 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
          */
         @Override
         public StateInterface step(ODEFunctionInterface f, double t, StateInterface y, double h) {
-
-                return null;
+                return y.addMul(h, call(t, y));
         }
 
         /*
@@ -217,13 +235,15 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                 State y1 = (State) y;
                 ChangeRate rate = new ChangeRate();
                 for (Body b : bodies) {
-                        rate.addVelocityChange(y1.getVelocityList().get(b.getID()));
+                        rate.addPositionChange(y1.getVelocityList().get(b.getID()));
 
                         ArrayList<Vector3dInterface> forces = new ArrayList<>();
                         for (Body b2: bodies) {
-                                ArrayList.add();
+                                if(!(b.equals(b2))){
+                                        forces.add(b2.gravitationalPull(b));
+                                }
                         }
-                        rate.addPositionChange(positionChange);
+                        rate.addVelocityChange(VectorTools.sumAll(forces).mul(1/b.getMass()));
                 }
                 return null;
         }
