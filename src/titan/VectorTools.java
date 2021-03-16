@@ -75,7 +75,7 @@ public class VectorTools {
         StdDraw.filledCircle(position.getX() - SolarSystem.getZoomOffsetX(),
                 position.getY() - SolarSystem.getZoomOffsetY(), 5e9 * Math.log10(radius));
         // line is just to help find offscreen planets
-        StdDraw.line(position.getX(), position.getY(), 0, 0);
+        // StdDraw.line(position.getX(), position.getY(), 0, 0);
     }
 
 }
