@@ -27,7 +27,7 @@ public class Body {
 
     /**
      * returns the mass of the object
-     * 
+     *
      * @return mass of the object
      */
     public double getMass() {
@@ -40,7 +40,7 @@ public class Body {
 
     /**
      * returns the velocity of the object
-     * 
+     *
      * @return velocity vector of the object
      */
     public Vector3dInterface getVelocity() {
@@ -49,7 +49,7 @@ public class Body {
 
     /**
      * returns the position of the object
-     * 
+     *
      * @return position vector of the object
      */
     public Vector3dInterface getPosition() {
@@ -168,7 +168,7 @@ public class Body {
 
     /**
      * This method returns the gravitational pull this Body has on another one
-     * 
+     *
      * @param body the body on which this force is acting
      * @return the resulting puling force
      */

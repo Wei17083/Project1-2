@@ -10,7 +10,7 @@ package titan;
 /** 
 * An interface representing the state of a system described by a differential equation. 
 */
-public interface StateInterface {    
+    public interface StateInterface {
     /**     
     * Update a state to a new state computed by: this + step * rate     
     *     

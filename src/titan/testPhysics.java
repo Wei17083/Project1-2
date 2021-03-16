@@ -1,6 +1,7 @@
 package titan;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class testPhysics {
     public static void main(String[] args) {
@@ -69,6 +70,19 @@ public class testPhysics {
                 neptune };
 
         SolarSystem system = new SolarSystem(bodies);
+        ArrayList<Vector3dInterface> positionList = new ArrayList<>();
+        positionList.add(new Vector(10,10,10));
+        positionList.add(new Vector(20,20,20));
+        ArrayList<Vector3dInterface> velocityList = new ArrayList<>();
+        velocityList.add(new Vector(10,10,10));
+        velocityList.add(new Vector(20,20,20));
+        State s = new State(0.0, positionList, velocityList);
+        ChangeRate rate = (ChangeRate)system.call(0.0,s);
+        ArrayList<Vector3dInterface> positionChanges = rate.getPositionChanges();
+        for (int i = 0; i < positionChanges.size(); i++) {
+           Vector3dInterface v = positionChanges.get(i);
+           System.out.println(VectorTools.vectorToString(v));
+        }
 
 
     }
