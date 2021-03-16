@@ -2,16 +2,18 @@ package titan;
 
 import java.util.ArrayList;
 
-public class State implements StateInterface, ODESolverInterface, ODEFunctionInterface{
+public class State implements StateInterface, ODEFunctionInterface{
 
     //bodyList will store all the bodies of the system with their respective
     // position and velocity at time tState
-    ArrayList<Body> bodyList;
+    ArrayList<Vector3dInterface> positionList;
+    ArrayList<Vector3dInterface> velocityList;
     double tState;
 
 
-    public State(ArrayList<Body> bodyList, double t0) {
-        this.bodyList = bodyList;
+    public State( double t0, ArrayList<Vector3dInterface> positionList, ArrayList<Vector3dInterface> velocityList) {
+        this.positionList = positionList;
+        this.velocityList = velocityList;
         tState = t0;
     }
 
@@ -25,10 +27,12 @@ public class State implements StateInterface, ODESolverInterface, ODEFunctionInt
     @Override
     public StateInterface addMul(double step, RateInterface rate) {
         ChangeRate rate1 = (ChangeRate) rate;
-        for (int i = 0; i < bodyList.size(); i++) {
-            bodyList.get(i).setPosition(bodyList.get(i).getPosition().addMul(step, rate1.getPositionChanges().get(i)));
+        for (int i = 0; i < positionList.size(); i++) {
+            positionList.set(i, positionList.get(i).addMul(step, rate1.getPositionChanges().get(i)));
+            velocityList.set(i, velocityList.get(i).addMul(step, rate1.getVelocityChanges().get(i)));
         }
-        return null;
+
+        return this;
     }
 
     /*
@@ -47,48 +51,6 @@ public class State implements StateInterface, ODESolverInterface, ODEFunctionInt
      */
     @Override
     public RateInterface call(double t, StateInterface y) {
-        return null;
-    }
-
-    /*
-     * Solve the differential equation by taking multiple steps.
-     *
-     * @param   f       the function defining the differential equation dy/dt=f(t,y)
-     * @param   y0      the starting state
-     * @param   ts      the times at which the states should be output, with ts[0] being the initial time
-     * @return  an array of size ts.length with all intermediate states along the path
-     */
-    @Override
-    public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double[] ts) {
-        return new StateInterface[0];
-    }
-
-    /*
-     * Solve the differential equation by taking multiple steps of equal size, starting at time 0.
-     * The final step may have a smaller size, if the step-size does not exactly divide the solution time range
-     *
-     * @param   f       the function defining the differential equation dy/dt=f(t,y)
-     * @param   y0      the starting state
-     * @param   tf      the final time
-     * @param   h       the size of step to be taken
-     * @return  an array of size round(tf/h)+1 including all intermediate states along the path
-     */
-    @Override
-    public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double tf, double h) {
-        return new StateInterface[0];
-    }
-
-    /*
-     * Update rule for one step.
-     *
-     * @param   f   the function defining the differential equation dy/dt=f(t,y)
-     * @param   t   the time
-     * @param   y   the state
-     * @param   h   the step size
-     * @return  the new state after taking one step
-     */
-    @Override
-    public StateInterface step(ODEFunctionInterface f, double t, StateInterface y, double h) {
         return null;
     }
 }

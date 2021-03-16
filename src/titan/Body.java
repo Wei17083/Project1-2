@@ -8,11 +8,13 @@ import java.awt.*;
 public class Body {
     private String name;
     private double mass;
+    private final int ID;
     private Vector3dInterface position;
     private Vector3dInterface velocity;
     private final double radius;
     private Color color; // color to visualise
     private Path path;
+
 
     public final double GRAV_CONSTANT = 6.674E-11;
 
@@ -128,8 +130,9 @@ public class Body {
      * @param radius   sets the radius of the object
      * @param c        sets the Color of the object, if NULL will be set to black
      */
-    public Body(String name, double mass, Vector3dInterface position, Vector3dInterface velocity, double radius, Color c) {
+    public Body(String name,int ID , double mass, Vector3dInterface position, Vector3dInterface velocity, double radius, Color c) {
         this.name = name;
+        this.ID = ID;
         this.mass = mass;
         this.position = position;
         this.velocity = velocity;
@@ -138,6 +141,25 @@ public class Body {
             color = Color.BLACK;
         else
             color = c;
+    }
+
+    /**
+     * Creates path for the body at t0
+     * @param stepSize stepsize corresponding to the path
+     * @param p initial position of the body
+     * @param v initial speed of the body
+     */
+    public void addPath(double stepSize, Vector3dInterface p, Vector3dInterface v) {
+        path = new Path(stepSize, p, v);
+    }
+
+    /**
+     * adds new position and velocity to the path
+     * @param p new position
+     * @param v new velocity
+     */
+    public void addPathEntry(Vector3dInterface p, Vector3dInterface v) {
+        path.add(p, v);
     }
 
     /**
