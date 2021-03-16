@@ -4,6 +4,8 @@ import titan.Vector;
 import titan.Vector3dInterface;
 import titan.VectorTools;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class VectorTest {
@@ -83,5 +85,18 @@ class VectorTest {
         Vector3dInterface v3 = VectorTools.directionVector(v1, v2);
         assertEquals(1, v3.getY());
 
+    }
+
+    @org.junit.jupiter.api.Test
+    void sumAll() {
+        Vector v1 = new Vector(1,0,1);
+        Vector v2 = new Vector(1,9,1);
+        Vector v3 = new Vector(3,9,-8);
+        ArrayList<Vector3dInterface> vectorList = new ArrayList<>();
+        vectorList.add(v1);
+        vectorList.add(v2);
+        vectorList.add(v3);
+        Vector3dInterface v4 = VectorTools.sumAll(vectorList);
+        assertTrue(VectorTools.equals(v4, new Vector(5, 18, -6)));
     }
 }
