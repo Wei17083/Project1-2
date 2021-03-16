@@ -48,6 +48,20 @@ public class State implements StateInterface {
         return new State(tState + step, newPositions, newVelocities);
     }
 
+    public String toString() {
+        StringBuilder returnString = new StringBuilder("Positions: ");
+        for (Vector3dInterface v: positionList) {
+            returnString.append(v.toString()).append(", ");
+        }
+
+
+        returnString.append("\nVelocities:  ");
+        for (Vector3dInterface v: velocityList) {
+            returnString.append(v.toString()).append(", ");
+        }
+        return returnString.toString();
+    }
+
 
 }
 
