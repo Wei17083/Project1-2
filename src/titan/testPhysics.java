@@ -71,7 +71,7 @@ public class testPhysics {
         SolarSystem system = new SolarSystem(bodies);
 
         System.out.println(system.getState().toString());
-        State state = (State) system.step(system, 1000, system.getState(), 1000);
+        State state = (State) system.step(system, 15778463, system.getState(), 15778463);
         System.out.println(state.toString());
     }
 }
