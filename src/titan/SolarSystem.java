@@ -1,13 +1,8 @@
-package Physics;
+package titan;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-
-import titan.RateInterface;
-import titan.StateInterface;
-import titan.Vector3dInterface;
 
 public class SolarSystem  implements StateInterface {
 

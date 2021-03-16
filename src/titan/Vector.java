@@ -1,6 +1,4 @@
-package Physics;
-
-import titan.*;
+package titan;
 
 import java.awt.Color;
 import java.lang.Math;

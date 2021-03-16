@@ -1,9 +1,11 @@
-package Physics;
+package titan.Physics;
 
 import org.junit.jupiter.api.Test;
 
-import Physics.*;
+import titan.Body;
+import titan.Vector;
 import titan.Vector3dInterface;
+import titan.VectorTools;
 
 import static org.junit.jupiter.api.Assertions.*;
 

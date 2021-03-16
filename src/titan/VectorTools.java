@@ -1,6 +1,4 @@
-package Physics;
-
-import titan.Vector3dInterface;
+package titan;
 
 import java.util.ArrayList;
 
