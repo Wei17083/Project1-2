@@ -37,8 +37,10 @@ public class Path {
      *
      * @param position vector to be added to the path
      */
-    public void add(Vector3dInterface position) {
+    public void add(Vector3dInterface position, Vector3dInterface velocity) {
+
         path.add(position);
+        velocities.add(velocity);
     }
 
     /** gets closest approximate position at a specific moment
