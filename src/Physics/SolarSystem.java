@@ -1,8 +1,10 @@
 package Physics;
 
 import java.awt.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import titan.FunctionInterface;
 import titan.Vector3dInterface;
@@ -13,11 +15,12 @@ public class SolarSystem implements FunctionInterface {
     // One AU is approximately the average distance between the Earth and the Sun
     // value taken from https://cneos.jpl.nasa.gov/glossary/au.html
     public static final double AU = 1.495978707e11;
+    private static final int msPerFrame = 1000;
     private static int maxSteps = 1000;
     private static double stepSize = 0.1;
     private List<Vector> positions = new ArrayList<Vector>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         // radius taken from
         // https://solarsystem.nasa.gov/solar-system
         // other values taken from solar_system_data-2020_04_01.txt
@@ -90,22 +93,28 @@ public class SolarSystem implements FunctionInterface {
         // that way we can skip most of the following loop, and only calculate the
         // forces acting on the probe
 
-        // go through every step
-        for (int i = 0; i < maxSteps;) { // i++ is missing for testing reasons
-            StdDraw.clear(Color.black); // reset canvas
-            for (int j = 0; j < bodies.length; j++) {
-                bodies[j].draw(); // draw every body
-                forceOnBody[j] = new Vector(0, 0, 0); // reset force
-                for (Body body : bodies) {
-                    // add all external forces acting on body
-                    // forceOnBody[j].add(body.getGravitationalForce(bodies[j]));
-                }
-                // add force to current velocity
-                // bodies[j].setVelocity(getVelocity().add(forceOnBody[j]));
-                // update position of body
-                // bodies[j].setPosition(getPosition().add(bodies[j].getVelocity()));
-            }
-            StdDraw.show(); // show the current system
+        // get all body position lists
+        // example values to test animation
+        List<Vector3dInterface> earthPositions = new ArrayList<>();
+        earthPositions.add(earth.getPosition());
+        earthPositions.add(earth.getPosition()
+                .add(new Vector(1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06)));
+        earthPositions.add(earth.getPosition()
+                .add(new Vector(1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06))
+                .add(new Vector(1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06)));
+
+        // create list of position lists to iterate over
+        // list<list<vector> positions = new list
+
+        StdDraw.clear(StdDraw.BLACK);
+        // draw initial positions
+        // TODO: Implement list of lists to draw all bodies
+        for (Vector3dInterface pos : earthPositions) {
+            Thread.sleep(msPerFrame);
+            StdDraw.clear(StdDraw.BLACK);
+            earth.setPosition((Vector) pos);
+            earth.draw();
+            StdDraw.show();
         }
 
     }
@@ -115,24 +124,27 @@ public class SolarSystem implements FunctionInterface {
         return null;
     }
 
-    /** Calculates the barycenter and changes all vectors to have the barycenter as source
+    /**
+     * Calculates the barycenter and changes all vectors to have the barycenter as
+     * source
      *
      */
     public void reCenter() {
 
     }
-    public List<Vector> positionEuler (double initialTime, Vector initialVelocity, Vector initialPosition){
+
+    public List<Vector> positionEuler(double initialTime, Vector initialVelocity, Vector initialPosition) {
         double xderivative = initialVelocity.getX();
-        double yderivative  = initialVelocity.getY();
+        double yderivative = initialVelocity.getY();
         double time;
         double xposition;
         double yposition;
         double xinitialposition = initialPosition.getX();
         double yinitialposition = initialPosition.getY();
-        
-        for (int j = 0; j <= maxSteps; j++){
-            xposition = xinitialposition + stepSize*xderivative;
-            yposition = yinitialposition + stepSize*yderivative;
+
+        for (int j = 0; j <= maxSteps; j++) {
+            xposition = xinitialposition + stepSize * xderivative;
+            yposition = yinitialposition + stepSize * yderivative;
             time = initialTime + stepSize;
             Vector updatedposition = new Vector(xposition, yposition, 0);
             positions.add(updatedposition);
