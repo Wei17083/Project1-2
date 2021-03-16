@@ -117,6 +117,14 @@ public class SolarSystem implements StateInterface {
                         earth.setPosition((Vector) pos);
                         earth.draw();
                         StdDraw.show();
+
+                        // zoom in
+                        scale /= 2;
+                        StdDraw.setXscale(-scale * AU, scale * AU);
+                        StdDraw.setYscale(-scale * AU, scale * AU);
+
+                        // change scale, but zoom should be enough
+                        // Vector.setBodyScale(Vector.getBodyScale() * 1.5);
                         Thread.sleep(msPerFrame);
                 }
 

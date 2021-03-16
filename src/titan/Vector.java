@@ -5,6 +5,7 @@ import java.lang.Math;
 
 public class Vector implements Vector3dInterface {
     private static final boolean DEBUG = true;
+    private static double bodyScale = 5e9;
     private double x;
     private double y;
     private double z;
@@ -94,8 +95,6 @@ public class Vector implements Vector3dInterface {
         return Math.sqrt(Math.pow(x - other.getX(), 2) + Math.pow(y - other.getY(), 2) + Math.pow(z - other.getZ(), 2));
     }
 
-
-
     /**
      * This method draws a circle on this vectors position with the given parameters
      * 
@@ -106,8 +105,16 @@ public class Vector implements Vector3dInterface {
         StdDraw.setPenColor(color);
         // using real scale of planets wouldnt give us a good overview
         // one can play around with the radius so that it looks presentable
-        StdDraw.filledCircle(this.x, this.y, 5e9 * Math.log10(radius));
+        StdDraw.filledCircle(this.x, this.y, bodyScale * Math.log10(radius));
         // line is just to help find offscreen planets
         StdDraw.line(this.x, this.y, 0, 0);
+    }
+
+    public static double getBodyScale() {
+        return bodyScale;
+    }
+
+    public static void setBodyScale(double bodyScale) {
+        Vector.bodyScale = bodyScale;
     }
 }
