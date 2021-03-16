@@ -2,7 +2,7 @@ package titan;
 
 import java.util.ArrayList;
 
-public class State implements StateInterface, ODEFunctionInterface{
+public class State implements StateInterface {
 
     //bodyList will store all the bodies of the system with their respective
     // position and velocity at time tState
@@ -27,32 +27,17 @@ public class State implements StateInterface, ODEFunctionInterface{
     @Override
     public StateInterface addMul(double step, RateInterface rate) {
         ChangeRate rate1 = (ChangeRate) rate;
+        ArrayList<Vector3dInterface> newPositions = new ArrayList<>();
+        ArrayList<Vector3dInterface> newVelocities = new ArrayList<>();
         for (int i = 0; i < positionList.size(); i++) {
-            positionList.set(i, positionList.get(i).addMul(step, rate1.getPositionChanges().get(i)));
-            velocityList.set(i, velocityList.get(i).addMul(step, rate1.getVelocityChanges().get(i)));
+            newPositions.add(i, positionList.get(i).addMul(step, rate1.getPositionChanges().get(i)));
+            newVelocities.add(i, velocityList.get(i).addMul(step, rate1.getVelocityChanges().get(i)));
         }
 
-        return this;
+        return new State(tState + step, newPositions, newVelocities);
     }
 
-    /*
-     * This is an interface for the function f that represents the
-     * differential equation dy/dt = f(t,y).
-     * You need to implement this function to represent to the laws of physics.
-     *
-     * For example, consider the differential equation
-     *   dy[0]/dt = y[1];  dy[1]/dt=cos(t)-sin(y[0])
-     * Then this function would be
-     *   f(t,y) = (y[1],cos(t)-sin(y[0])).
-     *
-     * @param   t   the time at which to evaluate the function
-     * @param   y   the state at which to evaluate the function
-     * @return  The average rate-of-change over the time-step. Has dimensions of [state]/[time].
-     */
-    @Override
-    public RateInterface call(double t, StateInterface y) {
-        return null;
-    }
+
 }
 
 class ChangeRate implements RateInterface {
