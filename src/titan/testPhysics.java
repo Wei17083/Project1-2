@@ -69,5 +69,7 @@ public class testPhysics {
                 neptune };
 
         SolarSystem system = new SolarSystem(bodies);
+
+
     }
 }

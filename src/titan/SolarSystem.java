@@ -145,9 +145,25 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
         private static double zoomOffsetY = 0;
 
         private final Body[] bodies;
+        private State initialState;
 
         public SolarSystem(Body[] bodies) {
                 this.bodies = bodies;
+                ArrayList<Vector3dInterface> positionList = new ArrayList<>();
+                ArrayList<Vector3dInterface> velocityList = new ArrayList<>();
+                for (Body b :bodies) {
+                        positionList.add(b.getPosition());
+                        velocityList.add(b.getVelocity());
+                }
+                this.initialState = new State(0, positionList, velocityList);
+        }
+
+        public Body[] getBodies() {
+                return bodies;
+        }
+
+        public State getState(){
+                return initialState;
         }
 
         /**
