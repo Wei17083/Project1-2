@@ -95,30 +95,4 @@ public class Vector implements Vector3dInterface {
         return Math.sqrt(Math.pow(x - other.getX(), 2) + Math.pow(y - other.getY(), 2) + Math.pow(z - other.getZ(), 2));
     }
 
-<<<<<<< HEAD
-    /**
-     * This method draws a circle on this vectors position with the given parameters
-     * 
-     * @param radius radius of the circle
-     * @param color  color of the circle
-     */
-    public void drawBody(double radius, Color color) {
-        StdDraw.setPenColor(color);
-        // using real scale of planets wouldnt give us a good overview
-        // one can play around with the radius so that it looks presentable
-        StdDraw.filledCircle(this.x, this.y, bodyScale * Math.log10(radius));
-        // line is just to help find offscreen planets
-        StdDraw.line(this.x, this.y, 0, 0);
-    }
-
-    public static double getBodyScale() {
-        return bodyScale;
-    }
-
-    public static void setBodyScale(double bodyScale) {
-        Vector.bodyScale = bodyScale;
-    }
-=======
-
->>>>>>> eac27b4e23639ea75a13c64369e3dcc965c2a1d7
 }
