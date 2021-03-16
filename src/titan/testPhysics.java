@@ -74,7 +74,7 @@ public class testPhysics {
         State state = (State) system.step(system, 86400, system.getState(), 86400);
         System.out.println(state.toString());
 
-        double[] ts = {0, 31556926 };
+        double[] ts = {0, 31556926 };   //31556926
         StateInterface[] stateList = system.solve(system, system.getState(), ts);
         System.out.println(stateList[1].toString());
 

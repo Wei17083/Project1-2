@@ -271,12 +271,26 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                         ArrayList<Vector3dInterface> forces = new ArrayList<>();
                         for (Body b2 : bodies) {
                                 if (!(b.equals(b2))) {
-                                        forces.add(b2.gravitationalPull(b));
+                                        forces.add(gravitationalPull(b, b2, y1.getPositionList().get(b.getID()), y1.getPositionList().get(b2.getID())));
                                 }
                         }
+                        Vector3dInterface force = VectorTools.sumAll(forces);
+                        //System.out.println(b.getName());
+                        //System.out.println(VectorTools.getUnitVector(force).toString());
+                        //System.out.println(VectorTools.directionVector(b.getPosition(), y1.getPositionList().get(0)));
                         rate.addVelocityChange(VectorTools.sumAll(forces).mul(1 / b.getMass()));
                 }
                 return rate;
+        }
+
+
+        public Vector3dInterface gravitationalPull(Body b1, Body b2, Vector3dInterface p1, Vector3dInterface p2) {
+
+                // TODO: Implement physics calculations on force here
+                double distance = p2.dist(p1);
+                Vector3dInterface forceDirection = VectorTools.directionVector(p1, p2);
+                double force = GRAV_CONSTANT * b1.getMass() * b2.getMass() / Math.pow(distance, 2);
+                return forceDirection.mul(force);
         }
 
         public static double getZoomOffsetX() {
