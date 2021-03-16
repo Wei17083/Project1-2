@@ -5,6 +5,7 @@ import java.lang.Math;
 
 public class Vector implements Vector3dInterface {
     private static final boolean DEBUG = true;
+    private static double bodyScale = 5e9;
     private double x;
     private double y;
     private double z;
@@ -93,6 +94,5 @@ public class Vector implements Vector3dInterface {
     public double dist(Vector3dInterface other) {
         return Math.sqrt(Math.pow(x - other.getX(), 2) + Math.pow(y - other.getY(), 2) + Math.pow(z - other.getZ(), 2));
     }
-
 
 }
