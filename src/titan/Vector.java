@@ -95,19 +95,4 @@ public class Vector implements Vector3dInterface {
     }
 
 
-
-    /**
-     * This method draws a circle on this vectors position with the given parameters
-     * 
-     * @param radius radius of the circle
-     * @param color  color of the circle
-     */
-    public void drawBody(double radius, Color color) {
-        StdDraw.setPenColor(color);
-        // using real scale of planets wouldnt give us a good overview
-        // one can play around with the radius so that it looks presentable
-        StdDraw.filledCircle(this.x, this.y, 5e9 * Math.log10(radius));
-        // line is just to help find offscreen planets
-        StdDraw.line(this.x, this.y, 0, 0);
-    }
 }

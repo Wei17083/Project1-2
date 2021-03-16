@@ -8,8 +8,8 @@ import java.awt.*;
 public class Body {
     private String name;
     private double mass;
-    private Vector position;
-    private Vector velocity;
+    private Vector3dInterface position;
+    private Vector3dInterface velocity;
     private final double radius;
     private Color color; // color to visualise
     private Path path;
@@ -20,7 +20,7 @@ public class Body {
      * This method draws the body using its position, radius and color
      */
     public void draw() {
-        position.drawBody(radius, color);
+        VectorTools.drawBody(position, radius, color);
     }
 
     /**
@@ -37,7 +37,7 @@ public class Body {
      * 
      * @return velocity vector of the object
      */
-    public Vector getVelocity() {
+    public Vector3dInterface getVelocity() {
         return velocity;
     }
 
@@ -46,7 +46,7 @@ public class Body {
      * 
      * @return position vector of the object
      */
-    public Vector getPosition() {
+    public Vector3dInterface getPosition() {
         return position;
     }
 
@@ -89,7 +89,7 @@ public class Body {
      *
      * @param position set the position vector of the body to this value
      */
-    public void setPosition(Vector position) {
+    public void setPosition(Vector3dInterface position) {
         this.position = position;
     }
 
@@ -98,7 +98,7 @@ public class Body {
      *
      * @param velocity set the velocity
      */
-    public void setVelocity(Vector velocity) {
+    public void setVelocity(Vector3dInterface velocity) {
         this.velocity = velocity;
     }
 
@@ -128,7 +128,7 @@ public class Body {
      * @param radius   sets the radius of the object
      * @param c        sets the Color of the object, if NULL will be set to black
      */
-    public Body(String name, double mass, Vector position, Vector velocity, double radius, Color c) {
+    public Body(String name, double mass, Vector3dInterface position, Vector3dInterface velocity, double radius, Color c) {
         this.name = name;
         this.mass = mass;
         this.position = position;
