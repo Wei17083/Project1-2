@@ -95,6 +95,7 @@ public class Vector implements Vector3dInterface {
         return Math.sqrt(Math.pow(x - other.getX(), 2) + Math.pow(y - other.getY(), 2) + Math.pow(z - other.getZ(), 2));
     }
 
+<<<<<<< HEAD
     /**
      * This method draws a circle on this vectors position with the given parameters
      * 
@@ -117,4 +118,7 @@ public class Vector implements Vector3dInterface {
     public static void setBodyScale(double bodyScale) {
         Vector.bodyScale = bodyScale;
     }
+=======
+
+>>>>>>> eac27b4e23639ea75a13c64369e3dcc965c2a1d7
 }
