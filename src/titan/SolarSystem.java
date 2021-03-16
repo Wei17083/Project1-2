@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SolarSystem  implements StateInterface {
+public class    SolarSystem  implements StateInterface {
 
     public final double GRAV_CONSTANT = 6.674E-11;
     // One AU is approximately the average distance between the Earth and the Sun
