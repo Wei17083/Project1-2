@@ -4,10 +4,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import titan.FunctionInterface;
+
+import titan.RateInterface;
+import titan.StateInterface;
 import titan.Vector3dInterface;
 
-public class SolarSystem implements FunctionInterface {
+public class SolarSystem  implements StateInterface {
 
     public final double GRAV_CONSTANT = 6.674E-11;
     // One AU is approximately the average distance between the Earth and the Sun
@@ -110,10 +112,6 @@ public class SolarSystem implements FunctionInterface {
 
     }
 
-    @Override
-    public Vector3dInterface call(double t, Vector3dInterface s) {
-        return null;
-    }
 
     /** Calculates the barycenter and changes all vectors to have the barycenter as source
      *
@@ -142,5 +140,10 @@ public class SolarSystem implements FunctionInterface {
         }
 
         return positions;
+    }
+
+    @Override
+    public StateInterface addMul(double step, RateInterface rate) {
+        return null;
     }
 }
