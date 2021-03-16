@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class Path {
     ArrayList<Vector3dInterface> path;
+    ArrayList<Vector3dInterface> velocities;
     double stepSize;
 
     /** constructor takes in the stepSize(time intervals) and the initial position for the path
@@ -14,10 +15,12 @@ public class Path {
      * @param stepSize size of the time intervals corresponding to the positions
      * @param initialPosition starting position vector of the path
      */
-    public Path(double stepSize, Vector3dInterface initialPosition) {
+    public Path(double stepSize, Vector3dInterface initialPosition, Vector3dInterface initialVelocity) {
         this.stepSize = stepSize;
         path = new ArrayList<Vector3dInterface>();
         path.add(initialPosition);
+        velocities = new ArrayList<Vector3dInterface>();
+        velocities.add(initialVelocity);
     }
 
     /** Constructor takes in the stepSize and an ArrayList storing a path of position vectors

@@ -149,7 +149,7 @@ public class Body {
      * @return the resulting puling force
      */
     public Vector3dInterface gravitationalPull(Body body) {
-        if (this == body) // a body doesnt have force on itself
+        if (this == body) // a body doesn't have force on itself
             return new Vector(0, 0, 0);
 
         // TODO: Implement physics calculations on force here

@@ -2,6 +2,8 @@ package Physics;
 
 import titan.Vector3dInterface;
 
+import java.util.ArrayList;
+
 public class VectorTools {
 
     /** Returns the unit vector pointing from the start to the end position
@@ -41,6 +43,19 @@ public class VectorTools {
      */
     public static Vector3dInterface getUnitVector(Vector3dInterface v){
         return v.mul(1/v.norm());
+    }
+
+    /** Returns sum of all vectors in an ArrayList
+     *
+     * @param vectorList ArrayList containing vectors we want to sum
+     * @return sum of all the vectors
+     */
+    public static Vector3dInterface sumAll(ArrayList<Vector3dInterface> vectorList) {
+        Vector3dInterface sum = new Vector(0,0,0);
+        for (Vector3dInterface v: vectorList) {
+            sum.add(v);
+        }
+        return sum;
     }
 
 }

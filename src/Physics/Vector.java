@@ -97,6 +97,7 @@ public class Vector implements Vector3dInterface {
     }
 
 
+
     /**
      * This method draws a circle on this vectors position with the given parameters
      * 
