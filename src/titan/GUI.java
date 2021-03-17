@@ -24,7 +24,7 @@ public class GUI {
         zoomOffsetY = bodies[3].getPosition().getY();
 
         // time stamps for automatic zoom
-        int zoomOut = earthPositions.size() / 4;
+        int zoomOut = earthPositions.size() / 2;
         int stay = earthPositions.size() / 4 * 3;
         // indicates wether the automatic zoom is active or not
         boolean interrupted = false;
@@ -67,34 +67,35 @@ public class GUI {
             // changes are scaling based on log of msPerFrame*10 so that the zoom effect
             // stays similar even when framerate changes.
             // msPerFrame has to be more than 0.1 for this to work, else log(1) = 0
-            // if (interrupted) {
-            if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT) || StdDraw.isKeyPressed(KeyEvent.VK_A))
-                zoomOffsetX -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
-            else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT) || StdDraw.isKeyPressed(KeyEvent.VK_D))
-                zoomOffsetX += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
-            else if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN) || StdDraw.isKeyPressed(KeyEvent.VK_S))
-                zoomOffsetY -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
-            else if (StdDraw.isKeyPressed(KeyEvent.VK_UP) || StdDraw.isKeyPressed(KeyEvent.VK_W))
-                zoomOffsetY += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+            if (interrupted) {
+                if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT) || StdDraw.isKeyPressed(KeyEvent.VK_A))
+                    zoomOffsetX -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+                else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT) || StdDraw.isKeyPressed(KeyEvent.VK_D))
+                    zoomOffsetX += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+                else if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN) || StdDraw.isKeyPressed(KeyEvent.VK_S))
+                    zoomOffsetY -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+                else if (StdDraw.isKeyPressed(KeyEvent.VK_UP) || StdDraw.isKeyPressed(KeyEvent.VK_W))
+                    zoomOffsetY += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
 
-            // zoom (make scale smaller to zoom in)
-            if (StdDraw.isKeyPressed(KeyEvent.VK_PLUS) || StdDraw.isKeyPressed(107)) {
-                scale /= 1.0 + (Math.log(msPerFrame * 10) / 40);
-            } else if (StdDraw.isKeyPressed(KeyEvent.VK_MINUS) || StdDraw.isKeyPressed(109)) {
-                scale *= 1.0 + (Math.log(msPerFrame * 10) / 40);
+                // zoom (make scale smaller to zoom in)
+                if (StdDraw.isKeyPressed(KeyEvent.VK_PLUS) || StdDraw.isKeyPressed(107)) {
+                    scale /= 1.0 + (Math.log(msPerFrame * 10) / 40);
+                } else if (StdDraw.isKeyPressed(KeyEvent.VK_MINUS) || StdDraw.isKeyPressed(109)) {
+                    scale *= 1.0 + (Math.log(msPerFrame * 10) / 40);
+                }
+            } else {
+                if (i <= zoomOut) {
+                    if (scale < 8) // slowly zoom out
+                        scale = Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), i);
+                    else {
+                        if (zoomOffsetX < (bodies[4].getPosition().getX() + bodies[8].getPosition().getX()) / 2)
+                            zoomOffsetX += (bodies[4].getPosition().getX() + bodies[8].getPosition().getX()) / 1000;
+                        if (zoomOffsetY > (bodies[4].getPosition().getY() + bodies[8].getPosition().getY()) / 2)
+                            zoomOffsetY += (bodies[4].getPosition().getY() + bodies[8].getPosition().getY()) / 1000;
+                    }
+
+                }
             }
-            // } else {
-            // if (i <= zoomOut) {
-            // if (scale < 8) // slowly zoom out
-            // scale = Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), i);
-            // if (zoomOffsetX < (bodies[4].getPosition().getX() +
-            // bodies[8].getPosition().getX()) / 2)
-            // zoomOffsetX = (bodies[4].getPosition().getX() +
-            // bodies[8].getPosition().getX()) / 2;
-            // zoomOffsetY = (bodies[4].getPosition().getY() +
-            // bodies[8].getPosition().getY()) / 2;
-            // }
-            // }
             StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
             StdDraw.setYscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
 
