@@ -25,7 +25,7 @@ public class Path {
 
     /** Constructor takes in the stepSize and an ArrayList storing a path of position vectors
      *
-      * @param stepSize stepSize size of the time intervals corresponding to the positions
+     * @param stepSize stepSize size of the time intervals corresponding to the positions
      * @param path ArrayList containing path comprised of position vectors
      */
     public Path(double stepSize, ArrayList<Vector3dInterface> path) {
