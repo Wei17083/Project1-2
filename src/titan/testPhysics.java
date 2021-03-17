@@ -1,5 +1,7 @@
 package titan;
 
+import BruteForce.BruteForce;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -92,5 +94,7 @@ public class testPhysics {
         System.out.println(earthPositionList.get(0).getX()+", "+earthPositionList.get(0).getY()+", "+earthPositionList.get(0).getZ());
         System.out.println(earthPositionList.get(earthPositionList.size()-1).getX()+", "+earthPositionList.get(earthPositionList.size()-1).getY()+", "+earthPositionList.get(earthPositionList.size()-1).getZ());
         System.out.println(earthPositionList.get((earthPositionList.size()-1)/2).getX()+", "+earthPositionList.get((earthPositionList.size()-1)/2).getY()+", "+earthPositionList.get((earthPositionList.size()-1)/2).getZ());
+        BruteForce.bruteforce(system);
+
     }
 }
