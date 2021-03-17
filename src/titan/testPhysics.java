@@ -60,15 +60,21 @@ public class testPhysics {
                                 new Vector(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02),
                                 2.4622e7, Color.blue);
 
+                Body probe = new Body("Probe", 11, 1.02413e26,
+                                new Vector(0, 0, 0),
+                                new Vector(0, 0, 0),
+                                1, null);  
+
+
                 // create arrays of bodies and corresponding forces
                 Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
-                                neptune };
+                                neptune, probe};
 
                 SolarSystem system = new SolarSystem(bodies);
 
-                System.out.println(system.getState().toString());
+                // System.out.println(system.getState().toString());
                 State state = (State) system.step(system, 86400, system.getState(), 86400);
-                System.out.println(state.toString());
+                // System.out.println(state.toString());
 
                 // double[] ts = {0, 31556926}; //31556926
                 // StateInterface[] stateList = system.solve(system, system.getState(), ts);

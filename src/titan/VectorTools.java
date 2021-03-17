@@ -71,6 +71,18 @@ public class VectorTools {
      * @param color  color of the circle
      */
     public static void drawBody(String name, Vector3dInterface position, double radius, Color color) {
+
+        if (name.equalsIgnoreCase("probe")) {
+            StdDraw.picture(10, 10, "spaceship.jpg", 6.95508e10, 6.95508e10);
+            // System.out.println("a");
+            double rad = 1e9 * Math.log(radius);
+            StdDraw.setPenColor(color.white);
+
+            StdDraw.text(position.getX() - GUI.getZoomOffsetX() + 2 * rad,
+                    position.getY() - GUI.getZoomOffsetY() + 2 * rad, name);
+
+        }
+        else {
         StdDraw.setPenColor(color);
         // using real scale of planets wouldnt give us a good overview
         // one can play around with the radius so that it looks presentable
@@ -99,6 +111,7 @@ public class VectorTools {
             StdDraw.text(position.getX() - GUI.getZoomOffsetX() + 1.5 * rad,
                     position.getY() - GUI.getZoomOffsetY() + 1.5 * rad, name);
         }
+    }
 
         // line is just to help find planets
         // StdDraw.line(position.getX() - GUI.getZoomOffsetX(), position.getY()
