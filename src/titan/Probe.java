@@ -2,9 +2,10 @@ package titan;
 
 import java.util.ArrayList;
 
-public class Probe  extends Body implements ProbeSimulatorInterface{
+public class Probe implements ProbeSimulatorInterface{
 
     public SolarSystem system;
+    public final double MASS = 15000;
 
     public Probe (SolarSystem system){
         this.system = system;
@@ -22,7 +23,26 @@ public class Probe  extends Body implements ProbeSimulatorInterface{
 
     @Override
     public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double[] ts) {
-
+        double stepSize = 100;
+        int size = ts.length-1;
+        int iterations = (int) (Math.round(ts[size]) + 1);
+        State[] stateList = (State[])system.solve(system, system.getState(), ts[size], stepSize);
+        Vector3dInterface[] probePositions = new Vector3dInterface[size];
+        probePositions[0] = p0;
+        Vector3dInterface currentPosition = p0;
+        Vector3dInterface currentVelocity = v0;
+        int index = 1;
+        for (int i = 1; i < iterations && index < ts.length; i++) {
+            if (Math.abs((i-1)*stepSize - ts[index]) < Math.abs(i*stepSize - ts[index])) {
+                probePositions[index] = currentPosition;
+                index++;
+            }
+            ArrayList<Vector3dInterface> changes = step(currentPosition, currentVelocity, stateList[i-1], stepSize);
+            probePositions[i] = changes.get(0);
+            currentPosition = changes.get(0);
+            currentVelocity = changes.get(1);
+        }
+        return probePositions;
     }
 
     /*
@@ -36,28 +56,32 @@ public class Probe  extends Body implements ProbeSimulatorInterface{
      */
     @Override
     public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double tf, double h) {
-        StateInterface[] statesPlanets = system.solve(system, system.getState(), tf, h);
-        ArrayList<Vector3dInterface> probePositions = new ArrayList<>();
-        ArrayList<Vector3dInterface> probeVelocities = new ArrayList<>();
-        ArrayList<Vector3dInterface> probeAccelerations = new ArrayList<>();
-        probePositions.add(p0);
-        probeVelocities.add(v0);
+        State[] statesList = (State[]) system.solve(system, system.getState(), tf, h);
         int size = (int) Math.round(tf / h + 1);
-        for (int i = 0; i < size; i++){
-            ArrayList<Vector3dInterface> forces = new ArrayList<>();
-            State y = (State) statesPlanets[i];
-            for(int j = 0; j < system.getBodies().length; j++){
-                forces.add(system.gravitationalPull(this, system.getBodies()[j],this.getPosition(), y.getPositionList().get(j)));
-            }
-            Vector3dInterface netForce = VectorTools.sumAll(forces);
-            probeAccelerations.add(VectorTools.sumAll(forces).mul(1 / this.getMass()));
-            probeVelocities.add(probeVelocities.get(i).addMul(h, probeAccelerations.get(i)));
+        Vector3dInterface[] probePositions = new Vector3dInterface[size];
+        Vector3dInterface[] probeVelocities = new Vector3dInterface[size];
+        probePositions[0] = p0;
+        probeVelocities[0] = v0;
+
+        for (int i = 1; i < size; i++){
+            ArrayList<Vector3dInterface> changes = step(probePositions[i-1], probeVelocities[i-1],statesList[i-1], h);
+            probePositions[i] = changes.get(0);
+            probeVelocities[i] = changes.get(1);
         }
 
-        for (int i = 0; i < size; i++){
-            probePositions.add(probePositions.get(i).addMul(h, probeVelocities.get(i)));
-        }
+        return probePositions;
+    }
 
-        return (Vector3dInterface[]) probePositions.toArray();
+    public ArrayList<Vector3dInterface> step (Vector3dInterface p, Vector3dInterface v, State s, double h){
+        Vector3dInterface newPosition = p.addMul(h, v);
+        ArrayList<Vector3dInterface> forces = new ArrayList<>();
+        for(int j = 0; j < system.getBodies().length; j++){
+            forces.add(system.gravitationalPull(MASS, system.getBodies()[j].getMass(), p, s.getPositionList().get(j)));
+        }
+        Vector3dInterface newVelocity = v.addMul(h, VectorTools.sumAll(forces).mul(1/MASS));
+        ArrayList<Vector3dInterface> step = new ArrayList<>();
+        step.add(newPosition);
+        step.add(newVelocity);
+        return step;
     }
 }
