@@ -109,7 +109,9 @@ public class ToolsCSV {
         }
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+    //main method to test results:
+
+   /* public static void main(String[] args) throws FileNotFoundException {
         // state 1
 
         ArrayList<Vector3dInterface> positionList = new ArrayList<>();
@@ -167,4 +169,6 @@ public class ToolsCSV {
         List<Vector> lv = getCSVVelocities("data.csv", usedID);
         System.out.println("Velocities of Body " + usedID + ": " + lv.toString());
     }
+
+    */
 }
