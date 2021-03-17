@@ -1,6 +1,7 @@
 package titan;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class testPhysics {
     public static void main(String[] args) {
@@ -80,6 +81,16 @@ public class testPhysics {
 
         double tf = 31556926;
         StateInterface[] stateList2 = system.solve(system,system.getState(), tf, 1000 );
+        State[] stateList3 = new State[stateList2.length];
+        for (int i = 0; i < stateList2.length ; i++) {
+            stateList3[i] = (State) stateList2[i];
+        }
         System.out.println(stateList2[stateList2.length-1].toString());
+
+        ArrayList<Vector3dInterface> earthPositionList = new ArrayList<>();
+        for (State s: stateList3) {
+            earthPositionList.add(s.getPositionList().get(3));
+        }
+
     }
 }
