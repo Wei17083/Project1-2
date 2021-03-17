@@ -44,7 +44,6 @@ public class Probe implements ProbeSimulatorInterface{
         }
         return probePositions;
     }
-
     /*
      * Simulate the solar system with steps of an equal size.
      * The final step may have a smaller size, if the step-size does not exactly divide the solution time range.
