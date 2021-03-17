@@ -68,9 +68,15 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                                 new Vector(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02),
                                 2.4622e7, Color.blue);
 
+                Body probe = new Body("Probe", 12, 1,
+                                new Vector(0, 0, 0),
+                                new Vector(0, 0, 0),
+                                1, null);  
+
+
                 // create arrays of bodies and corresponding forces
                 Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
-                                neptune };
+                                neptune, probe};
 
                 // use testPhysics.java to run visuals until we have full list of positions
                 GUI.visualise(bodies, null);
