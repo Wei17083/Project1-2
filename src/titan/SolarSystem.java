@@ -169,13 +169,13 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
          */
         @Override
         public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double tf, double h) {
-                int size = (int) Math.round(tf / h + 1);
+                int size = (int) (tf / h + 1);
                 StateInterface[] stateList = new StateInterface[size];
                 stateList[0] = y0;
-                for (int i = 1; i < stateList.length; i++) {
-
+                for (int i = 1; i < size-1; i++) {
                         stateList[i] = step(f, h * i, stateList[i - 1], h);
                 }
+                stateList[size-1] = step(f,tf, stateList[size-1], tf-h*size);
                 return stateList;
         }
 
@@ -215,9 +215,7 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
          */
         @Override
         public RateInterface call(double t, StateInterface y) {
-
                 State y1 = (State) y;
-
                 ChangeRate rate = new ChangeRate();
                 for (Body b : bodies) {
                         rate.addPositionChange(y1.getVelocityList().get(b.getID()));
@@ -225,8 +223,7 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                         ArrayList<Vector3dInterface> forces = new ArrayList<>();
                         for (Body b2 : bodies) {
                                 if (!(b.equals(b2))) {
-                                        forces.add(gravitationalPull(b, b2, y1.getPositionList().get(b.getID()),
-                                                        y1.getPositionList().get(b2.getID())));
+                                        forces.add(gravitationalPull(b.getMass(), b2.getMass(), y1.getPositionList().get(b.getID()), y1.getPositionList().get(b2.getID())));
                                 }
                         }
                         rate.addVelocityChange(VectorTools.sumAll(forces).mul(1 / b.getMass()));
@@ -236,12 +233,13 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                 return rate;
         }
 
-        public Vector3dInterface gravitationalPull(Body b1, Body b2, Vector3dInterface p1, Vector3dInterface p2) {
+
+        public Vector3dInterface gravitationalPull(double mass1, double mass2, Vector3dInterface p1, Vector3dInterface p2) {
 
                 // TODO: Implement physics calculations on force here
                 double distance = p2.dist(p1);
                 Vector3dInterface forceDirection = VectorTools.directionVector(p1, p2);
-                double force = GRAV_CONSTANT * b1.getMass() * b2.getMass() / Math.pow(distance, 2);
+                double force = GRAV_CONSTANT * mass1 * mass2 / Math.pow(distance, 2);
                 return forceDirection.mul(force);
         }
 
