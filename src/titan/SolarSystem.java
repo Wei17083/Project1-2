@@ -173,9 +173,7 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                 StateInterface[] stateList = new StateInterface[size];
                 stateList[0] = y0;
                 for (int i = 1; i < stateList.length; i++) {
-                        // System.out.println();
-                        // System.out.println();
-                        // System.out.println("Step: " + i);
+
                         stateList[i] = step(f, h * i, stateList[i - 1], h);
                 }
                 return stateList;
@@ -218,13 +216,8 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
         @Override
         public RateInterface call(double t, StateInterface y) {
 
-                System.out.println(t);
                 State y1 = (State) y;
-                System.out.println("positions");
-                for (Vector3dInterface v: y1.getPositionList()
-                     ) {
-                        System.out.println(v.toString());
-                }
+
                 ChangeRate rate = new ChangeRate();
                 for (Body b : bodies) {
                         rate.addPositionChange(y1.getVelocityList().get(b.getID()));
@@ -236,19 +229,9 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                                                         y1.getPositionList().get(b2.getID())));
                                 }
                         }
-                        // Vector3dInterface force = VectorTools.sumAll(forces);
-                        // System.out.println(b.getName());
-                        // System.out.println(force.toString());
-                        // System.out.println(VectorTools.getUnitVector(force).toString());
-                        // System.out.println(VectorTools.directionVector(b.getPosition(),
-                        // y1.getPositionList().get(0)));
                         rate.addVelocityChange(VectorTools.sumAll(forces).mul(1 / b.getMass()));
                 }
-                System.out.println("Velocities");
-                for (Vector3dInterface v: rate.getPositionChanges()
-                     ) {
-                        System.out.println(v.toString());
-                }
+
 
                 return rate;
         }
