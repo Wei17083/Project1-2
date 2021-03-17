@@ -4,7 +4,8 @@ import java.awt.event.KeyEvent;
 import java.util.*;
 
 public class GUI {
-    private static final int nsPerFrame = 1000015;
+    // has to be more than 100 000
+    private static final int nsPerFrame = 1000000;
     private static double zoomOffsetX = 0;
     private static double zoomOffsetY = 0;
 
@@ -33,6 +34,9 @@ public class GUI {
         }
         StdDraw.show();
 
+        // convert nsPerFrame to a ms double
+        double msPerFrame = nsPerFrame / 1000000;
+
         // TODO: Implement list of lists to draw all bodies
         for (Vector3dInterface pos : earthPositions) {
             StdDraw.clear(StdDraw.BLACK);
@@ -49,8 +53,10 @@ public class GUI {
             // zoomOffsetY = titan.getPosition().getY();
 
             // manual moving around
-            // convert nsPerFrame to a ms double
-            double msPerFrame = nsPerFrame / 1000000;
+
+            // changes are scaling based on log of msPerFrame*10 so that the zoom effect
+            // stays similar even when framerate changes.
+            // msPerFrame has to be more than 0.1 for this to work, else log(1) = 0
             if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT) || StdDraw.isKeyPressed(KeyEvent.VK_A)) {
                 zoomOffsetX -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
             } else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT) || StdDraw.isKeyPressed(KeyEvent.VK_D)) {
