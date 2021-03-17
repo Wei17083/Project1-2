@@ -196,7 +196,7 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
         @Override
         public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double[] ts) {
                 double stepSize = 100;
-                int iterations = (int) (Math.round(ts[ts.length - 1]) + 1);
+                int iterations = (int) (Math.round((ts[ts.length - 1]) / stepSize) + 1);
                 StateInterface[] stateList = new StateInterface[ts.length];
                 stateList[0] = y0;
                 StateInterface state = y0;
@@ -205,7 +205,6 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                         if (Math.abs((i - 1) * stepSize - ts[index]) < Math.abs(i * stepSize - ts[index])) {
                                 stateList[index] = state;
                                 index++;
-                                System.out.println("it happened");
                         }
                         state = step(f, stepSize * i, state, stepSize);
                 }
@@ -234,6 +233,9 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                 StateInterface[] stateList = new StateInterface[size];
                 stateList[0] = y0;
                 for (int i = 1; i < stateList.length; i++) {
+                        // System.out.println();
+                        // System.out.println();
+                        // System.out.println("Step: " + i);
                         stateList[i] = step(f, h * i, stateList[i - 1], h);
                 }
                 return stateList;
@@ -287,8 +289,9 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                                                         y1.getPositionList().get(b2.getID())));
                                 }
                         }
-                        Vector3dInterface force = VectorTools.sumAll(forces);
+                        // Vector3dInterface force = VectorTools.sumAll(forces);
                         // System.out.println(b.getName());
+                        // System.out.println(force.toString());
                         // System.out.println(VectorTools.getUnitVector(force).toString());
                         // System.out.println(VectorTools.directionVector(b.getPosition(),
                         // y1.getPositionList().get(0)));
