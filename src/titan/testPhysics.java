@@ -74,12 +74,12 @@ public class testPhysics {
         State state = (State) system.step(system, 86400, system.getState(), 86400);
         System.out.println(state.toString());
 
-        double[] ts = {0, 31556926 };   //31556926
-        StateInterface[] stateList = system.solve(system, system.getState(), ts);
-        System.out.println(stateList[1].toString());
-
-        double tf = 31556926;
-        StateInterface[] stateList2 = system.solve(system,system.getState(), tf, 1000 );
+//        double[] ts = {0, 31556926};   //31556926
+//        StateInterface[] stateList = system.solve(system, system.getState(), ts);
+//        System.out.println(stateList[1].toString());
+        System.out.println("JD:LASJD:AHS:DJASSDAJ:AJSD:ASJDL:JA");
+        double tf = 24*3600*4;
+        StateInterface[] stateList2 = system.solve(system,system.getState(), tf, 24*3600 );
         System.out.println(stateList2[stateList2.length-1].toString());
     }
 }
