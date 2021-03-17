@@ -1,7 +1,6 @@
 package titan;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class testPhysics {
     public static void main(String[] args) {
@@ -60,30 +59,16 @@ public class testPhysics {
                 new Vector(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02),
                 2.4622e7, Color.blue);
 
+
+
+
+
+
         // create arrays of bodies and corresponding forces
         Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
                 neptune };
 
         SolarSystem system = new SolarSystem(bodies);
-        State s = system.getState();
-        system.call(0.3,s);
-        ArrayList<Vector3dInterface> p = system.getState().getVelocityList();
-        for (int i = 0; i < p.size(); i++) {
-           Vector3dInterface v = p.get(i);
-           //System.out.println(VectorTools.vectorToString(v));
-        }
-        double [] times = {0.0, 0.5};
-        StateInterface[] s1 = system.solve(system, system.getState(), times);
-        for (int j = 0; j < s1.length; j++){
-            State s2 = (State)s1[j];
-            for(int z = 0; z < bodies.length; z++) {
-                Vector3dInterface v1 = s2.getVelocityList().get(z);
-                //System.out.println(VectorTools.vectorToString(v1));
-            }
-        }
-
-
-
 
         System.out.println(system.getState().toString());
         State state = (State) system.step(system, 86400, system.getState(), 86400);
