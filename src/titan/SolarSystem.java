@@ -72,7 +72,8 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                 Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
                                 neptune };
 
-                GUI.visualise(bodies);
+                // use testPhysics.java to run visuals until we have full list of positions
+                GUI.visualise(bodies, null);
 
         }
 

@@ -1,13 +1,14 @@
 package titan;
 
 import java.awt.event.KeyEvent;
+import java.util.*;
 
 public class GUI {
-    private static final int msPerFrame = 100;
+    private static final int nsPerFrame = 1000015;
     private static double zoomOffsetX = 0;
     private static double zoomOffsetY = 0;
 
-    public static void visualise(Body[] bodies) throws InterruptedException {
+    public static void visualise(Body[] bodies, List<Vector3dInterface> earthPositions) throws InterruptedException {
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
         // setting up scale in order to display whole solar system
@@ -21,8 +22,7 @@ public class GUI {
 
         // get all body position lists
         // example values to test animation
-        // List<Vector3dInterface> earthPositions = new ArrayList<>();
-        Vector3dInterface[] earthPositions = new Vector3dInterface[10000];
+        // Vector3dInterface[] earthPositions = new Vector3dInterface[10000];
         // create list of position lists to iterate over
         // list<list<vector> positions = getPositions
 
@@ -39,8 +39,9 @@ public class GUI {
             for (Body body : bodies) {
                 body.draw();
                 // set body to new pos
-
+                // body.setPosition(pos or whatever)
             }
+            bodies[3].setPosition(pos);
             StdDraw.show();
 
             // to focus on specific body set offsets like this
@@ -48,28 +49,32 @@ public class GUI {
             // zoomOffsetY = titan.getPosition().getY();
 
             // manual moving around
-            if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT)) {
-                zoomOffsetX -= SolarSystem.getAU();
-            } else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT)) {
-                zoomOffsetX += SolarSystem.getAU();
+            // convert nsPerFrame to a ms double
+            double msPerFrame = nsPerFrame / 1000000;
+            if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT) || StdDraw.isKeyPressed(KeyEvent.VK_A)) {
+                zoomOffsetX -= SolarSystem.getAU() * msPerFrame / 100 * scale;
+            } else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT) || StdDraw.isKeyPressed(KeyEvent.VK_D)) {
+                zoomOffsetX += SolarSystem.getAU() * msPerFrame / 100 * scale;
 
-            } else if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN)) {
-                zoomOffsetY -= SolarSystem.getAU();
+            } else if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN) || StdDraw.isKeyPressed(KeyEvent.VK_S)) {
+                zoomOffsetY -= SolarSystem.getAU() * msPerFrame / 100 * scale;
 
-            } else if (StdDraw.isKeyPressed(KeyEvent.VK_UP)) {
-                zoomOffsetY += SolarSystem.getAU();
+            } else if (StdDraw.isKeyPressed(KeyEvent.VK_UP) || StdDraw.isKeyPressed(KeyEvent.VK_W)) {
+                zoomOffsetY += SolarSystem.getAU() * msPerFrame / 100 * scale;
             }
 
-            // zoom in (make scale smaller to zoom in)
-            if (StdDraw.isKeyPressed(KeyEvent.VK_PLUS)) {
-                scale /= 2;
-            } else if (StdDraw.isKeyPressed(KeyEvent.VK_MINUS)) {
-                scale *= 2;
+            // zoom (make scale smaller to zoom in)
+            if (StdDraw.isKeyPressed(KeyEvent.VK_PLUS) || StdDraw.isKeyPressed(107)) {
+                scale /= 1.0 + (msPerFrame / 40);
+            } else if (StdDraw.isKeyPressed(KeyEvent.VK_MINUS) || StdDraw.isKeyPressed(109)) {
+                scale *= 1.0 + (msPerFrame / 40);
             }
             StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
             StdDraw.setYscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
 
-            Thread.sleep(msPerFrame);
+            int ms = nsPerFrame / 1000000;
+            int ns = nsPerFrame % 1000000;
+            Thread.sleep(ms, ns);
         }
 
     }
