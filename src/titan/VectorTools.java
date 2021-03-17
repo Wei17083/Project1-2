@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.DynamicTest.stream;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class VectorTools {
 
@@ -117,6 +118,11 @@ public class VectorTools {
         // StdDraw.line(position.getX() - GUI.getZoomOffsetX(), position.getY()
         // - GUI.getZoomOffsetY(), 0,
         // 0);
+    }
+
+    public static Vector3dInterface randUnitVector(){
+        Random rng = new Random();
+        return VectorTools.getUnitVector(new Vector(rng.nextDouble(), rng.nextDouble(), rng.nextDouble()));
     }
 
 }

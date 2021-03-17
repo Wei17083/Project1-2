@@ -228,8 +228,6 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                         }
                         rate.addVelocityChange(VectorTools.sumAll(forces).mul(1 / b.getMass()));
                 }
-
-
                 return rate;
         }
 
