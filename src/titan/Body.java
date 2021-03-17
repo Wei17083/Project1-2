@@ -13,7 +13,7 @@ public class Body {
     private Vector3dInterface velocity;
     private final double radius;
     private Color color; // color to visualise
-    private Path path;
+
 
     public final double GRAV_CONSTANT = 6.674E-11;
 
@@ -64,23 +64,15 @@ public class Body {
         return radius;
     }
 
-    /**
-     * returns the path of the body
-     *
-     * @return path of the body
-     */
-    public Path getPath() {
-        return path;
-    }
 
-    /**
-     * Sets the path of the body
-     *
-     * @param path path consisting of VectorPositions and corresponding stepSize
-     */
-    public void setPath(Path path) {
-        this.path = path;
-    }
+//    /**
+//     * Sets the path of the body
+//     *
+//     * @param path path consisting of VectorPositions and corresponding stepSize
+//     */
+//    public void setPath(Path path) {
+//        this.path = path;
+//    }
 
     /**
      * Changes the mass of the body
@@ -149,26 +141,7 @@ public class Body {
             color = c;
     }
 
-    /**
-     * Creates path for the body at t0
-     * 
-     * @param stepSize stepsize corresponding to the path
-     * @param p        initial position of the body
-     * @param v        initial speed of the body
-     */
-    public void addPath(double stepSize, Vector3dInterface p, Vector3dInterface v) {
-        path = new Path(stepSize, p, v);
-    }
 
-    /**
-     * adds new position and velocity to the path
-     * 
-     * @param p new position
-     * @param v new velocity
-     */
-    public void addPathEntry(Vector3dInterface p, Vector3dInterface v) {
-        path.add(p, v);
-    }
 
 
 

@@ -72,7 +72,7 @@ public class VectorTools {
      */
     public static void drawBody(String name, Vector3dInterface position, double radius, Color color) {
 
-        if (name.equalsIgnoreCase("probe")) {
+        if (name.equalsIgnoreCase("spaceship")) {
             StdDraw.picture(10, 10, "spaceship.jpg", 6.95508e10, 6.95508e10);
             // System.out.println("a");
             double rad = 1e9 * Math.log(radius);
