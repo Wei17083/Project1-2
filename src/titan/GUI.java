@@ -8,6 +8,8 @@ public class GUI {
     private static final int nsPerFrame = 1000000;
     private static double zoomOffsetX = 0;
     private static double zoomOffsetY = 0;
+    // animation only draws every nth position (n = skip)
+    private static int skip = 10;
 
     public static void visualise(Body[] bodies, List<Vector3dInterface> earthPositions) throws InterruptedException {
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
@@ -38,14 +40,15 @@ public class GUI {
         double msPerFrame = nsPerFrame / 1000000;
 
         // TODO: Implement list of lists to draw all bodies
-        for (Vector3dInterface pos : earthPositions) {
+        for (int i = 0; i < earthPositions.size(); i += skip) {
+
             StdDraw.clear(StdDraw.BLACK);
+            bodies[3].setPosition(earthPositions.get(i));
             for (Body body : bodies) {
-                body.draw();
                 // set body to new pos
                 // body.setPosition(pos or whatever)
+                body.draw();
             }
-            bodies[3].setPosition(pos);
             StdDraw.show();
 
             // to focus on specific body set offsets like this
