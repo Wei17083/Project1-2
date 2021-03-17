@@ -76,10 +76,8 @@ public class ToolsCSV {
         skipColumn(Reader,3);
 
         while(Reader.hasNextLine()){
-            //String test = Reader.next();
             double x = Double.parseDouble(Reader.next());
             double y = Double.parseDouble(Reader.next());
-            //String test = Reader.next();
             double z = Double.parseDouble(Reader.next());
 
             list.add(new Vector(x,y,z));
@@ -108,67 +106,4 @@ public class ToolsCSV {
             }
         }
     }
-
-    //main method to test results:
-
-   /* public static void main(String[] args) throws FileNotFoundException {
-        // state 1
-
-        ArrayList<Vector3dInterface> positionList = new ArrayList<>();
-        positionList.add(new Vector(1,1,1));
-        positionList.add(new Vector(2,1,2));
-        positionList.add(new Vector(5,6,5));
-
-        ArrayList<Vector3dInterface> velocityList = new ArrayList<>();
-        velocityList.add(new Vector(-1,-1,-1));
-        velocityList.add(new Vector(-2,-1,-2));
-        velocityList.add(new Vector(-5,-6,-5));
-
-        State s0 = new State(0, positionList, velocityList);
-
-        // state 2
-
-        ArrayList<Vector3dInterface> positionList1 = new ArrayList<>();
-        positionList1.add(new Vector(2,2,2));
-        positionList1.add(new Vector(3,2,3));
-        positionList1.add(new Vector(6,7,6));
-
-        ArrayList<Vector3dInterface> velocityList1 = new ArrayList<>();
-        velocityList1.add(new Vector(-2,-2,-2));
-        velocityList1.add(new Vector(-3,-2,-3));
-        velocityList1.add(new Vector(-6,-7,-6));
-
-        State s1 = new State(1, positionList1, velocityList1);
-
-        //state 3
-
-        ArrayList<Vector3dInterface> positionList2 = new ArrayList<>();
-        positionList2.add(new Vector(3,3,3));
-        positionList2.add(new Vector(4,3,4));
-        positionList2.add(new Vector(7,8,7));
-
-        ArrayList<Vector3dInterface> velocityList2 = new ArrayList<>();
-        velocityList2.add(new Vector(-3,-3,-3));
-        velocityList2.add(new Vector(-4,-3,-4));
-        velocityList2.add(new Vector(-7,-8,-7));
-
-        State s2 = new State(1, positionList2, velocityList2);
-
-
-        ArrayList<State> listStates = new ArrayList<>();
-        listStates.add(s0);
-        listStates.add(s1);
-        listStates.add(s2);
-
-        createCSV(listStates);
-
-        double usedID = 1;
-
-        List<Vector> l = getCSVPositions("data.csv", usedID);
-        System.out.println("Positions of Body " + usedID + ": " + l.toString());
-        List<Vector> lv = getCSVVelocities("data.csv", usedID);
-        System.out.println("Velocities of Body " + usedID + ": " + lv.toString());
-    }
-
-    */
 }
