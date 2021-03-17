@@ -52,26 +52,27 @@ public class GUI {
             // convert nsPerFrame to a ms double
             double msPerFrame = nsPerFrame / 1000000;
             if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT) || StdDraw.isKeyPressed(KeyEvent.VK_A)) {
-                zoomOffsetX -= SolarSystem.getAU() * msPerFrame / 100 * scale;
+                zoomOffsetX -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
             } else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT) || StdDraw.isKeyPressed(KeyEvent.VK_D)) {
-                zoomOffsetX += SolarSystem.getAU() * msPerFrame / 100 * scale;
+                zoomOffsetX += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
 
             } else if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN) || StdDraw.isKeyPressed(KeyEvent.VK_S)) {
-                zoomOffsetY -= SolarSystem.getAU() * msPerFrame / 100 * scale;
+                zoomOffsetY -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
 
             } else if (StdDraw.isKeyPressed(KeyEvent.VK_UP) || StdDraw.isKeyPressed(KeyEvent.VK_W)) {
-                zoomOffsetY += SolarSystem.getAU() * msPerFrame / 100 * scale;
+                zoomOffsetY += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
             }
 
             // zoom (make scale smaller to zoom in)
             if (StdDraw.isKeyPressed(KeyEvent.VK_PLUS) || StdDraw.isKeyPressed(107)) {
-                scale /= 1.0 + (msPerFrame / 40);
+                scale /= 1.0 + (Math.log(msPerFrame * 10) / 40);
             } else if (StdDraw.isKeyPressed(KeyEvent.VK_MINUS) || StdDraw.isKeyPressed(109)) {
-                scale *= 1.0 + (msPerFrame / 40);
+                scale *= 1.0 + (Math.log(msPerFrame * 10) / 40);
             }
             StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
             StdDraw.setYscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
 
+            // convert to int because sleep() doesnt take double
             int ms = nsPerFrame / 1000000;
             int ns = nsPerFrame % 1000000;
             Thread.sleep(ms, ns);
