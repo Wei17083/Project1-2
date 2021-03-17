@@ -96,9 +96,9 @@ public class VectorTools {
         if (radius > 6e8) {
             StdDraw.text(position.getX() - SolarSystem.getZoomOffsetX() + 2 * rad,
                     position.getY() - SolarSystem.getZoomOffsetY() + 2 * rad, name);
-        } else if (radius < 3e6) {
-            StdDraw.text(position.getX() - SolarSystem.getZoomOffsetX() + radius,
-                    position.getY() - SolarSystem.getZoomOffsetY() + radius, name);
+        } else if (radius < 3e6) {// TODO: change name offset to scale with zoom
+            StdDraw.text(position.getX() - SolarSystem.getZoomOffsetX() + radius + 1e9,
+                    position.getY() - SolarSystem.getZoomOffsetY() + radius + 1e9, name);
         } else {
             StdDraw.text(position.getX() - SolarSystem.getZoomOffsetX() + 1.5 * rad,
                     position.getY() - SolarSystem.getZoomOffsetY() + 1.5 * rad, name);
