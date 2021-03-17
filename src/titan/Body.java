@@ -15,19 +15,18 @@ public class Body {
     private Color color; // color to visualise
     private Path path;
 
-
     public final double GRAV_CONSTANT = 6.674E-11;
 
     /**
      * This method draws the body using its position, radius and color
      */
     public void draw() {
-        VectorTools.drawBody(position, radius, color);
+        VectorTools.drawBody(name, position, radius, color);
     }
 
     /**
      * returns the mass of the object
-     *
+     * 
      * @return mass of the object
      */
     public double getMass() {
@@ -40,7 +39,7 @@ public class Body {
 
     /**
      * returns the velocity of the object
-     *
+     * 
      * @return velocity vector of the object
      */
     public Vector3dInterface getVelocity() {
@@ -49,7 +48,7 @@ public class Body {
 
     /**
      * returns the position of the object
-     *
+     * 
      * @return position vector of the object
      */
     public Vector3dInterface getPosition() {
@@ -65,7 +64,8 @@ public class Body {
         return radius;
     }
 
-    /** returns the path of the body
+    /**
+     * returns the path of the body
      *
      * @return path of the body
      */
@@ -73,7 +73,8 @@ public class Body {
         return path;
     }
 
-    /** Sets the path of the body
+    /**
+     * Sets the path of the body
      *
      * @param path path consisting of VectorPositions and corresponding stepSize
      */
@@ -134,7 +135,8 @@ public class Body {
      * @param radius   sets the radius of the object
      * @param c        sets the Color of the object, if NULL will be set to black
      */
-    public Body(String name,int ID , double mass, Vector3dInterface position, Vector3dInterface velocity, double radius, Color c) {
+    public Body(String name, int ID, double mass, Vector3dInterface position, Vector3dInterface velocity, double radius,
+            Color c) {
         this.name = name;
         this.ID = ID;
         this.mass = mass;
@@ -149,9 +151,10 @@ public class Body {
 
     /**
      * Creates path for the body at t0
+     * 
      * @param stepSize stepsize corresponding to the path
-     * @param p initial position of the body
-     * @param v initial speed of the body
+     * @param p        initial position of the body
+     * @param v        initial speed of the body
      */
     public void addPath(double stepSize, Vector3dInterface p, Vector3dInterface v) {
         path = new Path(stepSize, p, v);
@@ -159,28 +162,12 @@ public class Body {
 
     /**
      * adds new position and velocity to the path
+     * 
      * @param p new position
      * @param v new velocity
      */
     public void addPathEntry(Vector3dInterface p, Vector3dInterface v) {
         path.add(p, v);
-    }
-
-    /**
-     * This method returns the gravitational pull this Body has on another one
-     *
-     * @param body the body on which this force is acting
-     * @return the resulting puling force
-     */
-    public Vector3dInterface gravitationalPull(Body body) {
-        if (this == body) // a body doesn't have force on itself
-            return new Vector(0, 0, 0);
-
-        // TODO: Implement physics calculations on force here
-        double distance = this.position.dist(body.getPosition());
-        Vector3dInterface forceDirection = VectorTools.directionVector(body.getPosition(), this.getPosition());
-        double force = GRAV_CONSTANT*this.getMass()* body.getMass()/Math.pow(distance,2);
-        return forceDirection.mul(force);
     }
 
 
