@@ -60,14 +60,17 @@ public class testPhysics {
                 new Vector(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02),
                 2.4622e7, Color.blue);
 
-
+        Body spaceship = new Body("spaceship", 10,1.02413e26,
+                new Vector(4.382692942729203e+12, -9.093501655486243e+11, -8.227728929479486e+10),
+                new Vector(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02),
+                2.4622e7, Color.blue);
 
 
 
 
         // create arrays of bodies and corresponding forces
         Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
-                neptune };
+                neptune, spaceship};
 
         SolarSystem system = new SolarSystem(bodies);
 
