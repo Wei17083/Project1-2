@@ -1,6 +1,7 @@
 package titan;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +77,7 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                 StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
                 StdDraw.setCanvasSize(750, 750);
                 // setting up scale in order to display whole solar system
-                int scale = 14;
+                double scale = 14;
                 StdDraw.setXscale(-scale * AU, scale * AU);
                 StdDraw.setYscale(-scale * AU, scale * AU);
 
@@ -86,14 +87,8 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
 
                 // get all body position lists
                 // example values to test animation
-                List<Vector3dInterface> earthPositions = new ArrayList<>();
-                earthPositions.add(earth.getPosition());
-                earthPositions.add(earth.getPosition()
-                                .add(new Vector(1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06)));
-                earthPositions.add(earth.getPosition()
-                                .add(new Vector(1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06))
-                                .add(new Vector(1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06)));
-
+                // List<Vector3dInterface> earthPositions = new ArrayList<>();
+                Vector3dInterface[] earthPositions = new Vector3dInterface[10000];
                 // create list of position lists to iterate over
                 // list<list<vector> positions = getPositions
 
@@ -114,12 +109,29 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
 
                         StdDraw.show();
 
-                        // this focusses on earth -> we can replace it with probe
-                        zoomOffsetX = earth.getPosition().getX();
-                        zoomOffsetY = earth.getPosition().getY();
+                        // to focus on specific body set offsets like this
+                        // zoomOffsetX = titan.getPosition().getX();
+                        // zoomOffsetY = titan.getPosition().getY();
+
+                        // manual moving around
+                        if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT)) {
+                                zoomOffsetX -= AU;
+                        } else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT)) {
+                                zoomOffsetX += AU;
+
+                        } else if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN)) {
+                                zoomOffsetY -= AU;
+
+                        } else if (StdDraw.isKeyPressed(KeyEvent.VK_UP)) {
+                                zoomOffsetY += AU;
+                        }
 
                         // zoom in (make scale smaller to zoom in)
-                        scale /= 2;
+                        if (StdDraw.isKeyPressed(KeyEvent.VK_PLUS)) {
+                                scale /= 2;
+                        } else if (StdDraw.isKeyPressed(KeyEvent.VK_MINUS)) {
+                                scale *= 2;
+                        }
                         StdDraw.setXscale(-scale * AU, scale * AU);
                         StdDraw.setYscale(-scale * AU, scale * AU);
 
@@ -132,7 +144,7 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
         // One AU is approximately the average distance between the Earth and the Sun
         // value taken from https://cneos.jpl.nasa.gov/glossary/au.html
         public static final double AU = 1.495978707e11;
-        private static final int msPerFrame = 1000;
+        private static final int msPerFrame = 100;
         private static int maxSteps = 1000;
         private static double stepSize = 0.1;
         private static double zoomOffsetX = 0;
@@ -190,9 +202,9 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                 StateInterface state = y0;
                 int index = 1;
                 for (int i = 1; i < iterations && index < ts.length; i++) {
-                        if (Math.abs((i-1)*stepSize - ts[index]) < Math.abs(i*stepSize - ts[index])) {
-                           stateList[index] = state;
-                           index++;
+                        if (Math.abs((i - 1) * stepSize - ts[index]) < Math.abs(i * stepSize - ts[index])) {
+                                stateList[index] = state;
+                                index++;
                                 System.out.println("it happened");
                         }
                         state = step(f, stepSize * i, state, stepSize);
@@ -271,18 +283,19 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                         ArrayList<Vector3dInterface> forces = new ArrayList<>();
                         for (Body b2 : bodies) {
                                 if (!(b.equals(b2))) {
-                                        forces.add(gravitationalPull(b, b2, y1.getPositionList().get(b.getID()), y1.getPositionList().get(b2.getID())));
+                                        forces.add(gravitationalPull(b, b2, y1.getPositionList().get(b.getID()),
+                                                        y1.getPositionList().get(b2.getID())));
                                 }
                         }
                         Vector3dInterface force = VectorTools.sumAll(forces);
-                        //System.out.println(b.getName());
-                        //System.out.println(VectorTools.getUnitVector(force).toString());
-                        //System.out.println(VectorTools.directionVector(b.getPosition(), y1.getPositionList().get(0)));
+                        // System.out.println(b.getName());
+                        // System.out.println(VectorTools.getUnitVector(force).toString());
+                        // System.out.println(VectorTools.directionVector(b.getPosition(),
+                        // y1.getPositionList().get(0)));
                         rate.addVelocityChange(VectorTools.sumAll(forces).mul(1 / b.getMass()));
                 }
                 return rate;
         }
-
 
         public Vector3dInterface gravitationalPull(Body b1, Body b2, Vector3dInterface p1, Vector3dInterface p2) {
 
