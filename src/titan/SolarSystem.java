@@ -277,7 +277,14 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
          */
         @Override
         public RateInterface call(double t, StateInterface y) {
+
+                System.out.println(t);
                 State y1 = (State) y;
+                System.out.println("positions");
+                for (Vector3dInterface v: y1.getPositionList()
+                     ) {
+                        System.out.println(v.toString());
+                }
                 ChangeRate rate = new ChangeRate();
                 for (Body b : bodies) {
                         rate.addPositionChange(y1.getVelocityList().get(b.getID()));
@@ -297,6 +304,12 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                         // y1.getPositionList().get(0)));
                         rate.addVelocityChange(VectorTools.sumAll(forces).mul(1 / b.getMass()));
                 }
+                System.out.println("Velocities");
+                for (Vector3dInterface v: rate.getPositionChanges()
+                     ) {
+                        System.out.println(v.toString());
+                }
+
                 return rate;
         }
 
