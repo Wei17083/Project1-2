@@ -73,9 +73,41 @@ public class VectorTools {
      */
     public static void drawBody(String name, Vector3dInterface position, double radius, Color color) {
 
-        if (name.equalsIgnoreCase("spaceship")) {
-            StdDraw.picture(10, 10, "spaceship.jpg", 6.95508e10, 6.95508e10, 20); // perhaps we can also change the
-                                                                                  // degree of the spaceship
+        if (name.equalsIgnoreCase("Moon")) {
+            double a = GUI.getScale()*2;
+            if (a>10) {
+                a=10;
+            }
+            else if (a<0.3) {
+                a=0.3;
+            }
+            StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), "spaceship.jpg", 6.95508e9*a, 6.95508e9*a); // perhaps we can also change the degree of the spaceship
+        }
+        else {
+        StdDraw.setPenColor(color);
+        // using real scale of planets wouldnt give us a good overview
+        // one can play around with the radius so that it looks presentable
+        double rad = 1e9 * Math.log(radius);
+        StdDraw.filledCircle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), radius);
+
+        // divide bodies into 3 categories:
+        // big (sun), small (moons + mercury), medium (planets)
+        if (radius > 6e8) {
+            StdDraw.circle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), 2 * rad);
+        } else if (radius < 3e6) {
+            StdDraw.circle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), rad);
+        } else {
+            StdDraw.circle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), 1.5 * rad);
+        }
+
+        // draw names
+        StdDraw.setPenColor(color.white);
+        if (radius > 6e8) {
+            StdDraw.text(position.getX() - GUI.getZoomOffsetX() + 2 * rad,
+                    position.getY() - GUI.getZoomOffsetY() + 2 * rad, name);
+        } else if (radius < 3e6) {// TODO: change name offset to scale with zoom
+            StdDraw.text(position.getX() - GUI.getZoomOffsetX() + radius + 1e9,
+                    position.getY() - GUI.getZoomOffsetY() + radius + 1e9, name);
         } else {
             StdDraw.setPenColor(color);
             // using real scale of planets wouldnt give us a good overview
