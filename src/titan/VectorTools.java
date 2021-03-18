@@ -74,14 +74,7 @@ public class VectorTools {
     public static void drawBody(String name, Vector3dInterface position, double radius, Color color) {
 
         if (name.equalsIgnoreCase("spaceship")) {
-            StdDraw.picture(10, 10, "spaceship.jpg", 6.95508e10, 6.95508e10);
-            // System.out.println("a");
-            double rad = 1e9 * Math.log(radius);
-            StdDraw.setPenColor(color.white);
-
-            StdDraw.text(position.getX() - GUI.getZoomOffsetX() + 2 * rad,
-                    position.getY() - GUI.getZoomOffsetY() + 2 * rad, name);
-
+            StdDraw.picture(10, 10, "spaceship.jpg", 6.95508e10, 6.95508e10, 20); // perhaps we can also change the degree of the spaceship
         }
         else {
         StdDraw.setPenColor(color);
