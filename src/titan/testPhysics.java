@@ -94,6 +94,8 @@ public class testPhysics {
 //        System.out.println(earthPositionList.get(0).getX()+", "+earthPositionList.get(0).getY()+", "+earthPositionList.get(0).getZ());
 //        System.out.println(earthPositionList.get(earthPositionList.size()-1).getX()+", "+earthPositionList.get(earthPositionList.size()-1).getY()+", "+earthPositionList.get(earthPositionList.size()-1).getZ());
 //        System.out.println(earthPositionList.get((earthPositionList.size()-1)/2).getX()+", "+earthPositionList.get((earthPositionList.size()-1)/2).getY()+", "+earthPositionList.get((earthPositionList.size()-1)/2).getZ());
+
+                System.out.println(new Vector(27771.89015815458, -40238.56416078634, -769.065384128892).norm());
         BruteForce.bruteforce(system);
 
     }

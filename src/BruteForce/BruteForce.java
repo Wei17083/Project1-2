@@ -3,6 +3,7 @@ package BruteForce;
 import titan.*;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BruteForce {
     private static final Vector3dInterface EarthP = new Vector(-1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06);
@@ -55,11 +56,12 @@ public class BruteForce {
             double launchSpeed = Math.random()*(maxSpeed-minSpeed) + minSpeed;
             System.out.println("launchSpeed: " + launchSpeed);
             //System.out.println("Random unit vector: " + unitVector.toString());
-            Vector3dInterface velocity = EarthV.addMul(launchSpeed, unitVector);
+            Vector3dInterface velocity = unitVector.mul(launchSpeed);
+            Vector3dInterface velocityTotal = EarthV.add(velocity);
 
 
             //System.out.println("Initial speed: " + velocity.toString());
-            Vector3dInterface[] trajectory = spaceship.trajectory(position, velocity, 31556926, 1000);
+            Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, 1000);
             //System.out.println(getMinimum(trajectories, states));
 
             if( i == 0 || getMinimum(trajectory, states) < distanceBest ) {
@@ -77,26 +79,27 @@ public class BruteForce {
         System.out.println("Starting while loop");
         boolean hit = false;
         int counter = 0;
+
         while(!hit) {
 
 
             double randNumber = Math.random();
             int randPower = (int) (Math.random()*2 + 1);
-            double changeRate = Math.random()*0.00001*(distanceBest/initialDistanceET)*Math.pow(-1, randPower);
+            double changeRate = ((new Random().nextInt(9)+1)*5*(100.0/counter)) *(distanceBest/initialDistanceET)*Math.pow(-1, randPower);
 
 
 
             Vector3dInterface unitVector = new Vector(0,0,0);
-            double launchSpeedNew = velocityBest.sub(EarthV).norm();
+            double launchSpeedNew = velocityBest.norm();
 
 
             if(randNumber < 0.25) {
                 double newX = velocityBest.getX()*(1 +changeRate);
                 unitVector = VectorTools.getUnitVector(new Vector(newX, velocityBest.getY(), velocityBest.getZ()));
-                System.out.println("x-difference: " + (newX - velocityBest.getX()));
-                System.out.println("New unit vector: " + unitVector.toString());
-                System.out.println("Best unit vector: " + unitVectorBest.toString());
-                System.out.println("Velocity best unit vector: " + VectorTools.getUnitVector(velocityBest));
+//                System.out.println("x-difference: " + (newX - velocityBest.getX()));
+//                System.out.println("New unit vector: " + unitVector.toString());
+//                System.out.println("Best unit vector: " + unitVectorBest.toString());
+//                System.out.println("Velocity best unit vector: " + VectorTools.getUnitVector(velocityBest));
             } else if(randNumber < 0.5) {
                 double newY = velocityBest.getY()*(1 +changeRate);
                 unitVector = VectorTools.getUnitVector(new Vector(velocityBest.getX(), newY , velocityBest.getZ()));
@@ -105,21 +108,26 @@ public class BruteForce {
                 unitVector = VectorTools.getUnitVector(new Vector(velocityBest.getX(), velocityBest.getY(), newZ));
             } else {
                // System.out.println("changeRate: " + changeRate);
-                launchSpeedNew = velocityBest.sub(EarthV).norm()*(1 +changeRate);
+                launchSpeedNew = velocityBest.norm()*(1 +changeRate);
                 if(launchSpeedNew > maxSpeed) launchSpeedNew = maxSpeed;
                // System.out.println("launchSpeedNew: " + launchSpeedNew);
                 unitVector = VectorTools.getUnitVector(velocityBest);
             }
             Vector3dInterface position = EarthP.addMul(EarthR, unitVector);
-            Vector3dInterface velocity = EarthV.addMul(launchSpeedNew, unitVector);
+            Vector3dInterface velocity = unitVector.mul(launchSpeedNew);
+            Vector3dInterface velocityTotal = EarthV.add(velocity);
 
-            Vector3dInterface[] trajectory = spaceship.trajectory(position, velocity, 31556926, 1000);
+            Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, 1000);
 
             double shortestDistance = getMinimum(trajectory, states);
-//            System.out.println();
-//            System.out.println(directionVector.toString());
-//            System.out.println("shortest distance: " + shortestDistance);
-//            System.out.println("shortest so far: " + distanceBest);
+            System.out.println();
+
+            System.out.println("ChangeRate: " + changeRate);
+            System.out.println("shortest distance: " + shortestDistance);
+//            System.out.println("Velocity vector: " + velocity.toString());
+            System.out.println("shortest so far: " + distanceBest);
+//            System.out.println("Velocity best: " + velocityBest.toString());
+            System.out.println(directionVector.toString());
             if(counter%10000 == 0) {
                 System.out.println();
                 System.out.println("ChangeRate: " + changeRate);
