@@ -133,7 +133,6 @@ public class testPhysics {
                 ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length);
                 csv.createCSV();
                 ToolsCSV.createProbeCSV(trajectory);
-                GUI.visualise(bodies, ToolsCSV.getAllPositions(), ToolsCSV.getProbeTrajectory());
                 // BruteForce.bruteforce(system);
 
         }
