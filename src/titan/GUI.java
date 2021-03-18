@@ -11,7 +11,8 @@ public class GUI {
     // animation only draws every nth position (n = skip)
     private static int skip = 10;
 
-    public static void visualise(Body[] bodies, List<Vector3dInterface> earthPositions) throws InterruptedException {
+    public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions)
+            throws InterruptedException {
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
         // setting up scale in order to display whole solar system
@@ -24,9 +25,15 @@ public class GUI {
         zoomOffsetY = bodies[3].getPosition().getY();
 
         // time stamps for automatic zoom
-        int zoomOut = earthPositions.size() / 2;
-        double zoomOutEndScale = scale;
-        int stay = earthPositions.size() / 4 * 3;
+        int phase1 = allPositions.get(0).size() / 2;
+        int zoomTime = 3000;
+        double phase1EndScale = scale;
+        double x1 = (allPositions.get(3).get(0).getX() + allPositions.get(8).get(allPositions.size() - 1).getX()) / 2;
+        double y1 = (allPositions.get(3).get(0).getY() + allPositions.get(8).get(allPositions.size() - 1).getY()) / 2;
+        double xStep1 = x1 / phase1;
+        double yStep1 = y1 / phase1;
+
+        int phase2 = allPositions.get(0).size() / 4 * 3;
         // indicates wether the automatic zoom is active or not
         boolean interrupted = false;
         // indicates wether the animation is paused or not
@@ -45,57 +52,61 @@ public class GUI {
         StdDraw.show();
 
         // TODO: Implement list of lists to draw all bodies
-        for (int i = 0; i < earthPositions.size(); i += skip) {
-
+        for (int i = 0; i < allPositions.get(0).size(); i += skip) {
             StdDraw.clear(StdDraw.BLACK);
-            bodies[3].setPosition(earthPositions.get(i));
+            // set bodies to new pos
+            for (int j = 0; j < bodies.length; j++) {
+                bodies[j].setPosition(allPositions.get(j).get(i));
+            }
+            // draw bodies
             for (Body body : bodies) {
-                // set body to new pos
-                // body.setPosition(pos or whatever)
                 body.draw();
             }
             StdDraw.show();
 
-            // to focus on specific body set offsets like this
-            // zoomOffsetX = titan.getPosition().getX();
-            // zoomOffsetY = titan.getPosition().getY();
-
             // manual moving around
-            // if we press a button, interrupt the auto animation
-            if (StdDraw.isKeyPressed(KeyEvent.KEY_PRESSED) && !StdDraw.isKeyPressed(KeyEvent.VK_SPACE))
-                interrupted = true;
+            // press space to continue the auto animation
+            if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE))
+                interrupted = false;
 
             // changes are scaling based on log of msPerFrame*10 so that the zoom effect
             // stays similar even when framerate changes.
             // msPerFrame has to be more than 0.1 for this to work, else log(1) = 0
-            if (interrupted) {
-                if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT) || StdDraw.isKeyPressed(KeyEvent.VK_A))
-                    zoomOffsetX -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
-                else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT) || StdDraw.isKeyPressed(KeyEvent.VK_D))
-                    zoomOffsetX += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
-                else if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN) || StdDraw.isKeyPressed(KeyEvent.VK_S))
-                    zoomOffsetY -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
-                else if (StdDraw.isKeyPressed(KeyEvent.VK_UP) || StdDraw.isKeyPressed(KeyEvent.VK_W))
-                    zoomOffsetY += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+            else if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT) || StdDraw.isKeyPressed(KeyEvent.VK_A)) {
+                interrupted = true;
+                zoomOffsetX -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+            } else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT) || StdDraw.isKeyPressed(KeyEvent.VK_D)) {
+                interrupted = true;
+                zoomOffsetX += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+            } else if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN) || StdDraw.isKeyPressed(KeyEvent.VK_S)) {
+                interrupted = true;
+                zoomOffsetY -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+            } else if (StdDraw.isKeyPressed(KeyEvent.VK_UP) || StdDraw.isKeyPressed(KeyEvent.VK_W)) {
+                interrupted = true;
+                zoomOffsetY += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+            }
+            // zoom (make scale smaller to zoom in)
+            if (StdDraw.isKeyPressed(KeyEvent.VK_PLUS) || StdDraw.isKeyPressed(107)) {
+                interrupted = true;
+                scale /= 1.0 + (Math.log(msPerFrame * 10) / 40);
+            } else if (StdDraw.isKeyPressed(KeyEvent.VK_MINUS) || StdDraw.isKeyPressed(109)) {
+                interrupted = true;
+                scale *= 1.0 + (Math.log(msPerFrame * 10) / 40);
+            }
 
-                // zoom (make scale smaller to zoom in)
-                if (StdDraw.isKeyPressed(KeyEvent.VK_PLUS) || StdDraw.isKeyPressed(107)) {
-                    scale /= 1.0 + (Math.log(msPerFrame * 10) / 40);
-                } else if (StdDraw.isKeyPressed(KeyEvent.VK_MINUS) || StdDraw.isKeyPressed(109)) {
-                    scale *= 1.0 + (Math.log(msPerFrame * 10) / 40);
-                }
-            } else {
-                if (i <= zoomOut) {
+            // auto animation
+            if (!interrupted) {
+                if (i <= phase1) {
                     if (scale < 8) { // slowly zoom out
                         scale = Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), i);
-                        zoomOutEndScale = scale;
-                    } else {// TODO: make an average step so that x and y are smooth
-                        if (zoomOffsetX < (bodies[4].getPosition().getX() + bodies[8].getPosition().getX()) / 2)
-                            zoomOffsetX += (bodies[4].getPosition().getX() + bodies[8].getPosition().getX()) / 1000;
-                        if (zoomOffsetY > (bodies[4].getPosition().getY() + bodies[8].getPosition().getY()) / 2)
-                            zoomOffsetY += (bodies[4].getPosition().getY() + bodies[8].getPosition().getY()) / 1000;
+                        phase1EndScale = scale;
+                    } else {
+                        if (zoomOffsetX < x1)
+                            zoomOffsetX = xStep1 * 2 * i;
+                        if (zoomOffsetY > y1)
+                            zoomOffsetY = yStep1 * 2 * i;
                     }
-                } else if (i > stay) {
+                } else if (i > phase2) {
 
                     // TODO: make an average step so that x and y are smooth
                     if (zoomOffsetX < bodies[8].getPosition().getX())
@@ -103,7 +114,7 @@ public class GUI {
                     if (zoomOffsetY > bodies[8].getPosition().getY())
                         zoomOffsetY += (bodies[4].getPosition().getY() + bodies[8].getPosition().getY()) / 1000;
                     else if (scale > 1) // slowly zoom in
-                        scale = zoomOutEndScale + 1.0 - Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), (i - stay));
+                        scale = phase1EndScale + 1.0 - Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), (i - phase2));
 
                 }
             }

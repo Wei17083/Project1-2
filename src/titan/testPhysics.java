@@ -3,10 +3,15 @@ package titan;
 import BruteForce.BruteForce;
 
 import java.awt.*;
+import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.tools.Tool;
 
 public class testPhysics {
-        public static void main(String[] args) throws InterruptedException {
+        public static void main(String[] args) throws InterruptedException, FileNotFoundException {
                 Body sun = new Body("Sun", 0, 1.988500e30,
                                 new Vector(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06),
                                 new Vector(-1.420511669610689e+01, -4.954714716629277e+00, 3.994237625449041e-01),
@@ -62,39 +67,48 @@ public class testPhysics {
                                 new Vector(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02),
                                 2.4622e7, Color.blue);
 
+                // create arrays of bodies and corresponding forces
+                Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
+                                neptune };
 
-        // create arrays of bodies and corresponding forces
-        Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
-                neptune};
+                SolarSystem system = new SolarSystem(bodies);
 
-        SolarSystem system = new SolarSystem(bodies);
+                // System.out.println(system.getState().toString());
+                State state = (State) system.step(system, 86400, system.getState(), 86400);
+                // System.out.println(state.toString());
 
-        //System.out.println(system.getState().toString());
-        State state = (State) system.step(system, 86400, system.getState(), 86400);
-        //System.out.println(state.toString());
+                double[] ts = { 0, 31556926 }; // 31556926
+                StateInterface[] stateList = system.solve(system, system.getState(), ts);
+                // System.out.println(stateList[1].toString());
 
-        double[] ts = {0, 31556926 };   //31556926
-        StateInterface[] stateList = system.solve(system, system.getState(), ts);
-        //System.out.println(stateList[1].toString());
+                double tf = 31556926;
+                // System.out.println("tf = "+tf);
+                StateInterface[] stateList2 = system.solve(system, system.getState(), tf, 1000);
+                State[] stateList3 = new State[stateList2.length];
+                for (int i = 0; i < stateList2.length; i++) {
+                        stateList3[i] = (State) stateList2[i];
+                }
+                // System.out.println(stateList2[stateList2.length-1].toString());
 
-        double tf = 31556926;
-        //System.out.println("tf = "+tf);
-        StateInterface[] stateList2 = system.solve(system,system.getState(), tf, 1000 );
-        State[] stateList3 = new State[stateList2.length];
-        for (int i = 0; i < stateList2.length ; i++) {
-            stateList3[i] = (State) stateList2[i];
+                ArrayList<Vector3dInterface> earthPositionList = new ArrayList<>();
+                for (State s : stateList3) {
+                        Vector3dInterface v = s.getPositionList().get(3);
+                        earthPositionList.add(s.getPositionList().get(3));
+                }
+
+                ArrayList<StateInterface> arListPositions = new ArrayList<>(Arrays.asList(stateList2));
+                ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length);
+                GUI.visualise(bodies, csv.getAllPositions());
+
+                // System.out.println(earthPositionList.get(0).getX()+",
+                // "+earthPositionList.get(0).getY()+", "+earthPositionList.get(0).getZ());
+                // System.out.println(earthPositionList.get(earthPositionList.size()-1).getX()+",
+                // "+earthPositionList.get(earthPositionList.size()-1).getY()+",
+                // "+earthPositionList.get(earthPositionList.size()-1).getZ());
+                // System.out.println(earthPositionList.get((earthPositionList.size()-1)/2).getX()+",
+                // "+earthPositionList.get((earthPositionList.size()-1)/2).getY()+",
+                // "+earthPositionList.get((earthPositionList.size()-1)/2).getZ());
+                BruteForce.bruteforce(system);
+
         }
-        //System.out.println(stateList2[stateList2.length-1].toString());
-
-        ArrayList<Vector3dInterface> earthPositionList = new ArrayList<>();
-        for (State s: stateList3) {
-            Vector3dInterface v = s.getPositionList().get(3);
-            earthPositionList.add(s.getPositionList().get(3));
-        }
-//        System.out.println(earthPositionList.get(0).getX()+", "+earthPositionList.get(0).getY()+", "+earthPositionList.get(0).getZ());
-//        System.out.println(earthPositionList.get(earthPositionList.size()-1).getX()+", "+earthPositionList.get(earthPositionList.size()-1).getY()+", "+earthPositionList.get(earthPositionList.size()-1).getZ());
-//        System.out.println(earthPositionList.get((earthPositionList.size()-1)/2).getX()+", "+earthPositionList.get((earthPositionList.size()-1)/2).getY()+", "+earthPositionList.get((earthPositionList.size()-1)/2).getZ());
-        BruteForce.bruteforce(system);
-
-    }
 }
