@@ -4,6 +4,7 @@ import BruteForce.BruteForce;
 
 import java.awt.*;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import java.util.Arrays;
 import javax.tools.Tool;
 
 public class testPhysics {
-        public static void main(String[] args) throws InterruptedException, FileNotFoundException {
+        public static void main(String[] args) throws InterruptedException, IOException {
                 Body sun = new Body("Sun", 0, 1.988500e30,
                                 new Vector(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06),
                                 new Vector(-1.420511669610689e+01, -4.954714716629277e+00, 3.994237625449041e-01),
@@ -131,7 +132,8 @@ public class testPhysics {
                 ArrayList<StateInterface> arListPositions = new ArrayList<>(Arrays.asList(stateList2));
                 ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length);
                 csv.createCSV();
-                GUI.visualise(bodies, ToolsCSV.getAllPositions(), trajectory);
+                ToolsCSV.createProbeCSV(trajectory);
+                GUI.visualise(bodies, ToolsCSV.getAllPositions(), ToolsCSV.getProbeTrajectory());
                 // BruteForce.bruteforce(system);
 
         }

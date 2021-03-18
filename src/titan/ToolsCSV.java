@@ -1,8 +1,10 @@
 package titan;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -12,6 +14,7 @@ import java.util.Scanner;
 public class ToolsCSV {
     private static ArrayList<StateInterface> listStates;
     private static String fileName = "data.csv";
+    private static String trajectoryFile = "trajectory.csv";
     private static int n_bodies;
 
     public ToolsCSV(ArrayList<StateInterface> listStates, int n_bodies) {
@@ -39,6 +42,19 @@ public class ToolsCSV {
             }
         }
         out.close();
+    }
+
+    public static void createProbeCSV(Vector3dInterface[] trajectory) throws FileNotFoundException {
+        File csvFile = new File(trajectoryFile);
+        PrintWriter out = new PrintWriter(csvFile);
+
+        out.println("X-Position, Y-Position, Z-Position");// , X-Velocity, Y-Velocity, Z-Velocity");
+
+        for (int i = 0; i < trajectory.length; i++) {
+            out.println(VectorTools.csvCoordinates(trajectory[i]) + ",");
+        }
+        out.close();
+
     }
 
     // method to return the list of position vectors of a given Body (ID)
@@ -98,6 +114,32 @@ public class ToolsCSV {
         }
         Reader.close();
         return (list);
+    }
+
+    public static Vector3dInterface[] getProbeTrajectory() throws IOException {
+        BufferedReader bfReader = new BufferedReader(new FileReader(trajectoryFile));
+        int lines = 0;
+        while (bfReader.readLine() != null)
+            lines++;
+        bfReader.close();
+        // create array with enough space for every line (-1 cause of title line)
+        Vector3dInterface[] trajectory = new Vector3dInterface[lines - 1];
+
+        FileReader f = new FileReader(trajectoryFile);
+        Scanner Reader = new Scanner(f);
+        Reader.useDelimiter(",");
+        skipLine(Reader, 1);
+
+        for (int i = 0; i < trajectory.length; i++) {
+
+            double x = Double.parseDouble(Reader.next());
+            double y = Double.parseDouble(Reader.next());
+            double z = Double.parseDouble(Reader.next());
+            trajectory[i] = new Vector(x, y, z);
+        }
+        Reader.close();
+        return (trajectory);
+
     }
 
     public static List<List<Vector3dInterface>> getAllPositions() throws FileNotFoundException {
