@@ -11,7 +11,7 @@ public class BruteForce {
     private static final double EarthR = 6.371e6;
     private static final double minSpeed = 12000;//m/s
     private static final double maxSpeed = 60000;//m/s
-    private static final double STEP_SIZE = 500;
+    private static final double STEP_SIZE = 1000;
     private static final double TIME_FRAME =  31556926;
 
     private static final int EARTH_ID = 3;
@@ -149,6 +149,7 @@ public class BruteForce {
 
             if(distanceBest < RADIUS_TITAN) {
                 System.out.println("OH MY GOD WE HIT IT");
+                System.out.println("Distance to Titan's centre: " + distanceBest);
                 System.out.println(velocityBest.toString());
                 System.out.println(positionBest.toString());
                 System.out.println("Step: " + step);

@@ -79,7 +79,7 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                                 neptune, probe};
 
                 // use testPhysics.java to run visuals until we have full list of positions
-                GUI.visualise(bodies, null);
+               // GUI.visualise(bodies, null);
 
         }
 

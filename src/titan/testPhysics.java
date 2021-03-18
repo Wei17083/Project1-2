@@ -108,31 +108,31 @@ public class testPhysics {
                 // System.out.println(new Vector(27771.89015815458, -40238.56416078634,
                 // -769.065384128892).norm());
 
-                double stepSize = 1000;
-                StateInterface[] states = system.solve(system, system.getState(), 31556926, stepSize);
-
-                Vector3dInterface velocity = new Vector(27771.89015815458, -40238.56416078634, -769.065384128892);
-
-                Vector3dInterface unitVector = VectorTools.getUnitVector(velocity);
-                Vector3dInterface EarthP = new Vector(-1.471922101663588e+11, -2.860995816266412e+10,
-                                8.278183193596080e+06);
-                Vector3dInterface EarthV = new Vector(5.427193405797901e+03, -2.931056622265021e+04,
-                                6.575428158157592e-01);
-                double EarthR = 6.371e6;
-
-                Vector3dInterface position = EarthP.addMul(EarthR, unitVector);
-                Vector3dInterface velocityTotal = EarthV.add(velocity);
-
-                Probe spaceship = new Probe(system, states);
-                Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, stepSize);
-                System.out.println("Minimum distance: " + BruteForce.getMinimum(trajectory, states, 8));
-                System.out.println("Minimum distance Jupiter: " + BruteForce.getMinimum(trajectory, states, 6));
-
-                ArrayList<StateInterface> arListPositions = new ArrayList<>(Arrays.asList(stateList2));
-                ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length);
-                csv.createCSV();
-                GUI.visualise(bodies, ToolsCSV.getAllPositions(), trajectory);
-                // BruteForce.bruteforce(system);
+//                double stepSize = 1000;
+//                StateInterface[] states = system.solve(system, system.getState(), 31556926, stepSize);
+//
+//                Vector3dInterface velocity = new Vector(27771.89015815458, -40238.56416078634, -769.065384128892);
+//
+//                Vector3dInterface unitVector = VectorTools.getUnitVector(velocity);
+//                Vector3dInterface EarthP = new Vector(-1.471922101663588e+11, -2.860995816266412e+10,
+//                                8.278183193596080e+06);
+//                Vector3dInterface EarthV = new Vector(5.427193405797901e+03, -2.931056622265021e+04,
+//                                6.575428158157592e-01);
+//                double EarthR = 6.371e6;
+//
+//                Vector3dInterface position = EarthP.addMul(EarthR, unitVector);
+//                Vector3dInterface velocityTotal = EarthV.add(velocity);
+//
+//                Probe spaceship = new Probe(system, states);
+//                Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, stepSize);
+//                System.out.println("Minimum distance: " + BruteForce.getMinimum(trajectory, states, 8));
+//                System.out.println("Minimum distance Jupiter: " + BruteForce.getMinimum(trajectory, states, 6));
+//
+//                ArrayList<StateInterface> arListPositions = new ArrayList<>(Arrays.asList(stateList2));
+//                ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length);
+//                csv.createCSV();
+//                GUI.visualise(bodies, ToolsCSV.getAllPositions(), trajectory);
+                 BruteForce.bruteforce(system);
 
     }
 }
