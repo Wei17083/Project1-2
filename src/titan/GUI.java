@@ -8,6 +8,7 @@ public class GUI {
     private static final int nsPerFrame = 1000000;
     private static double zoomOffsetX = 0;
     private static double zoomOffsetY = 0;
+    private static double scale = 1;
     // animation only draws every nth position (n = skip)
     private static int skip = 10;
 
@@ -16,7 +17,7 @@ public class GUI {
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
         // setting up scale in order to display whole solar system
-        double scale = 1;
+        scale = 1;
         StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
         StdDraw.setYscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
         // set up offset to start on earth
@@ -131,6 +132,10 @@ public class GUI {
 
     public static double getZoomOffsetX() {
         return zoomOffsetX;
+    }
+
+    public static double getScale() {
+        return scale;
     }
 
     public static void setZoomOffsetX(double zoomOffsetX) {

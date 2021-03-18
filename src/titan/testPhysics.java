@@ -67,9 +67,14 @@ public class testPhysics {
                                 new Vector(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02),
                                 2.4622e7, Color.blue);
 
+               // Body spaceship = new Body("spaceship", 11, 1,
+               //                 new Vector(0, 0, 0),
+               //                 new Vector(0, 0, 0),
+                //                1, null);  
+
                 // create arrays of bodies and corresponding forces
                 Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
-                                neptune };
+                                neptune};
 
                 SolarSystem system = new SolarSystem(bodies);
 
@@ -110,5 +115,5 @@ public class testPhysics {
                 // "+earthPositionList.get((earthPositionList.size()-1)/2).getZ());
                 BruteForce.bruteforce(system);
 
-        }
+        } 
 }
