@@ -21,14 +21,15 @@ public class BruteForce {
         State initialState = (State)statesList[0];
         int step = 0;
         double minimumDistance = minimum.dist(initialState.getPositionList().get(TITAN_ID));
-        for (int i = 1; i < trajectory.length; i++) {
-            State temp = (State)statesList[i-1];
+        for (int i = 0; i < trajectory.length -1; i++) {
+            State temp = (State)statesList[i];
             if(trajectory[i].dist(temp.getPositionList().get(TITAN_ID)) < minimumDistance){
                 minimum = trajectory[i];
                 minimumDistance = trajectory[i].dist(temp.getPositionList().get(TITAN_ID));
                 step = i;
             }
         }
+        System.out.println("Direction: " + VectorTools.directionVector(trajectory[step], ((State) statesList[step]).getPositionList().get(TITAN_ID)) );
         return minimumDistance;
 
     }
