@@ -21,12 +21,12 @@ public class GUI {
         scale = 1;
         StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
         StdDraw.setYscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
+
         // set up offset to start on earth
         panOffsetX = bodies[3].getPosition().getX();
         panOffsetY = bodies[3].getPosition().getY();
 
         String instructions = "Start: O, Stop: P, Follow Probe: Spacebar, Zoom: +/-, Pan: WASD or arrows";
-        Body probe = bodies[11];
 
         // phase 2
         int phase2 = allPositions.get(0).size() / 4 * 3;

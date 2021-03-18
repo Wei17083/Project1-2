@@ -42,6 +42,16 @@ public class VectorTools {
     }
 
     /**
+     * Returns string "x, y, z" with values of a given vector
+     *
+     * @param v vector to turn into a string
+     * @return "x, y, z"
+     */
+    public static String csvCoordinates(Vector3dInterface v) {
+        return v.getX() + ", " + v.getY() + ", " + v.getZ();
+    }
+
+    /**
      * returns unit vector with same direction as given vector
      *
      * @param v vector to turn into unit vector
