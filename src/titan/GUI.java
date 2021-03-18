@@ -96,14 +96,15 @@ public class GUI {
                             zoomOffsetY += (bodies[4].getPosition().getY() + bodies[8].getPosition().getY()) / 1000;
                     }
                 } else if (i > stay) {
-                    if (scale > 1) // slowly zoom in
-                        scale = zoomOutEndScale - Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), (i - stay));
-                    else {// TODO: make an average step so that x and y are smooth
-                        if (zoomOffsetX < bodies[8].getPosition().getX())
-                            zoomOffsetX += (bodies[4].getPosition().getX() + bodies[8].getPosition().getX()) / 1000;
-                        if (zoomOffsetY > bodies[8].getPosition().getY())
-                            zoomOffsetY += (bodies[4].getPosition().getY() + bodies[8].getPosition().getY()) / 1000;
-                    }
+
+                    // TODO: make an average step so that x and y are smooth
+                    if (zoomOffsetX < bodies[8].getPosition().getX())
+                        zoomOffsetX += (bodies[4].getPosition().getX() + bodies[8].getPosition().getX()) / 1000;
+                    if (zoomOffsetY > bodies[8].getPosition().getY())
+                        zoomOffsetY += (bodies[4].getPosition().getY() + bodies[8].getPosition().getY()) / 1000;
+                    else if (scale > 1) // slowly zoom in
+                        scale = zoomOutEndScale + 1.0 - Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), (i - stay));
+
                 }
             }
             StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
