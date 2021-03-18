@@ -7,6 +7,7 @@ public class Probe implements ProbeSimulatorInterface{
     public SolarSystem system;
     public final double MASS = 15000;
     public StateInterface[] stateList;
+    private Vector3dInterface[] probeVelocities;
 
     public Probe (SolarSystem system, StateInterface[] states){
         stateList = states;
@@ -30,13 +31,16 @@ public class Probe implements ProbeSimulatorInterface{
         int iterations = (int) (Math.round(ts[size]) + 1);
         stateList = system.solve(system, system.getState(), ts[size], stepSize);
         Vector3dInterface[] probePositions = new Vector3dInterface[size];
+        probeVelocities = new Vector3dInterface[size];
         probePositions[0] = p0;
+        probeVelocities[0] = v0;
         Vector3dInterface currentPosition = p0;
         Vector3dInterface currentVelocity = v0;
         int index = 1;
         for (int i = 1; i < iterations && index < ts.length; i++) {
             if (Math.abs((i-1)*stepSize - ts[index]) < Math.abs(i*stepSize - ts[index])) {
                 probePositions[index] = currentPosition;
+                probeVelocities[index] = currentVelocity;
                 index++;
             }
             State temp = (State) stateList[i-1];
@@ -61,7 +65,7 @@ public class Probe implements ProbeSimulatorInterface{
         StateInterface[] statesList = system.solve(system, system.getState(), tf, h);
         int size = (int) Math.round(tf / h + 1);
         Vector3dInterface[] probePositions = new Vector3dInterface[size];
-        Vector3dInterface[] probeVelocities = new Vector3dInterface[size];
+        probeVelocities = new Vector3dInterface[size];
         probePositions[0] = p0;
         probeVelocities[0] = v0;
 
@@ -74,6 +78,14 @@ public class Probe implements ProbeSimulatorInterface{
         return probePositions;
     }
 
+    /** Calculates one step of the probeTrajectory and returns then new speed and velocity
+     *
+     * @param p position of the probe at the start of the step
+     * @param v velocity of the probe at the start of the step
+     * @param s State of the system at the start of the step
+     * @param h step size in seconds
+     * @return array with new position and velocity of the probe
+     */
     public ArrayList<Vector3dInterface> step (Vector3dInterface p, Vector3dInterface v, State s, double h){
         Vector3dInterface newPosition = p.addMul(h, v);
         ArrayList<Vector3dInterface> forces = new ArrayList<>();
@@ -85,5 +97,9 @@ public class Probe implements ProbeSimulatorInterface{
         step.add(newPosition);
         step.add(newVelocity);
         return step;
+    }
+
+    public Vector3dInterface[] getProbeVelocities() {
+        return probeVelocities;
     }
 }
