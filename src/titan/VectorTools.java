@@ -73,6 +73,9 @@ public class VectorTools {
      */
     public static void drawBody(String name, Vector3dInterface position, double radius, Color color) {
 
+        if (name.equalsIgnoreCase("Probe")) {
+            int x = 0;
+        }
         if (name.equalsIgnoreCase("spaceship")) {
             double a = GUI.getScale() * 2;
             if (a > 10) {
@@ -81,8 +84,7 @@ public class VectorTools {
                 a = 0.3;
             }
             StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(),
-                    "spaceship.jpg", 6.95508e9 * a, 6.95508e9 * a); // perhaps we can also change the degree of the
-                                                                    // spaceship
+                    "spaceship.jpg", 6.95508e9 * a, 6.95508e9 * a);
         } else {
             StdDraw.setPenColor(color);
             // using real scale of planets wouldnt give us a good overview

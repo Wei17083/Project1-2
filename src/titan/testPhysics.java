@@ -66,10 +66,11 @@ public class testPhysics {
                                 new Vector(4.382692942729203e+12, -9.093501655486243e+11, -8.227728929479486e+10),
                                 new Vector(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02),
                                 2.4622e7, Color.blue);
+                Body probe = new Body("Probe", 11, 15000, new Vector(0, 0, 0), new Vector(0, 0, 0), 100, null);
 
                 // create arrays of bodies and corresponding forces
                 Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
-                                neptune };
+                                neptune, probe };
 
                 SolarSystem system = new SolarSystem(bodies);
 
@@ -129,6 +130,7 @@ public class testPhysics {
 
                 ArrayList<StateInterface> arListPositions = new ArrayList<>(Arrays.asList(stateList2));
                 ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length);
+                csv.createCSV();
                 GUI.visualise(bodies, csv.getAllPositions());
                 // BruteForce.bruteforce(system);
 
