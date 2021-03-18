@@ -9,13 +9,23 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ToolsCSV {
-    public static void createCSV(ArrayList<State> listStates) throws FileNotFoundException {
-        File csvFile = new File("data.csv");
+    private static ArrayList<StateInterface> listStates;
+    private static String fileName = "data.csv";
+    private static int n_bodies;
+
+    public ToolsCSV(ArrayList<StateInterface> listStates, int n_bodies){
+        this.listStates = listStates;
+        this.n_bodies = n_bodies;
+    }
+
+    public static void createCSV() throws FileNotFoundException {
+        File csvFile = new File(fileName);
         PrintWriter out = new PrintWriter(csvFile);
 
         out.println("time, ID, X-Position, Y-Position, Z-Position, X-Velocity, Y-Velocity, Z-Velocity");
 
-        for (State s : listStates) {
+        for (StateInterface si : listStates) {
+            State s = (State) si;
             for (int i = 0; i < s.positionList.size(); i++) {
                 out.print(s.tState + ", "); //1st column: time
                 out.print(i + ", ");    //2nd column: ID
@@ -31,9 +41,9 @@ public class ToolsCSV {
     }
 
     //method to return the list of position vectors of a given Body (ID)
-    public static List<Vector> getCSVPositions(String s, double ID) throws FileNotFoundException{
-        LinkedList<Vector> list = new LinkedList<Vector>();
-        FileReader f = new FileReader(s);
+    public static List<Vector3dInterface> getCSVPositions(double ID) throws FileNotFoundException{
+        List<Vector3dInterface> list = new ArrayList<Vector3dInterface>();
+        FileReader f = new FileReader(fileName);
         Scanner Reader = new Scanner(f);
         Reader.useDelimiter(",");
         skipLine(Reader, 1);
@@ -52,7 +62,7 @@ public class ToolsCSV {
 
             list.add(new Vector(x,y,z));
 
-            skipLine(Reader,3);
+            skipLine(Reader, n_bodies);
             skipColumn(Reader, 2);
         }
         Reader.close();
@@ -60,9 +70,9 @@ public class ToolsCSV {
     }
 
     //method to return the list of velocity vectors of a given Body (ID)
-    public static List<Vector> getCSVVelocities(String s, double ID) throws FileNotFoundException{
-        LinkedList<Vector> list = new LinkedList<Vector>();
-        FileReader f = new FileReader(s);
+    public static List<Vector3dInterface> getCSVVelocities(double ID) throws FileNotFoundException{
+        ArrayList<Vector3dInterface> list = new ArrayList<Vector3dInterface>();
+        FileReader f = new FileReader(fileName);
         Scanner Reader = new Scanner(f);
         Reader.useDelimiter(",");
         skipLine(Reader, 1);
@@ -82,7 +92,7 @@ public class ToolsCSV {
 
             list.add(new Vector(x,y,z));
 
-            skipLine(Reader,3);
+            skipLine(Reader, n_bodies);
             skipColumn(Reader, 5);
         }
         Reader.close();
