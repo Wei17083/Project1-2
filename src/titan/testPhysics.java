@@ -127,6 +127,9 @@ public class testPhysics {
                 System.out.println("Minimum distance: " + BruteForce.getMinimum(trajectory, states, 8));
                 System.out.println("Minimum distance Jupiter: " + BruteForce.getMinimum(trajectory, states, 6));
 
+                ArrayList<StateInterface> arListPositions = new ArrayList<>(Arrays.asList(stateList2));
+                ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length);
+                GUI.visualise(bodies, csv.getAllPositions());
                 // BruteForce.bruteforce(system);
 
         }
