@@ -74,9 +74,14 @@ public class VectorTools {
     public static void drawBody(String name, Vector3dInterface position, double radius, Color color) {
 
         if (name.equalsIgnoreCase("Moon")) {
-            // scale /= 1.0 + (Math.log(msPerFrame * 10) / 40);
-            // scale *= 1.0 + (Math.log(msPerFrame * 10) / 40);
-            StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), "spaceship.jpg", 6.95508e9*GUI.getScale()*2, 6.95508e9*GUI.getScale()*2); // perhaps we can also change the degree of the spaceship
+            double a = GUI.getScale()*2;
+            if (a>10) {
+                a=10;
+            }
+            else if (a<0.3) {
+                a=0.3;
+            }
+            StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), "spaceship.jpg", 6.95508e9*a, 6.95508e9*a); // perhaps we can also change the degree of the spaceship
         }
         else {
         StdDraw.setPenColor(color);
