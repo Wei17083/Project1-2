@@ -74,38 +74,40 @@ public class VectorTools {
     public static void drawBody(String name, Vector3dInterface position, double radius, Color color) {
 
         if (name.equalsIgnoreCase("spaceship")) {
-            StdDraw.picture(10, 10, "spaceship.jpg", 6.95508e10, 6.95508e10, 20); // perhaps we can also change the degree of the spaceship
-        }
-        else {
-        StdDraw.setPenColor(color);
-        // using real scale of planets wouldnt give us a good overview
-        // one can play around with the radius so that it looks presentable
-        double rad = 1e9 * Math.log(radius);
-        StdDraw.filledCircle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), radius);
-
-        // divide bodies into 3 categories:
-        // big (sun), small (moons + mercury), medium (planets)
-        if (radius > 6e8) {
-            StdDraw.circle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), 2 * rad);
-        } else if (radius < 3e6) {
-            StdDraw.circle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), rad);
+            StdDraw.picture(10, 10, "spaceship.jpg", 6.95508e10, 6.95508e10, 20); // perhaps we can also change the
+                                                                                  // degree of the spaceship
         } else {
-            StdDraw.circle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), 1.5 * rad);
-        }
+            StdDraw.setPenColor(color);
+            // using real scale of planets wouldnt give us a good overview
+            // one can play around with the radius so that it looks presentable
+            double rad = 1e9 * Math.log(radius);
+            StdDraw.filledCircle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(),
+                    radius);
 
-        // draw names
-        StdDraw.setPenColor(color.white);
-        if (radius > 6e8) {
-            StdDraw.text(position.getX() - GUI.getZoomOffsetX() + 2 * rad,
-                    position.getY() - GUI.getZoomOffsetY() + 2 * rad, name);
-        } else if (radius < 3e6) {// TODO: change name offset to scale with zoom
-            StdDraw.text(position.getX() - GUI.getZoomOffsetX() + radius + 1e9,
-                    position.getY() - GUI.getZoomOffsetY() + radius + 1e9, name);
-        } else {
-            StdDraw.text(position.getX() - GUI.getZoomOffsetX() + 1.5 * rad,
-                    position.getY() - GUI.getZoomOffsetY() + 1.5 * rad, name);
+            // divide bodies into 3 categories:
+            // big (sun), small (moons + mercury), medium (planets)
+            if (radius > 6e8) {
+                StdDraw.circle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), 2 * rad);
+            } else if (radius < 3e6) {
+                StdDraw.circle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), rad);
+            } else {
+                StdDraw.circle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(),
+                        1.5 * rad);
+            }
+
+            // draw names
+            StdDraw.setPenColor(color.white);
+            if (radius > 6e8) {
+                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + 2 * rad,
+                        position.getY() - GUI.getZoomOffsetY() + 2 * rad, name);
+            } else if (radius < 3e6) {// TODO: change name offset to scale with zoom
+                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + radius + 1e9,
+                        position.getY() - GUI.getZoomOffsetY() + radius + 1e9, name);
+            } else {
+                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + 1.5 * rad,
+                        position.getY() - GUI.getZoomOffsetY() + 1.5 * rad, name);
+            }
         }
-    }
 
         // line is just to help find planets
         // StdDraw.line(position.getX() - GUI.getZoomOffsetX(), position.getY()
@@ -113,17 +115,19 @@ public class VectorTools {
         // 0);
     }
 
-    /** Generates a random unit vector
+    /**
+     * Generates a random unit vector
      *
      * @return Vector3dInterface that is a random unit vector
      */
-    public static Vector3dInterface randUnitVector(){
+    public static Vector3dInterface randUnitVector() {
         Random rng = new Random();
-        return VectorTools.getUnitVector(new Vector(rng.nextDouble()-0.5, rng.nextDouble()-0.5, rng.nextDouble()-0.5));
+        return VectorTools
+                .getUnitVector(new Vector(rng.nextDouble() - 0.5, rng.nextDouble() - 0.5, rng.nextDouble() - 0.5));
     }
 
     public static char maxParameter(Vector3dInterface v) {
-        if(v.getX() > v.getY() && v.getX() > v.getZ()) {
+        if (v.getX() > v.getY() && v.getX() > v.getZ()) {
             return 'X';
         } else if (v.getY() > v.getZ()) {
             return 'Y';

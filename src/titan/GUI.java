@@ -25,15 +25,28 @@ public class GUI {
         zoomOffsetY = bodies[3].getPosition().getY();
 
         // time stamps for automatic zoom
-        int phase1 = allPositions.get(0).size() / 2;
-        int zoomTime = 3000;
-        double phase1EndScale = scale;
-        double x1 = (allPositions.get(3).get(0).getX() + allPositions.get(8).get(allPositions.size() - 1).getX()) / 2;
-        double y1 = (allPositions.get(3).get(0).getY() + allPositions.get(8).get(allPositions.size() - 1).getY()) / 2;
-        double xStep1 = x1 / phase1;
-        double yStep1 = y1 / phase1;
+        int zoomCount = 0;
+        int zoomCount2 = 0;
 
+        Vector3dInterface titanEndPos = allPositions.get(8).get(allPositions.size() - 1);
+        Vector3dInterface earthStartPos = allPositions.get(3).get(0);
+        // phase 1
+        int phase1 = allPositions.get(0).size() / 2;
+        double phase1EndScale = scale;
+        double x1 = (earthStartPos.getX() + titanEndPos.getX()) / 2;
+        double y1 = (earthStartPos.getY() + titanEndPos.getY()) / 2;
+        double x1Distance = Math.sqrt(Math.pow(earthStartPos.getX(), 2) + Math.pow(x1, 2));
+        double y1Distance = Math.sqrt(Math.pow(earthStartPos.getY(), 2) + Math.pow(y1, 2));
+        double xStep1 = x1Distance / phase1;
+        double yStep1 = y1Distance / phase1;
+        // phase 2
         int phase2 = allPositions.get(0).size() / 4 * 3;
+        double x2 = titanEndPos.getX();
+        double y2 = titanEndPos.getY();
+        double x2Distance = Math.sqrt(Math.pow(x1, 2) + Math.pow(titanEndPos.getX(), 2));
+        double y2Distance = Math.sqrt(Math.pow(x1, 2) + Math.pow(titanEndPos.getX(), 2));
+        double xStep2 = x1Distance / phase1;
+        double yStep2 = y1Distance / phase1;
         // indicates wether the automatic zoom is active or not
         boolean interrupted = false;
         // indicates wether the animation is paused or not
@@ -101,19 +114,25 @@ public class GUI {
                         scale = Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), i);
                         phase1EndScale = scale;
                     } else {
-                        if (zoomOffsetX < x1)
-                            zoomOffsetX = xStep1 * 2 * i;
-                        if (zoomOffsetY > y1)
-                            zoomOffsetY = yStep1 * 2 * i;
+                        if (zoomOffsetX < x1) {
+                            zoomOffsetX = earthStartPos.getX() + xStep1 * 2 * zoomCount;
+                            zoomCount += skip;
+                            if (zoomOffsetY > y1)
+                                zoomOffsetY = earthStartPos.getY() - yStep1 * 2 * zoomCount;
+                            zoomCount += skip;
+                        }
+                        // zoomOffsetX = x1;
+                        // zoomOffsetY = y1;
                     }
                 } else if (i > phase2) {
-
                     // TODO: make an average step so that x and y are smooth
-                    if (zoomOffsetX < bodies[8].getPosition().getX())
-                        zoomOffsetX += (bodies[4].getPosition().getX() + bodies[8].getPosition().getX()) / 1000;
-                    if (zoomOffsetY > bodies[8].getPosition().getY())
-                        zoomOffsetY += (bodies[4].getPosition().getY() + bodies[8].getPosition().getY()) / 1000;
-                    else if (scale > 1) // slowly zoom in
+                    if (zoomOffsetX < x2) {
+                        zoomOffsetX = earthStartPos.getX() + xStep1 * 2 * zoomCount;
+                        zoomCount += skip;
+                        if (zoomOffsetY > y1)
+                            zoomOffsetY = earthStartPos.getY() - yStep1 * 2 * zoomCount;
+                        zoomCount += skip;
+                    } else if (scale > 1) // slowly zoom in
                         scale = phase1EndScale + 1.0 - Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), (i - phase2));
 
                 }
