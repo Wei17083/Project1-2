@@ -113,9 +113,23 @@ public class VectorTools {
         // 0);
     }
 
+    /** Generates a random unit vector
+     *
+     * @return Vector3dInterface that is a random unit vector
+     */
     public static Vector3dInterface randUnitVector(){
         Random rng = new Random();
-        return VectorTools.getUnitVector(new Vector(rng.nextDouble()-0.5, rng.nextDouble()-0.5, (rng.nextDouble()-0.5)/10));
+        return VectorTools.getUnitVector(new Vector(rng.nextDouble()-0.5, rng.nextDouble()-0.5, rng.nextDouble()-0.5));
+    }
+
+    public static char maxParameter(Vector3dInterface v) {
+        if(v.getX() > v.getY() && v.getX() > v.getZ()) {
+            return 'X';
+        } else if (v.getY() > v.getZ()) {
+            return 'Y';
+        } else {
+            return 'Z';
+        }
     }
 
 }
