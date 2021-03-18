@@ -25,6 +25,7 @@ public class GUI {
 
         // time stamps for automatic zoom
         int zoomOut = earthPositions.size() / 2;
+        double zoomOutEndScale = scale;
         int stay = earthPositions.size() / 4 * 3;
         // indicates wether the automatic zoom is active or not
         boolean interrupted = false;
@@ -85,15 +86,24 @@ public class GUI {
                 }
             } else {
                 if (i <= zoomOut) {
-                    if (scale < 8) // slowly zoom out
+                    if (scale < 8) { // slowly zoom out
                         scale = Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), i);
-                    else {
+                        zoomOutEndScale = scale;
+                    } else {// TODO: make an average step so that x and y are smooth
                         if (zoomOffsetX < (bodies[4].getPosition().getX() + bodies[8].getPosition().getX()) / 2)
                             zoomOffsetX += (bodies[4].getPosition().getX() + bodies[8].getPosition().getX()) / 1000;
                         if (zoomOffsetY > (bodies[4].getPosition().getY() + bodies[8].getPosition().getY()) / 2)
                             zoomOffsetY += (bodies[4].getPosition().getY() + bodies[8].getPosition().getY()) / 1000;
                     }
-
+                } else if (i > stay) {
+                    if (scale > 1) // slowly zoom in
+                        scale = zoomOutEndScale - Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), (i - stay));
+                    else {// TODO: make an average step so that x and y are smooth
+                        if (zoomOffsetX < bodies[8].getPosition().getX())
+                            zoomOffsetX += (bodies[4].getPosition().getX() + bodies[8].getPosition().getX()) / 1000;
+                        if (zoomOffsetY > bodies[8].getPosition().getY())
+                            zoomOffsetY += (bodies[4].getPosition().getY() + bodies[8].getPosition().getY()) / 1000;
+                    }
                 }
             }
             StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
