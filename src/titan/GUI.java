@@ -66,8 +66,6 @@ public class GUI {
                 // set pan to follow probe
                 panOffsetX = trajectory[i].getX();
                 panOffsetY = trajectory[i].getY();
-                // panOffsetX = allPositions.get(3).get(i).getX();
-                // panOffsetY = allPositions.get(3).get(i).getY();
             }
 
             // changes are scaling based on log of msPerFrame*10 so that the zoom effect
@@ -108,8 +106,6 @@ public class GUI {
                     // set pan to follow probe
                     panOffsetX = trajectory[i].getX();
                     panOffsetY = trajectory[i].getY();
-                    // panOffsetX = allPositions.get(3).get(i).getX();
-                    // panOffsetY = allPositions.get(3).get(i).getY();
                     if (!zoomInterrupted) {
                         if (i <= phase2) {
                             if (scale < 8) { // slowly zoom out

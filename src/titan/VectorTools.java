@@ -70,14 +70,8 @@ public class VectorTools {
         if (a > 10) {
             a = 10;
         }
-        // else if (a < 0.3) {
-        // a = 0.3;
-        // }
-        StdDraw.setPenColor(Color.white);
-        StdDraw.filledSquare(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), a * 7e9);
-        // StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() -
-        // GUI.getZoomOffsetY(), "spaceship.jpg",
-        // 7e9 * a, 7e9 * a);
+        StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), "spaceship.jpg",
+                7e9 * a, 7e9 * a);
     }
 
     /**

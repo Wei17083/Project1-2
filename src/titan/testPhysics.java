@@ -131,7 +131,7 @@ public class testPhysics {
                 ArrayList<StateInterface> arListPositions = new ArrayList<>(Arrays.asList(stateList2));
                 ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length);
                 csv.createCSV();
-                GUI.visualise(bodies, csv.getAllPositions(), trajectory);
+                GUI.visualise(bodies, ToolsCSV.getAllPositions(), trajectory);
                 // BruteForce.bruteforce(system);
 
         }
