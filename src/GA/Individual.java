@@ -52,7 +52,7 @@ public class Individual {
         Probe spaceship = new Probe(system, stateList);
         Vector3dInterface[] trajectory = spaceship.trajectory(this.initPosition, this.initVelocity, 31556926, 1000);
 
-        return BruteForce.getMinimum(trajectory, stateList);
+        return BruteForce.getMinimum(trajectory, stateList,8)[0];
     }
 
     /**public double calcFitnessValue(Vector3dInterface[] trajectory, StateInterface[] statesList){
