@@ -6,8 +6,8 @@ import java.util.*;
 public class GUI {
     // has to be more than 100 000
     private static final int nsPerFrame = 1000000;
-    private static double zoomOffsetX = 0;
-    private static double zoomOffsetY = 0;
+    private static double panOffsetX = 0;
+    private static double panOffsetY = 0;
     private static double scale = 1;
     // animation only draws every nth position (n = skip)
     private static int skip = 10;
@@ -22,32 +22,18 @@ public class GUI {
         StdDraw.setYscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
         // set up offset to start on earth
         // TODO: double check that index 3 is always earth
-        zoomOffsetX = bodies[3].getPosition().getX();
-        zoomOffsetY = bodies[3].getPosition().getY();
-
-        // time stamps for automatic zoom
-        int zoomCount = 0;
-        int zoomCount2 = 0;
+        panOffsetX = bodies[3].getPosition().getX();
+        panOffsetY = bodies[3].getPosition().getY();
 
         Vector3dInterface titanEndPos = allPositions.get(8).get(allPositions.size() - 1);
         Vector3dInterface earthStartPos = allPositions.get(3).get(0);
         // phase 1
         int phase1 = allPositions.get(0).size() / 2;
         double phase1EndScale = scale;
-        double x1 = (earthStartPos.getX() + titanEndPos.getX()) / 2;
-        double y1 = (earthStartPos.getY() + titanEndPos.getY()) / 2;
-        double x1Distance = Math.sqrt(Math.pow(earthStartPos.getX(), 2) + Math.pow(x1, 2));
-        double y1Distance = Math.sqrt(Math.pow(earthStartPos.getY(), 2) + Math.pow(y1, 2));
-        double xStep1 = x1Distance / phase1;
-        double yStep1 = y1Distance / phase1;
+
         // phase 2
         int phase2 = allPositions.get(0).size() / 4 * 3;
-        double x2 = titanEndPos.getX();
-        double y2 = titanEndPos.getY();
-        double x2Distance = Math.sqrt(Math.pow(x1, 2) + Math.pow(titanEndPos.getX(), 2));
-        double y2Distance = Math.sqrt(Math.pow(x1, 2) + Math.pow(titanEndPos.getX(), 2));
-        double xStep2 = x1Distance / phase1;
-        double yStep2 = y1Distance / phase1;
+
         // indicates wether the automatic zoom is active or not
         boolean interrupted = false;
         // indicates wether the animation is paused or not
@@ -88,23 +74,21 @@ public class GUI {
             // msPerFrame has to be more than 0.1 for this to work, else log(1) = 0
             else if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT) || StdDraw.isKeyPressed(KeyEvent.VK_A)) {
                 interrupted = true;
-                zoomOffsetX -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+                panOffsetX -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
             } else if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT) || StdDraw.isKeyPressed(KeyEvent.VK_D)) {
                 interrupted = true;
-                zoomOffsetX += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+                panOffsetX += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
             } else if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN) || StdDraw.isKeyPressed(KeyEvent.VK_S)) {
                 interrupted = true;
-                zoomOffsetY -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+                panOffsetY -= SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
             } else if (StdDraw.isKeyPressed(KeyEvent.VK_UP) || StdDraw.isKeyPressed(KeyEvent.VK_W)) {
                 interrupted = true;
-                zoomOffsetY += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
+                panOffsetY += SolarSystem.getAU() * Math.log(msPerFrame * 10) / 100 * scale;
             }
             // zoom (make scale smaller to zoom in)
             if (StdDraw.isKeyPressed(KeyEvent.VK_PLUS) || StdDraw.isKeyPressed(107)) {
-                interrupted = true;
                 scale /= 1.0 + (Math.log(msPerFrame * 10) / 40);
             } else if (StdDraw.isKeyPressed(KeyEvent.VK_MINUS) || StdDraw.isKeyPressed(109)) {
-                interrupted = true;
                 scale *= 1.0 + (Math.log(msPerFrame * 10) / 40);
             }
 
@@ -112,30 +96,13 @@ public class GUI {
             if (!interrupted) {
                 if (i <= phase1) {
                     if (scale < 8) { // slowly zoom out
-                        scale = Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), i);
+                        scale = Math.pow(1.0 + (Math.log(msPerFrame * 10) / 10000), i);
                         phase1EndScale = scale;
-                    } else {
-                        if (zoomOffsetX < x1) {
-                            zoomOffsetX = earthStartPos.getX() + xStep1 * 2 * zoomCount;
-                            zoomCount += skip;
-                            if (zoomOffsetY > y1)
-                                zoomOffsetY = earthStartPos.getY() - yStep1 * 2 * zoomCount;
-                            zoomCount += skip;
-                        }
-                        // zoomOffsetX = x1;
-                        // zoomOffsetY = y1;
                     }
                 } else if (i > phase2) {
-                    // TODO: make an average step so that x and y are smooth
-                    if (zoomOffsetX < x2) {
-                        zoomOffsetX = earthStartPos.getX() + xStep1 * 2 * zoomCount;
-                        zoomCount += skip;
-                        if (zoomOffsetY > y1)
-                            zoomOffsetY = earthStartPos.getY() - yStep1 * 2 * zoomCount;
-                        zoomCount += skip;
-                    } else if (scale > 1) // slowly zoom in
-                        scale = phase1EndScale + 1.0 - Math.pow(1.0 + (Math.log(msPerFrame * 10) / 4000), (i - phase2));
-
+                    if (scale > 1) // slowly zoom in
+                        scale = phase1EndScale + 1.0
+                                - Math.pow(1.0 + (Math.log(msPerFrame * 10) / 10000), (i - phase2));
                 }
             }
             StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
@@ -150,7 +117,7 @@ public class GUI {
     }
 
     public static double getZoomOffsetX() {
-        return zoomOffsetX;
+        return panOffsetX;
     }
 
     public static double getScale() {
@@ -158,15 +125,15 @@ public class GUI {
     }
 
     public static void setZoomOffsetX(double zoomOffsetX) {
-        GUI.zoomOffsetX = zoomOffsetX;
+        GUI.panOffsetX = zoomOffsetX;
     }
 
     public static double getZoomOffsetY() {
-        return zoomOffsetY;
+        return panOffsetY;
     }
 
     public static void setZoomOffsetY(double zoomOffsetY) {
-        GUI.zoomOffsetY = zoomOffsetY;
+        GUI.panOffsetY = zoomOffsetY;
     }
 
 }
