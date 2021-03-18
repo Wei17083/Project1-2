@@ -65,6 +65,21 @@ public class VectorTools {
         return sum;
     }
 
+    public static void drawProbe(Vector3dInterface position) {
+        double a = GUI.getScale() * 2;
+        if (a > 10) {
+            a = 10;
+        }
+        // else if (a < 0.3) {
+        // a = 0.3;
+        // }
+        StdDraw.setPenColor(Color.white);
+        StdDraw.filledSquare(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), a * 7e9);
+        // StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() -
+        // GUI.getZoomOffsetY(), "spaceship.jpg",
+        // 7e9 * a, 7e9 * a);
+    }
+
     /**
      * This method draws a circle on this vectors position with the given parameters
      *
@@ -74,17 +89,8 @@ public class VectorTools {
     public static void drawBody(String name, Vector3dInterface position, double radius, Color color) {
 
         if (name.equalsIgnoreCase("Probe")) {
-            int x = 0;
-        }
-        if (name.equalsIgnoreCase("spaceship")) {
-            double a = GUI.getScale() * 2;
-            if (a > 10) {
-                a = 10;
-            } else if (a < 0.3) {
-                a = 0.3;
-            }
-            StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(),
-                    "spaceship.jpg", 6.95508e9 * a, 6.95508e9 * a);
+            // ignore probe body
+            return;
         } else {
             StdDraw.setPenColor(color);
             // using real scale of planets wouldnt give us a good overview

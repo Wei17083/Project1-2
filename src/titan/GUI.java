@@ -12,8 +12,8 @@ public class GUI {
     // animation only draws every nth position (n = skip)
     private static int skip = 10;
 
-    public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions)
-            throws InterruptedException {
+    public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions,
+            Vector3dInterface[] trajectory) throws InterruptedException {
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
 
@@ -46,6 +46,7 @@ public class GUI {
         for (Body body : bodies) {
             body.draw();
         }
+        VectorTools.drawProbe(trajectory[0]);
         StdDraw.show();
 
         // start animation loop (animation starts paused)
@@ -63,10 +64,10 @@ public class GUI {
                 interrupted = false;
                 zoomInterrupted = false;
                 // set pan to follow probe
-                // panOffsetX = probe.getPosition().getX();
-                // panOffsetY = probe.getPosition().getY();
-                panOffsetX = allPositions.get(3).get(i).getX();
-                panOffsetY = allPositions.get(3).get(i).getY();
+                panOffsetX = trajectory[i].getX();
+                panOffsetY = trajectory[i].getY();
+                // panOffsetX = allPositions.get(3).get(i).getX();
+                // panOffsetY = allPositions.get(3).get(i).getY();
             }
 
             // changes are scaling based on log of msPerFrame*10 so that the zoom effect
@@ -105,10 +106,10 @@ public class GUI {
                 // auto animation following probe
                 if (!interrupted) {
                     // set pan to follow probe
-                    // panOffsetX = probe.getPosition().getX();
-                    // panOffsetY = probe.getPosition().getY();
-                    panOffsetX = allPositions.get(3).get(i).getX();
-                    panOffsetY = allPositions.get(3).get(i).getY();
+                    panOffsetX = trajectory[i].getX();
+                    panOffsetY = trajectory[i].getY();
+                    // panOffsetX = allPositions.get(3).get(i).getX();
+                    // panOffsetY = allPositions.get(3).get(i).getY();
                     if (!zoomInterrupted) {
                         if (i <= phase2) {
                             if (scale < 8) { // slowly zoom out
@@ -139,6 +140,11 @@ public class GUI {
             // draw new bodies
             for (Body body : bodies) {
                 body.draw();
+            }
+            if (i <= 0) // if animation hasnt started yet
+                VectorTools.drawProbe(trajectory[0]);
+            else {
+                VectorTools.drawProbe(trajectory[i]);
             }
             StdDraw.text(0, -0.9 * scale * SolarSystem.AU, instructions);
             StdDraw.show();
