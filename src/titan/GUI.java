@@ -26,7 +26,7 @@ public class GUI {
         panOffsetX = bodies[3].getPosition().getX();
         panOffsetY = bodies[3].getPosition().getY();
 
-        String instructions = "Start: O, Stop: P, Follow Probe: Spacebar, Zoom: +/-, Pan: WASD or arrows";
+        String instructions = "Start/Stop: Spacebar, Follow Probe: F, Zoom: +/-, Pan: WASD or arrows";
 
         // phase 2
         int phase2 = allPositions.get(0).size() / 4 * 3;
@@ -37,6 +37,8 @@ public class GUI {
         boolean zoomInterrupted = false;
         // indicates wether the animation is paused or not
         boolean paused = true;
+        // lock to make sure one button press doesnt toggle pause on/off multiple times
+        boolean pauseLock = false;
 
         // convert nsPerFrame to a ms double
         double msPerFrame = nsPerFrame / 1000000;
@@ -51,16 +53,22 @@ public class GUI {
 
         // start animation loop (animation starts paused)
         for (int i = 0; i < allPositions.get(0).size(); i += skip) {
-            // pause entire animation
-            if (StdDraw.isKeyPressed(KeyEvent.VK_P))
-                paused = true;
+            // pause/unpause entire animation
+            if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
+                if (!pauseLock) {
+                    paused = !paused; // toggle pause
+                    pauseLock = true; // lock pause button
+                }
+            }
+            if (!StdDraw.isKeyPressed(KeyEvent.VK_SPACE))
+                pauseLock = false; // unlock pause once button released
             // unpause entire animation
             else if (StdDraw.isKeyPressed(KeyEvent.VK_O))
                 paused = false;
 
             // manual moving around
             // press space to continue the auto animation
-            if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
+            if (StdDraw.isKeyPressed(KeyEvent.VK_F)) {
                 interrupted = false;
                 zoomInterrupted = false;
                 // set pan to follow probe
