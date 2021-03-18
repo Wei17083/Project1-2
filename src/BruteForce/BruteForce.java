@@ -11,7 +11,7 @@ public class BruteForce {
     private static final double EarthR = 6.371e6;
     private static final double minSpeed = 12000;//m/s
     private static final double maxSpeed = 60000;//m/s
-    private static final double STEP_SIZE = 1000;
+    private static final double STEP_SIZE = 500;
     private static final double TIME_FRAME =  31556926;
 
     private static final int EARTH_ID = 3;
@@ -21,6 +21,14 @@ public class BruteForce {
 
     private static Vector3dInterface directionVector;
 
+    /** Takes in a trajectory , an array of states and a planet ID and returns
+     *  the distance of the closest point of the trajectory to the planet
+     *  the trajectory and statelist need to have the same size and stepSize for accurate results
+     * @param trajectory trajectory of a probe
+     * @param statesList list of states of the system
+     * @param planetID  ID of the planet you want to calculate the distance to
+     * @return closest distance of the trajectory to the planet and corresponding step
+     */
     public static double[] getMinimum(Vector3dInterface[] trajectory, StateInterface[] statesList, int planetID){
         Vector3dInterface minimum = trajectory[0];
         State initialState = (State)statesList[0];
@@ -61,15 +69,12 @@ public class BruteForce {
             Vector3dInterface unitVector = VectorTools.randUnitVector();
             Vector3dInterface position = EarthP.addMul(EarthR, unitVector);
             double launchSpeed = Math.random()*(maxSpeed-minSpeed) + minSpeed;
-//            System.out.println("launchSpeed: " + launchSpeed);
-            //System.out.println("Random unit vector: " + unitVector.toString());
             Vector3dInterface velocity = unitVector.mul(launchSpeed);
             Vector3dInterface velocityTotal = EarthV.add(velocity);
 
 
-            //System.out.println("Initial speed: " + velocity.toString());
+
             Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, STEP_SIZE);
-            //System.out.println(getMinimum(trajectories, states));
             double[] minArray = getMinimum(trajectory, states, TITAN_ID);
             if( i == 0 || minArray[0] < distanceBest ) {
                 distanceBest = minArray[0];
@@ -82,9 +87,7 @@ public class BruteForce {
         }
 
         double initialDistanceET = system.getState().getPositionList().get(EARTH_ID).dist(system.getState().getPositionList().get(TITAN_ID));
-
-       // System.out.println("Starting while loop");
-        boolean hit = false;
+        boolean hit = false;           // flag to check if we've reached Titan
         int counter = 0;
 
         while(!hit) {
@@ -107,10 +110,8 @@ public class BruteForce {
                 double newZ = velocityBest.getZ()*(1 + changeRate);
                 unitVector = VectorTools.getUnitVector(new Vector(velocityBest.getX(), velocityBest.getY(), newZ));
             } else {
-               // System.out.println("changeRate: " + changeRate);
                 launchSpeedNew = velocityBest.norm()*(1 + changeRate);
                 if(launchSpeedNew > maxSpeed) launchSpeedNew = maxSpeed;
-               // System.out.println("launchSpeedNew: " + launchSpeedNew);
                 unitVector = VectorTools.getUnitVector(velocityBest);
             }
             Vector3dInterface position = EarthP.addMul(EarthR, unitVector);
