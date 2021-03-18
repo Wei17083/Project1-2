@@ -11,6 +11,7 @@ public class BruteForce {
     private static final double EarthR = 6.371e6;
     private static final double minSpeed = 12000;//m/s
     private static final double maxSpeed = 60000;//m/s
+    private static final double STEP_SIZE = 500;
 
     private static final int EARTH_ID = 3;
     private static final int TITAN_ID = 8;
@@ -38,7 +39,7 @@ public class BruteForce {
     }
 
     public static ArrayList<Vector3dInterface> bruteforce (SolarSystem system){
-        StateInterface[] states = system.solve(system, system.getState(), 31556926, 1000);
+        StateInterface[] states = system.solve(system, system.getState(), 31556926, STEP_SIZE);
 
         double distanceBest = 0;
         Vector3dInterface velocityBest = new Vector(0,0,0);
@@ -61,7 +62,7 @@ public class BruteForce {
 
 
             //System.out.println("Initial speed: " + velocity.toString());
-            Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, 1000);
+            Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, STEP_SIZE);
             //System.out.println(getMinimum(trajectories, states));
 
             if( i == 0 || getMinimum(trajectory, states) < distanceBest ) {
@@ -117,7 +118,7 @@ public class BruteForce {
             Vector3dInterface velocity = unitVector.mul(launchSpeedNew);
             Vector3dInterface velocityTotal = EarthV.add(velocity);
 
-            Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, 1000);
+            Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, STEP_SIZE);
 
             double shortestDistance = getMinimum(trajectory, states);
             System.out.println();
