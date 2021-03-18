@@ -6,8 +6,10 @@ public class Probe implements ProbeSimulatorInterface{
 
     public SolarSystem system;
     public final double MASS = 15000;
+    public StateInterface[] stateList;
 
-    public Probe (SolarSystem system){
+    public Probe (SolarSystem system, StateInterface[] states){
+        stateList = states;
         this.system = system;
     }
 
@@ -26,7 +28,7 @@ public class Probe implements ProbeSimulatorInterface{
         double stepSize = 100;
         int size = ts.length-1;
         int iterations = (int) (Math.round(ts[size]) + 1);
-        State[] stateList = (State[])system.solve(system, system.getState(), ts[size], stepSize);
+        stateList = system.solve(system, system.getState(), ts[size], stepSize);
         Vector3dInterface[] probePositions = new Vector3dInterface[size];
         probePositions[0] = p0;
         Vector3dInterface currentPosition = p0;
@@ -37,7 +39,8 @@ public class Probe implements ProbeSimulatorInterface{
                 probePositions[index] = currentPosition;
                 index++;
             }
-            ArrayList<Vector3dInterface> changes = step(currentPosition, currentVelocity, stateList[i-1], stepSize);
+            State temp = (State) stateList[i-1];
+            ArrayList<Vector3dInterface> changes = step(currentPosition, currentVelocity, temp, stepSize);
             probePositions[i] = changes.get(0);
             currentPosition = changes.get(0);
             currentVelocity = changes.get(1);
@@ -55,7 +58,7 @@ public class Probe implements ProbeSimulatorInterface{
      */
     @Override
     public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double tf, double h) {
-        State[] statesList = (State[]) system.solve(system, system.getState(), tf, h);
+        StateInterface[] statesList = system.solve(system, system.getState(), tf, h);
         int size = (int) Math.round(tf / h + 1);
         Vector3dInterface[] probePositions = new Vector3dInterface[size];
         Vector3dInterface[] probeVelocities = new Vector3dInterface[size];
@@ -63,7 +66,7 @@ public class Probe implements ProbeSimulatorInterface{
         probeVelocities[0] = v0;
 
         for (int i = 1; i < size; i++){
-            ArrayList<Vector3dInterface> changes = step(probePositions[i-1], probeVelocities[i-1],statesList[i-1], h);
+            ArrayList<Vector3dInterface> changes = step(probePositions[i-1], probeVelocities[i-1],(State)statesList[i-1], h);
             probePositions[i] = changes.get(0);
             probeVelocities[i] = changes.get(1);
         }

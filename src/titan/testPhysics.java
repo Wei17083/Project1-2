@@ -1,5 +1,7 @@
 package titan;
 
+import BruteForce.BruteForce;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -60,39 +62,39 @@ public class testPhysics {
                                 new Vector(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02),
                                 2.4622e7, Color.blue);
 
-                // Body spaceship = new Body("spaceship", 10, 1.02413e26,
-                // new Vector(4.382692942729203e+12, -9.093501655486243e+11,
-                // -8.227728929479486e+10),
-                // new Vector(1.068410720964204e+03, 5.354959501569486e+03,
-                // -1.343918199987533e+02),
-                // 2.4622e7, Color.blue);
 
-                // create arrays of bodies and corresponding forces
-                Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
-                                neptune };
+        // create arrays of bodies and corresponding forces
+        Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
+                neptune};
 
-                SolarSystem system = new SolarSystem(bodies);
+        SolarSystem system = new SolarSystem(bodies);
 
-                System.out.println(system.getState().toString());
-                State state = (State) system.step(system, 86400, system.getState(), 86400);
-                System.out.println(state.toString());
+        //System.out.println(system.getState().toString());
+        State state = (State) system.step(system, 86400, system.getState(), 86400);
+        //System.out.println(state.toString());
 
-                double[] ts = { 0, 31556926 }; // 31556926
-                StateInterface[] stateList = system.solve(system, system.getState(), ts);
-                System.out.println(stateList[1].toString());
+        double[] ts = {0, 31556926 };   //31556926
+        StateInterface[] stateList = system.solve(system, system.getState(), ts);
+        //System.out.println(stateList[1].toString());
 
-                double tf = 31556926;
-                StateInterface[] stateList2 = system.solve(system, system.getState(), tf, 1000);
-                State[] stateList3 = new State[stateList2.length];
-                for (int i = 0; i < stateList2.length; i++) {
-                        stateList3[i] = (State) stateList2[i];
-                }
-                System.out.println(stateList2[stateList2.length - 1].toString());
-
-                ArrayList<Vector3dInterface> earthPositionList = new ArrayList<>();
-                for (State s : stateList3) {
-                        earthPositionList.add(s.getPositionList().get(3));
-                }
-                GUI.visualise(bodies, earthPositionList);
+        double tf = 31556926;
+        //System.out.println("tf = "+tf);
+        StateInterface[] stateList2 = system.solve(system,system.getState(), tf, 1000 );
+        State[] stateList3 = new State[stateList2.length];
+        for (int i = 0; i < stateList2.length ; i++) {
+            stateList3[i] = (State) stateList2[i];
         }
+        //System.out.println(stateList2[stateList2.length-1].toString());
+
+        ArrayList<Vector3dInterface> earthPositionList = new ArrayList<>();
+        for (State s: stateList3) {
+            Vector3dInterface v = s.getPositionList().get(3);
+            earthPositionList.add(s.getPositionList().get(3));
+        }
+//        System.out.println(earthPositionList.get(0).getX()+", "+earthPositionList.get(0).getY()+", "+earthPositionList.get(0).getZ());
+//        System.out.println(earthPositionList.get(earthPositionList.size()-1).getX()+", "+earthPositionList.get(earthPositionList.size()-1).getY()+", "+earthPositionList.get(earthPositionList.size()-1).getZ());
+//        System.out.println(earthPositionList.get((earthPositionList.size()-1)/2).getX()+", "+earthPositionList.get((earthPositionList.size()-1)/2).getY()+", "+earthPositionList.get((earthPositionList.size()-1)/2).getZ());
+        BruteForce.bruteforce(system);
+
+    }
 }

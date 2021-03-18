@@ -74,14 +74,7 @@ public class VectorTools {
     public static void drawBody(String name, Vector3dInterface position, double radius, Color color) {
 
         if (name.equalsIgnoreCase("spaceship")) {
-            StdDraw.picture(10, 10, "spaceship.jpg", 6.95508e10, 6.95508e10);
-            // System.out.println("a");
-            double rad = 1e9 * Math.log(radius);
-            StdDraw.setPenColor(color.white);
-
-            StdDraw.text(position.getX() - GUI.getZoomOffsetX() + 2 * rad,
-                    position.getY() - GUI.getZoomOffsetY() + 2 * rad, name);
-
+            StdDraw.picture(10, 10, "spaceship.jpg", 6.95508e10, 6.95508e10, 20); // perhaps we can also change the degree of the spaceship
         }
         else {
         StdDraw.setPenColor(color);
@@ -120,9 +113,23 @@ public class VectorTools {
         // 0);
     }
 
+    /** Generates a random unit vector
+     *
+     * @return Vector3dInterface that is a random unit vector
+     */
     public static Vector3dInterface randUnitVector(){
         Random rng = new Random();
-        return VectorTools.getUnitVector(new Vector(rng.nextDouble(), rng.nextDouble(), rng.nextDouble()));
+        return VectorTools.getUnitVector(new Vector(rng.nextDouble()-0.5, rng.nextDouble()-0.5, rng.nextDouble()-0.5));
+    }
+
+    public static char maxParameter(Vector3dInterface v) {
+        if(v.getX() > v.getY() && v.getX() > v.getZ()) {
+            return 'X';
+        } else if (v.getY() > v.getZ()) {
+            return 'Y';
+        } else {
+            return 'Z';
+        }
     }
 
 }

@@ -66,8 +66,8 @@ public class State implements StateInterface {
 }
 
 class ChangeRate implements RateInterface {
-    ArrayList<Vector3dInterface> positionChanges;
-    ArrayList<Vector3dInterface> velocityChanges;
+    private final ArrayList<Vector3dInterface> positionChanges;
+    private final ArrayList<Vector3dInterface> velocityChanges;
 
 
     public ChangeRate() {
