@@ -20,20 +20,20 @@ public class BruteForce {
 
     private static Vector3dInterface directionVector;
 
-    public static double getMinimum(Vector3dInterface[] trajectory, StateInterface[] statesList){
+    public static double getMinimum(Vector3dInterface[] trajectory, StateInterface[] statesList, int planetID){
         Vector3dInterface minimum = trajectory[0];
         State initialState = (State)statesList[0];
         int step = 0;
-        double minimumDistance = minimum.dist(initialState.getPositionList().get(TITAN_ID));
+        double minimumDistance = minimum.dist(initialState.getPositionList().get(planetID));
         for (int i = 0; i < trajectory.length -1; i++) {
             State temp = (State)statesList[i];
-            if(trajectory[i].dist(temp.getPositionList().get(TITAN_ID)) < minimumDistance){
+            if(trajectory[i].dist(temp.getPositionList().get(planetID)) < minimumDistance){
                 minimum = trajectory[i];
-                minimumDistance = trajectory[i].dist(temp.getPositionList().get(TITAN_ID));
+                minimumDistance = trajectory[i].dist(temp.getPositionList().get(planetID));
                 step = i;
             }
         }
-        directionVector = VectorTools.directionVector(trajectory[step], ((State) statesList[step]).getPositionList().get(TITAN_ID));
+        directionVector = VectorTools.directionVector(trajectory[step], ((State) statesList[step]).getPositionList().get(planetID));
         return minimumDistance;
 
     }
@@ -65,8 +65,8 @@ public class BruteForce {
             Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, STEP_SIZE);
             //System.out.println(getMinimum(trajectories, states));
 
-            if( i == 0 || getMinimum(trajectory, states) < distanceBest ) {
-                distanceBest = getMinimum(trajectory, states);
+            if( i == 0 || getMinimum(trajectory, states, TITAN_ID) < distanceBest ) {
+                distanceBest = getMinimum(trajectory, states, TITAN_ID);
                 velocityBest = velocity;
                 positionBest = position;
                 unitVectorBest = unitVector;
@@ -120,7 +120,7 @@ public class BruteForce {
 
             Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, STEP_SIZE);
 
-            double shortestDistance = getMinimum(trajectory, states);
+            double shortestDistance = getMinimum(trajectory, states, TITAN_ID);
             System.out.println();
 
             System.out.println("ChangeRate: " + changeRate);
