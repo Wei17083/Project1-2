@@ -15,12 +15,12 @@ public class BruteForce {
         Vector3dInterface minimum = trajectory[0];
         State initialState = (State)statesList[0];
         int step = 0;
-        double minimumDistance = minimum.dist(initialState.getPositionList().get(9));
+        double minimumDistance = minimum.dist(initialState.getPositionList().get(8));
         for (int i = 1; i < trajectory.length; i++) {
             State temp = (State)statesList[i-1];
-            if(trajectory[i].dist(temp.getPositionList().get(9)) < minimumDistance){
+            if(trajectory[i].dist(temp.getPositionList().get(8)) < minimumDistance){
                 minimum = trajectory[i];
-                minimumDistance = trajectory[i].dist(temp.getPositionList().get(9));
+                minimumDistance = trajectory[i].dist(temp.getPositionList().get(8));
                 step = i;
             }
         }
@@ -30,13 +30,19 @@ public class BruteForce {
 
     public static ArrayList<Vector3dInterface> bruteforce (SolarSystem system){
         StateInterface[] states = system.solve(system, system.getState(), 31556926, 1000);
+
+
         for(int i = 0; i < 10000; i++){
             Vector3dInterface unitVector = VectorTools.randUnitVector();
             Vector3dInterface position = EarthP.addMul(EarthR, unitVector);
             double launchSpeed = Math.random()*(maxSpeed-minSpeed) + minSpeed;
+            //System.out.println("Random unit vector: " + unitVector.toString());
             Vector3dInterface velocity = EarthV.addMul(launchSpeed, unitVector);
             Probe spaceship = new Probe(system, states);
+
+            //System.out.println("Initial speed: " + velocity.toString());
             Vector3dInterface[] trajectories = spaceship.trajectory(position, velocity, 31556926, 1000);
+            System.out.println(getMinimum(trajectories, states));
 
             if(getMinimum(trajectories, states) < 2.5755e6) {
                 System.out.println("hit");
