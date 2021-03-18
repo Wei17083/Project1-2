@@ -73,67 +73,79 @@ public class testPhysics {
                 Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
                                 neptune, probe };
 
-                SolarSystem system = new SolarSystem(bodies);
-
-                // System.out.println(system.getState().toString());
-                State state = (State) system.step(system, 86400, system.getState(), 86400);
-                // System.out.println(state.toString());
-
-                double[] ts = { 0, 31556926 }; // 31556926
-                StateInterface[] stateList = system.solve(system, system.getState(), ts);
-                // System.out.println(stateList[1].toString());
-
-                double tf = 31556926;
-                // System.out.println("tf = "+tf);
-                StateInterface[] stateList2 = system.solve(system, system.getState(), tf, 1000);
-                State[] stateList3 = new State[stateList2.length];
-                for (int i = 0; i < stateList2.length; i++) {
-                        stateList3[i] = (State) stateList2[i];
-                }
-                // System.out.println(stateList2[stateList2.length-1].toString());
-
-                ArrayList<Vector3dInterface> earthPositionList = new ArrayList<>();
-                for (State s : stateList3) {
-                        Vector3dInterface v = s.getPositionList().get(3);
-                        earthPositionList.add(s.getPositionList().get(3));
-                }
-                // System.out.println(earthPositionList.get(0).getX()+",
-                // "+earthPositionList.get(0).getY()+", "+earthPositionList.get(0).getZ());
-                // System.out.println(earthPositionList.get(earthPositionList.size()-1).getX()+",
-                // "+earthPositionList.get(earthPositionList.size()-1).getY()+",
-                // "+earthPositionList.get(earthPositionList.size()-1).getZ());
-                // System.out.println(earthPositionList.get((earthPositionList.size()-1)/2).getX()+",
-                // "+earthPositionList.get((earthPositionList.size()-1)/2).getY()+",
-                // "+earthPositionList.get((earthPositionList.size()-1)/2).getZ());
-
-                // System.out.println(new Vector(27771.89015815458, -40238.56416078634,
-                // -769.065384128892).norm());
-
-                double stepSize = 1000;
-                StateInterface[] states = system.solve(system, system.getState(), 31556926, stepSize);
-
-                Vector3dInterface velocity = new Vector(27771.89015815458, -40238.56416078634, -769.065384128892);
-
-                Vector3dInterface unitVector = VectorTools.getUnitVector(velocity);
-                Vector3dInterface EarthP = new Vector(-1.471922101663588e+11, -2.860995816266412e+10,
-                                8.278183193596080e+06);
-                Vector3dInterface EarthV = new Vector(5.427193405797901e+03, -2.931056622265021e+04,
-                                6.575428158157592e-01);
-                double EarthR = 6.371e6;
-
-                Vector3dInterface position = EarthP.addMul(EarthR, unitVector);
-                Vector3dInterface velocityTotal = EarthV.add(velocity);
-
-                Probe spaceship = new Probe(system, states);
-                Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, stepSize);
-                System.out.println("Minimum distance: " + BruteForce.getMinimum(trajectory, states, 8));
-                System.out.println("Minimum distance Jupiter: " + BruteForce.getMinimum(trajectory, states, 6));
-
-                ArrayList<StateInterface> arListPositions = new ArrayList<>(Arrays.asList(stateList2));
-                ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length);
-                csv.createCSV();
-                ToolsCSV.createProbeCSV(trajectory);
+                ToolsCSV csv = new ToolsCSV(null, bodies.length);
                 GUI.visualise(bodies, ToolsCSV.getAllPositions(), ToolsCSV.getProbeTrajectory());
+
+                // SolarSystem system = new SolarSystem(bodies);
+
+                // // System.out.println(system.getState().toString());
+                // State state = (State) system.step(system, 86400, system.getState(), 86400);
+                // // System.out.println(state.toString());
+
+                // double[] ts = { 0, 31556926 }; // 31556926
+                // StateInterface[] stateList = system.solve(system, system.getState(), ts);
+                // // System.out.println(stateList[1].toString());
+
+                // double tf = 31556926;
+                // // System.out.println("tf = "+tf);
+                // StateInterface[] stateList2 = system.solve(system, system.getState(), tf,
+                // 1000);
+                // State[] stateList3 = new State[stateList2.length];
+                // for (int i = 0; i < stateList2.length; i++) {
+                // stateList3[i] = (State) stateList2[i];
+                // }
+                // // System.out.println(stateList2[stateList2.length-1].toString());
+
+                // ArrayList<Vector3dInterface> earthPositionList = new ArrayList<>();
+                // for (State s : stateList3) {
+                // Vector3dInterface v = s.getPositionList().get(3);
+                // earthPositionList.add(s.getPositionList().get(3));
+                // }
+                // // System.out.println(earthPositionList.get(0).getX()+",
+                // // "+earthPositionList.get(0).getY()+", "+earthPositionList.get(0).getZ());
+                // //
+                // System.out.println(earthPositionList.get(earthPositionList.size()-1).getX()+",
+                // // "+earthPositionList.get(earthPositionList.size()-1).getY()+",
+                // // "+earthPositionList.get(earthPositionList.size()-1).getZ());
+                // //
+                // System.out.println(earthPositionList.get((earthPositionList.size()-1)/2).getX()+",
+                // // "+earthPositionList.get((earthPositionList.size()-1)/2).getY()+",
+                // // "+earthPositionList.get((earthPositionList.size()-1)/2).getZ());
+
+                // // System.out.println(new Vector(27771.89015815458, -40238.56416078634,
+                // // -769.065384128892).norm());
+
+                // double stepSize = 1000;
+                // StateInterface[] states = system.solve(system, system.getState(), 31556926,
+                // stepSize);
+
+                // Vector3dInterface velocity = new Vector(27771.89015815458,
+                // -40238.56416078634, -769.065384128892);
+
+                // Vector3dInterface unitVector = VectorTools.getUnitVector(velocity);
+                // Vector3dInterface EarthP = new Vector(-1.471922101663588e+11,
+                // -2.860995816266412e+10,
+                // 8.278183193596080e+06);
+                // Vector3dInterface EarthV = new Vector(5.427193405797901e+03,
+                // -2.931056622265021e+04,
+                // 6.575428158157592e-01);
+                // double EarthR = 6.371e6;
+
+                // Vector3dInterface position = EarthP.addMul(EarthR, unitVector);
+                // Vector3dInterface velocityTotal = EarthV.add(velocity);
+
+                // Probe spaceship = new Probe(system, states);
+                // Vector3dInterface[] trajectory = spaceship.trajectory(position,
+                // velocityTotal, 31556926, stepSize);
+                // System.out.println("Minimum distance: " + BruteForce.getMinimum(trajectory,
+                // states, 8));
+                // System.out.println("Minimum distance Jupiter: " +
+                // BruteForce.getMinimum(trajectory, states, 6));
+
+                // ArrayList<StateInterface> arListPositions = new
+                // ArrayList<>(Arrays.asList(stateList2));
+                // csv.createCSV();
+                // ToolsCSV.createProbeCSV(trajectory);
                 // BruteForce.bruteforce(system);
 
         }
