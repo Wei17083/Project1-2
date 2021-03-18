@@ -70,7 +70,7 @@ public class VectorTools {
         if (a > 10) {
             a = 10;
         }
-        StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), "spaceship.jpg",
+        StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), "spaceship.png",
                 7e9 * a, 7e9 * a);
     }
 
