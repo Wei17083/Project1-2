@@ -44,12 +44,12 @@ public class ToolsCSV {
         out.close();
     }
 
-    public static void createProbeCSV(Vector3dInterface[] trajectory) throws FileNotFoundException {
+    public static void createProbeCSV(Vector3dInterface[] trajectory, double finalPos) throws FileNotFoundException {
         File csvFile = new File(trajectoryFile);
         PrintWriter out = new PrintWriter(csvFile);
 
         out.println("X-Position, Y-Position, Z-Position");// , X-Velocity, Y-Velocity, Z-Velocity");
-
+        out.println(finalPos + ",");
         for (int i = 0; i < trajectory.length; i++) {
             out.println(VectorTools.csvCoordinates(trajectory[i]) + ",");
         }
@@ -116,19 +116,30 @@ public class ToolsCSV {
         return (list);
     }
 
+    public static int getFinalProbePosition() throws FileNotFoundException {
+        FileReader f = new FileReader(trajectoryFile);
+        Scanner Reader = new Scanner(f);
+        Reader.useDelimiter(",");
+        skipLine(Reader, 1);
+        double ind = Double.parseDouble(Reader.next());
+        Reader.close();
+        return (int) ind;
+    }
+
     public static Vector3dInterface[] getProbeTrajectory() throws IOException {
         BufferedReader bfReader = new BufferedReader(new FileReader(trajectoryFile));
         int lines = 0;
         while (bfReader.readLine() != null)
             lines++;
         bfReader.close();
-        // create array with enough space for every line (-1 cause of title line)
-        Vector3dInterface[] trajectory = new Vector3dInterface[lines - 1];
+        // create array with enough space for every line (-2 cause of title line and
+        // finalPos)
+        Vector3dInterface[] trajectory = new Vector3dInterface[lines - 2];
 
         FileReader f = new FileReader(trajectoryFile);
         Scanner Reader = new Scanner(f);
         Reader.useDelimiter(",");
-        skipLine(Reader, 1);
+        skipLine(Reader, 2);
 
         for (int i = 0; i < trajectory.length; i++) {
 
