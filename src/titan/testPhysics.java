@@ -81,7 +81,7 @@ public class testPhysics {
 
                 double[] ts = { 0, 31556926 }; // 31556926
                 StateInterface[] stateList = system.solve(system, system.getState(), ts);
-                // System.out.println(stateList[1].toString());
+               // System.out.println(stateList[stateList.length-1].toString());
 
                 double tf = 31556926;
                 // System.out.println("tf = "+tf);
@@ -90,7 +90,7 @@ public class testPhysics {
                 for (int i = 0; i < stateList2.length; i++) {
                         stateList3[i] = (State) stateList2[i];
                 }
-                // System.out.println(stateList2[stateList2.length-1].toString());
+                //System.out.println(stateList2[stateList2.length-1].toString());
 
                 ArrayList<Vector3dInterface> earthPositionList = new ArrayList<>();
                 for (State s : stateList3) {
@@ -117,13 +117,13 @@ public class testPhysics {
                 // -40238.56416078634, -769.065384128892);
                 //
                 // Vector3dInterface unitVector = VectorTools.getUnitVector(velocity);
-                // Vector3dInterface EarthP = new Vector(-1.471922101663588e+11,
-                // -2.860995816266412e+10,
-                // 8.278183193596080e+06);
+                Vector3dInterface EarthP = new Vector(-1.471922101663588e+11,
+                -2.860995816266412e+10,
+                8.278183193596080e+06);
                 // Vector3dInterface EarthV = new Vector(5.427193405797901e+03,
                 // -2.931056622265021e+04,
                 // 6.575428158157592e-01);
-                // double EarthR = 6.371e6;
+                double EarthR = 6.371e6;
                 //
                 // Vector3dInterface position = EarthP.addMul(EarthR, unitVector);
                 // Vector3dInterface velocityTotal = EarthV.add(velocity);
@@ -140,7 +140,13 @@ public class testPhysics {
                 // ArrayList<>(Arrays.asList(stateList2));
                 // ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length);
                 // csv.createCSV();
-                BruteForce.bruteforce(system);
+                // BruteForce.bruteforce(system);
+                Vector3dInterface vel = new Vector(26964.97216, -38497.03713, -659.7120337);
+                Vector3dInterface uni = VectorTools.getUnitVector(vel);
+                Vector3dInterface p = EarthP.addMul(EarthR, uni);
+
+
+                System.out.println(p.toString());
 
         }
 }
