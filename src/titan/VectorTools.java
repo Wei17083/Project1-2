@@ -8,6 +8,10 @@ import java.util.Random;
 
 public class VectorTools {
 
+    // private static double scaleMultiplier1 = 0.1 * GUI.getScale();
+    // private static double scaleMultiplier2 = 3 * GUI.getScale();
+    // private static double scaleMultiplier3 = 20 * GUI.getScale();
+
     /**
      * Returns the unit vector pointing from the start to the end position
      *
@@ -117,42 +121,14 @@ public class VectorTools {
             // draw names
             StdDraw.setPenColor(color.white);
             if (radius > 6e8) {
-                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + 2 * rad,
-                        position.getY() - GUI.getZoomOffsetY() + 2 * rad, name);
-            } else if (radius < 3e6) {// TODO: change name offset to scale with zoom
-                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + radius + 1e9,
-                        position.getY() - GUI.getZoomOffsetY() + radius + 1e9, name);
+                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + GUI.getScale() * 1.4 * rad,
+                        position.getY() - GUI.getZoomOffsetY() + GUI.getScale() * rad, name);
+            } else if (radius < 3e6) {
+                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + GUI.getScale() * 0.6 * radius + 1e9,
+                        position.getY() - GUI.getZoomOffsetY() + GUI.getScale() * radius + 1e9, name);
             } else {
-                StdDraw.setPenColor(color);
-                // using real scale of planets wouldnt give us a good overview
-                // one can play around with the radius so that it looks presentable
-                StdDraw.filledCircle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(),
-                        radius);
-
-                // divide bodies into 3 categories:
-                // big (sun), small (moons + mercury), medium (planets)
-                if (radius > 6e8) {
-                    StdDraw.circle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(),
-                            2 * rad);
-                } else if (radius < 3e6) {
-                    StdDraw.circle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), rad);
-                } else {
-                    StdDraw.circle(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(),
-                            1.5 * rad);
-                }
-
-                // draw names
-                StdDraw.setPenColor(color.white);
-                if (radius > 6e8) {
-                    StdDraw.text(position.getX() - GUI.getZoomOffsetX() + 2 * rad,
-                            position.getY() - GUI.getZoomOffsetY() + 2 * rad, name);
-                } else if (radius < 3e6) {// TODO: change name offset to scale with zoom
-                    StdDraw.text(position.getX() - GUI.getZoomOffsetX() + radius + 1e9,
-                            position.getY() - GUI.getZoomOffsetY() + radius + 1e9, name);
-                } else {
-                    StdDraw.text(position.getX() - GUI.getZoomOffsetX() + 1.5 * rad,
-                            position.getY() - GUI.getZoomOffsetY() + 1.5 * rad, name);
-                }
+                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + GUI.getScale() * 0.4 * rad,
+                        position.getY() - GUI.getZoomOffsetY() + GUI.getScale() * 0.4 * rad, name);
             }
         }
 
