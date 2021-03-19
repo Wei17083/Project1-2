@@ -13,7 +13,7 @@ public class GUI {
     private static int skip = 10;
 
     public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions,
-            Vector3dInterface[] trajectory) throws InterruptedException {
+            Vector3dInterface[] trajectory, int finalPos) throws InterruptedException {
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
 
@@ -147,7 +147,9 @@ public class GUI {
             }
             if (i <= 0) // if animation hasnt started yet
                 VectorTools.drawProbe(trajectory[0]);
-            else {
+            else if (i > finalPos) {
+                VectorTools.drawProbe(trajectory[finalPos]);
+            } else {
                 VectorTools.drawProbe(trajectory[i]);
             }
             StdDraw.text(0, -0.9 * scale * SolarSystem.AU, instructions);
