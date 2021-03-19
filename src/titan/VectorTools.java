@@ -8,10 +8,6 @@ import java.util.Random;
 
 public class VectorTools {
 
-    // private static double scaleMultiplier1 = 0.1 * GUI.getScale();
-    // private static double scaleMultiplier2 = 3 * GUI.getScale();
-    // private static double scaleMultiplier3 = 20 * GUI.getScale();
-
     /**
      * Returns the unit vector pointing from the start to the end position
      *
@@ -120,15 +116,18 @@ public class VectorTools {
 
             // draw names
             StdDraw.setPenColor(color.white);
+            double zoomScale = GUI.getScale();
+            if (zoomScale > 6)
+                zoomScale = 6;
             if (radius > 6e8) {
-                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + GUI.getScale() * 1.4 * rad,
-                        position.getY() - GUI.getZoomOffsetY() + GUI.getScale() * rad, name);
+                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + zoomScale * 1.4 * rad,
+                        position.getY() - GUI.getZoomOffsetY() + zoomScale * 1.4 * rad, name);
             } else if (radius < 3e6) {
-                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + GUI.getScale() * 0.6 * radius + 1e9,
-                        position.getY() - GUI.getZoomOffsetY() + GUI.getScale() * radius + 1e9, name);
+                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + zoomScale * 0.4 * radius + 1e9,
+                        position.getY() - GUI.getZoomOffsetY() + zoomScale * 0.4 * radius + 1e9, name);
             } else {
-                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + GUI.getScale() * 0.4 * rad,
-                        position.getY() - GUI.getZoomOffsetY() + GUI.getScale() * 0.4 * rad, name);
+                StdDraw.text(position.getX() - GUI.getZoomOffsetX() + zoomScale * 0.6 * rad,
+                        position.getY() - GUI.getZoomOffsetY() + zoomScale * 0.6 * rad, name);
             }
         }
 
