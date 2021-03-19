@@ -18,7 +18,7 @@ public class GUI {
         StdDraw.setCanvasSize(750, 750);
 
         // setting up scale in order to display whole solar system
-        scale = 1;
+        scale = 0.5;
         StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
         StdDraw.setYscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
 
@@ -29,7 +29,7 @@ public class GUI {
         String instructions = "Start/Stop: Spacebar, Follow Probe: F, Zoom: +/-, Pan: WASD or arrows";
 
         // phase 2
-        int phase2 = allPositions.get(0).size() / 4 * 3;
+        int phase2 = finalPos / 4 * 3;
 
         // indicates wether the automatic panning is active or not
         boolean interrupted = false;
@@ -53,6 +53,11 @@ public class GUI {
 
         // start animation loop (animation starts paused)
         for (int i = 0; i < allPositions.get(0).size(); i += skip) {
+            if (i >= finalPos - 3 * skip) {
+                skip = 1; // slow down for last frames
+                if (i > finalPos)
+                    i--; // stay on last position
+            }
             // pause/unpause entire animation
             if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
                 if (!pauseLock) {
@@ -116,23 +121,24 @@ public class GUI {
                     panOffsetY = trajectory[i].getY();
                     if (!zoomInterrupted) {
                         if (i <= phase2) {
-                            if (scale < 8) { // slowly zoom out
-                                // scale = Math.pow(1.0 + (Math.log(msPerFrame * 10) / 10000), i);
-                                // phase1EndScale = scale;
+                            if (scale < 1) { // quickly zoom out
+                                scale *= 1.0 + (Math.log(msPerFrame * 10) / 500);
+                            } else if (scale < 8) { // slowly zoom out
                                 scale *= 1.0 + (Math.log(msPerFrame * 10) / 1000);
                             } else if (scale > 8.1) {
                                 scale /= 1.0 + (Math.log(msPerFrame * 10) / 1000);
                             }
-                        } else if (i > phase2) {
-                            if (scale > 1) { // slowly zoom in
-                                // scale = phase1EndScale + 1.0
-                                // - Math.pow(1.0 + (Math.log(msPerFrame * 10) / 10000), (i - phase2));
+                        } else if (i > phase2 && i < finalPos) {
+                            if (scale > 4) { // slowly zoom in
                                 scale /= 1.0 + (Math.log(msPerFrame * 10) / 1000);
-                            } else if (scale < 0.9) {
-                                scale *= 1.0 + (Math.log(msPerFrame * 10) / 1000);
+                            } else if (scale > 1) { // zoom in quicker
+                                scale /= 1.0 + (Math.log(msPerFrame * 10) / 600);
+                            } else if (scale < 0.0005) {
+                                scale *= 1.0 + (Math.log(msPerFrame * 10) / 10000);
                             }
                         }
                     }
+
                 }
 
             } else {
@@ -162,6 +168,7 @@ public class GUI {
             int ns = nsPerFrame % 1000000;
             Thread.sleep(ms, ns);
         }
+
     }
 
     public static double getZoomOffsetX() {
