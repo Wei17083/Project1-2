@@ -10,7 +10,8 @@ public class GUI {
     private static double panOffsetY = 0;
     private static double scale = 1;
     // animation only draws every nth position (n = skip)
-    private static int skip = 10;
+    private static int skipSize = 10;
+    private static int skip = skipSize;
     private static double daysPerStep;
     private static int currentDay;
 
@@ -31,7 +32,7 @@ public class GUI {
         panOffsetY = bodies[3].getPosition().getY();
 
         String timePassed = "Day ";
-        String instructions = "Start/Stop: Spacebar, Follow Probe: F, Zoom: +/-, Pan: WASD or arrows";
+        String instructions = "Start/Stop: Spacebar, Follow Probe: F, Zoom: +/-, Pan: WASD or arrows, Restart: R";
 
         // phase 2
         int phase2 = finalPos / 4 * 3;
@@ -73,9 +74,22 @@ public class GUI {
             }
             if (!StdDraw.isKeyPressed(KeyEvent.VK_SPACE))
                 pauseLock = false; // unlock pause once button released
-            // unpause entire animation
-            else if (StdDraw.isKeyPressed(KeyEvent.VK_O))
-                paused = false;
+
+            // restart animation
+            if (StdDraw.isKeyPressed(KeyEvent.VK_R)) {
+                // reset all values
+                paused = true;
+                interrupted = false;
+                zoomInterrupted = false;
+                i = 0;
+                for (int j = 0; j < bodies.length; j++) { // redraw bodies
+                    bodies[j].setPosition(allPositions.get(j).get(i));
+                }
+                skip = skipSize;
+                scale = 0.5;
+                panOffsetX = trajectory[i].getX();
+                panOffsetY = trajectory[i].getY();
+            }
 
             // manual moving around
             // press space to continue the auto animation
