@@ -11,6 +11,8 @@ public class GUI {
     private static double scale = 1;
     // animation only draws every nth position (n = skip)
     private static int skip = 10;
+    private static double daysPerStep;
+    private static int currentDay;
 
     public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions,
             Vector3dInterface[] trajectory, int finalPos) throws InterruptedException {
@@ -22,10 +24,13 @@ public class GUI {
         StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
         StdDraw.setYscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
 
+        daysPerStep = (double) 365 / allPositions.get(0).size();
+        double x = trajectory.length * daysPerStep;
         // set up offset to start on earth
         panOffsetX = bodies[3].getPosition().getX();
         panOffsetY = bodies[3].getPosition().getY();
 
+        String timePassed = "Day ";
         String instructions = "Start/Stop: Spacebar, Follow Probe: F, Zoom: +/-, Pan: WASD or arrows";
 
         // phase 2
@@ -53,6 +58,7 @@ public class GUI {
 
         // start animation loop (animation starts paused)
         for (int i = 0; i < allPositions.get(0).size(); i += skip) {
+            currentDay = (int) (i * daysPerStep + 1);
             if (i >= finalPos - 3 * skip) {
                 skip = 1; // slow down for last frames
                 if (i > finalPos)
@@ -158,6 +164,7 @@ public class GUI {
             } else {
                 VectorTools.drawProbe(trajectory[i]);
             }
+            StdDraw.text(-0.9 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, timePassed + currentDay);
             StdDraw.text(0, -0.9 * scale * SolarSystem.AU, instructions);
             StdDraw.show();
             StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
