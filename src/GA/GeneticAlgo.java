@@ -167,16 +167,16 @@ public class GeneticAlgo {
 //            System.out.println("mutates");
             int geneToMutate = new Random().nextInt(6);
             if(geneToMutate == 0)
-                individual.getInitPosition().setX(individual.getInitPosition().getX()*2);
+                individual.getInitPosition().setX(individual.getInitPosition().getX()*Math.random());
             else if(geneToMutate == 1)
-                individual.getInitPosition().setY(individual.getInitPosition().getY()*2);
+                individual.getInitPosition().setY(individual.getInitPosition().getY()*Math.random());
             else if(geneToMutate == 2)
-                individual.getInitPosition().setZ(individual.getInitPosition().getZ()*2);
+                individual.getInitPosition().setZ(individual.getInitPosition().getZ()*Math.random());
             else if(geneToMutate == 3)
-                individual.getInitVelocity().setX(individual.getInitVelocity().getX()*2);
+                individual.getInitVelocity().setX(individual.getInitVelocity().getX()*Math.random());
             else if(geneToMutate == 4)
-                individual.getInitVelocity().setY(individual.getInitVelocity().getY()*2);
-            else individual.getInitVelocity().setZ(individual.getInitVelocity().getZ()*2);
+                individual.getInitVelocity().setY(individual.getInitVelocity().getY()*Math.random());
+            else individual.getInitVelocity().setZ(individual.getInitVelocity().getZ()*Math.random());
         }
 //        System.out.println("doesnt mutate");
         return individual;
