@@ -15,10 +15,10 @@ public class VerletSolver {
     private final ArrayList<Vector3dInterface> velocities = new ArrayList<>();
     private final Vector3dInterface[] acceleration;
 
-    private ArrayList<State> states = new ArrayList<>();
+    private final ArrayList<State> states = new ArrayList<>();
 
-    private double timeStep;
-    private double numOfSteps;
+    private final double timeStep;
+    private final double numOfSteps;
 
     public VerletSolver(State ogState, double timeStep, double numOfSteps){
 
