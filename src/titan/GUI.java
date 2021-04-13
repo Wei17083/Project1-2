@@ -101,7 +101,7 @@ public class GUI {
                 panOffsetY = trajectory[i].getY();
             }
 
-            // changes are scaling based on log of msPerFrame*10 so that the zoom effect
+            // changes are scaling based on log of msPerFrame*10 so that the zoom effect.
             // stays similar even when framerate changes.
             // msPerFrame has to be more than 0.1 for this to work, else log(1) = 0
             else if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT) || StdDraw.isKeyPressed(KeyEvent.VK_A)) {
