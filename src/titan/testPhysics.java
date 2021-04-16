@@ -137,7 +137,7 @@ public class testPhysics {
 
                 // generate csv files for data
                 ArrayList<StateInterface> arListPositions = new ArrayList<>(Arrays.asList(stateList2));
-                ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length);
+                ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length, "data");
                 ToolsCSV.createCSV();
                 ToolsCSV.createProbeCSV(trajectory, BruteForce.getMinimum(trajectory, stateList2, 8)[1]);
                 // BruteForce.bruteforce(system);
