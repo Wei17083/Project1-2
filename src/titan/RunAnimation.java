@@ -67,7 +67,7 @@ public class RunAnimation {
                 Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
                                 neptune, probe };
 
-                ToolsCSV csv = new ToolsCSV(null, bodies.length);
+                ToolsCSV csv = new ToolsCSV(null, bodies.length, "data");
                 GUI.visualise(bodies, ToolsCSV.getAllPositions(), ToolsCSV.getProbeTrajectory(),
                                 ToolsCSV.getFinalProbePosition());
 
