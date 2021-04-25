@@ -68,8 +68,7 @@ public class RunAnimation {
                                 neptune, probe };
 
                 ToolsCSV csv = new ToolsCSV(null, bodies.length, "data");
-                GUI.visualise(bodies, ToolsCSV.getAllPositions(), ToolsCSV.getProbeTrajectory(),
-                                ToolsCSV.getFinalProbePosition());
+                GUI.visualise(bodies, ToolsCSV.getAllPositions(), ToolsCSV.getProbeTrajectory(), ToolsCSV.getFinalProbePosition());
 
         }
 }

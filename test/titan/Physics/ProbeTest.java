@@ -1,13 +1,14 @@
 package titan.Physics;
 
+import org.junit.jupiter.api.Test;
 import titan.Probe;
 import titan.ProbeSimulatorInterface;
 import titan.SolarSystem;
 
 public class ProbeTest {
 
-    @org.junit.jupiter.api.Test
-    void trajectory() {
+    @Test
+    void step() {
 
 
 
