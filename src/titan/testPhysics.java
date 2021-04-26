@@ -120,35 +120,35 @@ public class testPhysics {
                 Vector3dInterface EarthV = new Vector(5.427193405797901e+03, -2.931056622265021e+04,
                                 6.575428158157592e-01);
                 double EarthR = 6.371e6;
-                //System.out.println("unitVector: " + unitVector.toString());
+                // System.out.println("unitVector: " + unitVector.toString());
                 Vector3dInterface position = EarthP.addMul(EarthR, unitVector);
-                //System.out.println("Position norm: ");
-                //System.out.println("relPositon: " + position.sub(EarthP).toString());
-                //System.out.println("launch positon: " + position.toString());
+                // System.out.println("Position norm: ");
+                // System.out.println("relPositon: " + position.sub(EarthP).toString());
+                // System.out.println("launch positon: " + position.toString());
                 Vector3dInterface velocityTotal = EarthV.add(velocity);
 
                 Probe spaceship = new Probe(system, states);
                 Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, stepSize);
-                //System.out.println("Minimum distance: " + BruteForce.getMinimum(trajectory, states, 8)[0]);
-                //System.out.println("Steps: " + BruteForce.getMinimum(trajectory, states, 8)[1]);
-                //System.out.println("Travel time: " + BruteForce.getMinimum(trajectory, states, 8)[1] * stepSize);
-                //System.out.println("Minimum distance Saturn: " + BruteForce.getMinimum(trajectory, states, 7)[0]);
+                // System.out.println("Minimum distance: " + BruteForce.getMinimum(trajectory,
+                // states, 8)[0]);
+                // System.out.println("Steps: " + BruteForce.getMinimum(trajectory, states,
+                // 8)[1]);
+                // System.out.println("Travel time: " + BruteForce.getMinimum(trajectory,
+                // states, 8)[1] * stepSize);
+                // System.out.println("Minimum distance Saturn: " +
+                // BruteForce.getMinimum(trajectory, states, 7)[0]);
                 //
 
                 // generate csv files for data
                 ArrayList<StateInterface> arListPositions = new ArrayList<>(Arrays.asList(stateList2));
-                ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length, "data");
+                ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length, "data", "trajectory");
                 ToolsCSV.createCSV();
                 ToolsCSV.createProbeCSV(trajectory, BruteForce.getMinimum(trajectory, stateList2, 8)[1]);
                 // BruteForce.bruteforce(system);
 
-
-
-
-
-        Vector3dInterface v = new Vector(34479.14521, -47015.88941, -635.4333416);
-        Vector3dInterface u = VectorTools.getUnitVector(v);
-        Vector3dInterface p = EarthP.addMul(EarthR, u);
+                Vector3dInterface v = new Vector(34479.14521, -47015.88941, -635.4333416);
+                Vector3dInterface u = VectorTools.getUnitVector(v);
+                Vector3dInterface p = EarthP.addMul(EarthR, u);
                 System.out.println(p.sub(EarthP).toString());
 
         }
