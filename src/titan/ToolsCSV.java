@@ -14,13 +14,14 @@ import java.util.Scanner;
 public class ToolsCSV {
     private static ArrayList<StateInterface> listStates;
     private static String fileName = ".csv";
-    private static String trajectoryFile = "trajectory.csv";
+    private static String trajectoryFile = ".csv";
     private static int n_bodies;
 
-    public ToolsCSV(ArrayList<StateInterface> listStates, int n_bodies, String name) {
+    public ToolsCSV(ArrayList<StateInterface> listStates, int n_bodies, String name, String trajectoryName) {
         this.listStates = listStates;
         this.n_bodies = n_bodies;
         fileName = name + fileName;
+        trajectoryFile = trajectoryName + trajectoryFile;
     }
 
     public static void createCSV() throws FileNotFoundException {
