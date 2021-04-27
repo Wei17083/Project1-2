@@ -1,6 +1,8 @@
 package titan.Physics;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import titan.*;
 import java.io.FileNotFoundException;
@@ -11,7 +13,7 @@ import java.util.List;
 
 public class CSVTest {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
         // state 1
 
         ArrayList<Vector3dInterface> positionList = new ArrayList<>();
@@ -73,7 +75,10 @@ public class CSVTest {
         testGetCSVPosB2();
         testGetCSVPVelB2();
 
+        testGetFinalProbePosition();
+        testGetProbeTrajectory();
     }
+
 
     // Test body 0 positions
     @Test
