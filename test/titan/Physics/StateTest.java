@@ -1,13 +1,12 @@
 package titan.Physics;
 
 import org.junit.jupiter.api.Test;
-import titan.ChangeRate;
-import titan.Vector;
-import titan.Vector3dInterface;
-import titan.State;
+import titan.*;
+
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StateTest {
     @Test
@@ -23,8 +22,8 @@ public class StateTest {
         velocityList.add(v);
         velocityList.add(v1);
         State s = new State(0, positionList, velocityList);
-        assertEquals(s.getPositionList(), positionList);
-        assertEquals(s.getVelocityList(), velocityList);
+        assertTrue(VectorTools.equals(s.getPositionList().get(0), p));
+        assertTrue(VectorTools.equals(s.getVelocityList().get(0), v));
         assertEquals(s.getState(), 0);
     }
     @Test
@@ -51,8 +50,10 @@ public class StateTest {
         ArrayList<Vector3dInterface> velocityListNew = new ArrayList<>();
         positionListNew.add(pNew);
         velocityListNew.add(vNew);
-        State sNew = new State(0, positionListNew, velocityListNew);
-        assertEquals(s.addMul(0.1, c), sNew);
+        State sNew = (State) s.addMul(0.1, c);
+        assertTrue(VectorTools.equals(positionListNew.get(0), sNew.getPositionList().get(0)));
+        assertTrue(VectorTools.equals(velocityListNew.get(0), sNew.getVelocityList().get(0)));
+        assertEquals(0, sNew.getState());
     }
 
     @Test

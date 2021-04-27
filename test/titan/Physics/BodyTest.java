@@ -2,6 +2,7 @@ package titan.Physics;
 import org.junit.jupiter.api.Test;
 import titan.Body;
 import titan.Vector;
+import titan.VectorTools;
 
 import java.awt.*;
 
@@ -16,8 +17,8 @@ public class BodyTest {
         assertEquals(b.getName(), "test");
         assertEquals(b.getID(), 10);
         assertEquals(b.getMass(), 100);
-        assertEquals(b.getPosition(), p);
-        assertEquals(b.getVelocity(), v);
+        assertTrue(VectorTools.equals(b.getPosition(), p));
+        assertTrue(VectorTools.equals(b.getVelocity(), v));
         assertEquals(b.getRadius(), 100);
         assertEquals(b.getColor(), null);
 
@@ -28,8 +29,8 @@ public class BodyTest {
         b.setColor(new Color(1, 1, 1));
         assertEquals(b.getName(), "test 1");
         assertEquals(b.getMass(), 200);
-        assertEquals(b.getPosition(), new Vector(3,3,3));
-        assertEquals(b.getVelocity(), new Vector(4,4,4));
+        assertTrue(VectorTools.equals(b.getPosition(), new Vector(3,3,3)));
+        assertTrue(VectorTools.equals(b.getVelocity(), new Vector(4,4,4)));
         assertEquals(b.getColor(), new Color(1, 1, 1));
     }
 

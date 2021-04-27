@@ -7,11 +7,12 @@ import titan.Vector3dInterface;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import titan.*;
 
 public class ChangeRateTest {
     @Test
-    void getSet(){
+    void getAdd(){
         Vector p1 = new Vector(2, 2, 2);
         Vector v1 = new Vector(4, 4, 4);
         ArrayList<Vector3dInterface> positionChanges = new ArrayList<>();
@@ -21,7 +22,7 @@ public class ChangeRateTest {
         ChangeRate c = new ChangeRate();
         c.addPositionChange(p1);
         c.addVelocityChange(v1);
-        assertEquals(c.getPositionChanges(), positionChanges);
-        assertEquals(c.getVelocityChanges(), velocityChanges);
+        assertTrue(VectorTools.equals(c.getPositionChanges().get(0), positionChanges.get(0)));
+        assertTrue(VectorTools.equals(c.getVelocityChanges().get(0), velocityChanges.get(0)));
     }
 }

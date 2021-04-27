@@ -144,8 +144,7 @@ public class VectorTools {
      */
     public static Vector3dInterface randUnitVector() {
         Random rng = new Random();
-        return VectorTools
-                .getUnitVector(new Vector(rng.nextDouble() - 0.5, rng.nextDouble() - 0.5, rng.nextDouble() - 0.5));
+        return VectorTools.getUnitVector(new Vector(rng.nextDouble() - 0.5, rng.nextDouble() - 0.5, rng.nextDouble() - 0.5));
     }
 
     public static char maxParameter(Vector3dInterface v) {
