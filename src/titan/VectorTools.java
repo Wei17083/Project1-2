@@ -1,7 +1,5 @@
 package titan;
 
-import static org.junit.jupiter.api.DynamicTest.stream;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;

@@ -1,9 +1,12 @@
 package titan.Physics;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import org.junit.jupiter.api.Test;
+import titan.*;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -123,17 +126,27 @@ public class CSVTest {
         expected[0] = new Vector(1, 2, 3);
         expected[1] = new Vector(4, 5, 6);
 
-        Vector3dInterface[] traj = ToolsCSV.getProbeTrajectory();
-        for (int i = 0; i < traj.length; i++) {
-            assertEquals(VectorTools.vectorToString(expected[i]), VectorTools.vectorToString(traj[i]));
+        try {
+            Vector3dInterface[] traj = ToolsCSV.getProbeTrajectory();
+            for (int i = 0; i < traj.length; i++) {
+                assertEquals(VectorTools.vectorToString(expected[i]), VectorTools.vectorToString(traj[i]));
+            }
+        } catch (IOException e) {
+            fail();
         }
+
+
     }
 
     // Test getFinalPosition
     @Test
     public static void testGetFinalProbePosition() {
+        try{
         int expected = 1;
         assertEquals(expected, ToolsCSV.getFinalProbePosition());
+    } catch (IOException e) {
+        fail();
+    }
     }
 
 }
