@@ -10,6 +10,7 @@ public class VerletSolver {
 
     private final double[] MASSES = new double[]{1.988500e30, 3.302e23, 4.8685e24, 5.97219e24, 7.349e22, 6.4171e23, 1.89813e27, 5.6834e26, 1.34553e23, 8.6813e25, 1.02413e26};
     private final double GRAV_CONSTANT = 6.674E-11;
+
     private final ArrayList<Vector3dInterface> positions = new ArrayList<>();
     private final ArrayList<Vector3dInterface> previousPositions = new ArrayList<>();
     private final ArrayList<Vector3dInterface> velocities = new ArrayList<>();
@@ -19,6 +20,7 @@ public class VerletSolver {
 
     private final double timeStep;
     private final double numOfSteps;
+
 
     public VerletSolver(State ogState, double timeStep, double numOfSteps){
 
@@ -41,6 +43,7 @@ public class VerletSolver {
 
     public ArrayList<State> doVerlet(){
 
+        //use velocity verlet on first step to get previous and present position
         nextPositionVV();
         addNewState(1);
 
@@ -52,7 +55,6 @@ public class VerletSolver {
     }
 
     public void nextPosition() {
-
         for(int i = 0; i < positions.size(); i++){
 
             Vector3dInterface pos = positions.get(i).mul(2);
@@ -67,11 +69,10 @@ public class VerletSolver {
             previousPositions.set(i, positions.get(i));
             positions.set(i, VectorTools.sumAll(vs));
         }
-
         updateAcceleration();
-
     }
 
+    //use velocity verlet to get next position
     public void nextPositionVV(){
 
         // update position
@@ -86,12 +87,9 @@ public class VerletSolver {
             vs.add(acc);
 
             positions.set(i, VectorTools.sumAll(vs));
-
         }
-
         //update acceleration
         updateAcceleration();
-
     }
 
     public void updateAcceleration(){
@@ -99,6 +97,7 @@ public class VerletSolver {
         for(int i = 0; i < positions.size(); i++){
             Vector3dInterface body1 = positions.get(i);
             double mass1 = MASSES[i];
+
             ArrayList<Vector3dInterface> forces = new ArrayList<>();
 
             for(int j = 0; j < positions.size(); j++){
@@ -108,7 +107,6 @@ public class VerletSolver {
                     forces.add(gravitationalPull(mass1, mass2, body1, body2));
                 }
             }
-
             acceleration[i] = VectorTools.sumAll(forces).mul(1/mass1);
         }
     }
@@ -120,7 +118,5 @@ public class VerletSolver {
         return forceDirection.mul(force);
     }
 
-    private void addNewState(double t){
-        states.add(new State(t, this.positions, this.velocities));
-    }
+    private void addNewState(double time){ states.add(new State(time, new ArrayList<>(this.positions), this.velocities)); }
 }
