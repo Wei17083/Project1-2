@@ -1,5 +1,6 @@
 package Verlet;
 
+import titan.Probe;
 import titan.State;
 import titan.Vector3dInterface;
 import titan.VectorTools;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 
 public class VerletSolver {
 
-    private final double[] MASSES = new double[]{1.988500e30, 3.302e23, 4.8685e24, 5.97219e24, 7.349e22, 6.4171e23, 1.89813e27, 5.6834e26, 1.34553e23, 8.6813e25, 1.02413e26};
+    private double[] MASSES = new double[]{1.988500e30, 3.302e23, 4.8685e24, 5.97219e24, 7.349e22, 6.4171e23, 1.89813e27, 5.6834e26, 1.34553e23, 8.6813e25, 1.02413e26};
     private final double GRAV_CONSTANT = 6.674E-11;
 
     private final ArrayList<Vector3dInterface> positions = new ArrayList<>();
@@ -72,11 +73,12 @@ public class VerletSolver {
         updateAcceleration();
     }
 
-    //use velocity verlet to get next position
     public void nextPositionVV(){
 
         // update position
         for(int i = 0; i < positions.size(); i++){
+
+
             Vector3dInterface pos = positions.get(i);
             Vector3dInterface vel = velocities.get(i).mul(timeStep);
             Vector3dInterface acc = acceleration[i].mul(timeStep*timeStep*(0.5));
@@ -95,6 +97,7 @@ public class VerletSolver {
     public void updateAcceleration(){
 
         for(int i = 0; i < positions.size(); i++){
+
             Vector3dInterface body1 = positions.get(i);
             double mass1 = MASSES[i];
 
@@ -109,6 +112,19 @@ public class VerletSolver {
             }
             acceleration[i] = VectorTools.sumAll(forces).mul(1/mass1);
         }
+    }
+
+    public void addProbe(Probe probe, Vector3dInterface position, Vector3dInterface velocity){
+
+        double[] massesWithProbe = new double[MASSES.length+1];
+        System.arraycopy(MASSES, 0, massesWithProbe, 0, MASSES.length);
+        massesWithProbe[massesWithProbe.length-1] = probe.MASS;
+        MASSES = massesWithProbe;
+
+        positions.add(position);
+        previousPositions.add(position);
+        velocities.add(velocity);
+
     }
 
     private Vector3dInterface gravitationalPull(double mass1, double mass2, Vector3dInterface p1, Vector3dInterface p2) {
