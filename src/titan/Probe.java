@@ -17,16 +17,21 @@ public class Probe implements ProbeSimulatorInterface{
     /*
      * Simulate the solar system, including a probe fired from Earth at 00:00h on 1April 2020.
      *
-     * @param   p0      the starting position of the probe, relative to the earth'sposition.
-     * @param   v0      the starting velocity of the probe, relative to the earth'svelocity.
+     * @param   p0      the starting position of the probe, relative to the earth's position.
+     * @param   v0      the starting velocity of the probe, relative to the earth's velocity.
      * @param   ts      the times at which the states should be output, with ts[0] being the initial time.
-     * @return  an array of size ts.length giving the position of the probe at eachtime stated,
+     * @return  an array of size ts.length giving the position of the probe at each time stated,
      *          taken relative to the Solar System barycentre.
      */
 
     @Override
     public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double[] ts) {
-        double stepSize = 100;
+        double stepSize = ts[1]-ts[0];
+        for (int i = 2; i < ts.length; i++){
+            if(ts[i]-ts[i-1] < stepSize){
+                stepSize = ts[i]-ts[i-1];
+            }
+        }
         int size = ts.length-1;
         int iterations = (int) (Math.round(ts[size]) + 1);
         stateList = system.solve(system, system.getState(), ts[size], stepSize);
@@ -99,6 +104,10 @@ public class Probe implements ProbeSimulatorInterface{
         return step;
     }
 
+    /** Returns the velocities of the probe of one trajectory
+     *
+     * @return array with velocities of the probe
+     */
     public Vector3dInterface[] getProbeVelocities() {
         return probeVelocities;
     }

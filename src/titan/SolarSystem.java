@@ -68,18 +68,15 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
                                 new Vector(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02),
                                 2.4622e7, Color.blue);
 
-                Body probe = new Body("Probe", 12, 1,
-                                new Vector(0, 0, 0),
-                                new Vector(0, 0, 0),
-                                1, null);  
+
 
 
                 // create arrays of bodies and corresponding forces
                 Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
-                                neptune, probe};
+                                neptune};
 
                 // use testPhysics.java to run visuals until we have full list of positions
-                GUI.visualise(bodies, null);
+               //GUI.visualise(bodies, null);
 
         }
 
@@ -135,7 +132,12 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
          */
         @Override
         public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double[] ts) {
-                double stepSize = 100;
+                double stepSize = ts[1]-ts[0];
+                for (int i = 1; i < ts.length; i++){
+                        if(ts[i]-ts[i-1] < stepSize){
+                                stepSize = ts[i]-ts[i-1];
+                        }
+                }
                 int iterations = (int) (Math.round((ts[ts.length - 1]) / stepSize) + 2);
                 StateInterface[] stateList = new StateInterface[ts.length];
                 stateList[0] = y0;
