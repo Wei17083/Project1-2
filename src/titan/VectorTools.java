@@ -27,7 +27,11 @@ public class VectorTools {
      * @return true if vectors are the same, false otherwise
      */
     public static boolean equals(Vector3dInterface v1, Vector3dInterface v2) {
-        return v1.getX() == v2.getX() && v1.getY() == v2.getY() && v1.getZ() == v2.getZ();
+        final double ACCURACY = 1E-5;
+
+        return ((v1.getX()-v2.getX())/v1.getX() < ACCURACY)&&
+                ((v1.getY()-v2.getY())/v1.getY() < ACCURACY) &&
+                ((v1.getZ()-v2.getZ())/v1.getZ() < ACCURACY);
     }
 
     /**
