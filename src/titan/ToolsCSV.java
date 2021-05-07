@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,7 +32,7 @@ public class ToolsCSV {
         for (StateInterface si : listStates) {
             State s = (State) si;
             for (int i = 0; i < s.positionList.size(); i++) {
-                out.print(s.tState + ", "); // 1st column: time
+                out.print(s.stateTime + ", "); // 1st column: time
                 out.print(i + ", "); // 2nd column: ID
                 out.print(s.positionList.get(i).getX() + ", "); // 3rd column: X-Position
                 out.print(s.positionList.get(i).getY() + ", "); // 4th column: Y-Position

@@ -1,0 +1,4 @@
+package titan;
+
+interface RateInterface {
+}

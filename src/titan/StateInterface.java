@@ -23,5 +23,3 @@ package titan;
         public String toString();
     }
 
-    interface RateInterface {
-    }

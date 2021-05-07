@@ -24,7 +24,7 @@ public class StateTest {
         State s = new State(0, positionList, velocityList);
         assertTrue(VectorTools.equals(s.getPositionList().get(0), p));
         assertTrue(VectorTools.equals(s.getVelocityList().get(0), v));
-        assertEquals(s.getState(), 0);
+        assertEquals(s.getStateTime(), 0);
     }
     @Test
     void addMul(){
@@ -53,7 +53,7 @@ public class StateTest {
         State sNew = (State) s.addMul(0.1, c);
         assertTrue(VectorTools.equals(positionListNew.get(0), sNew.getPositionList().get(0)));
         assertTrue(VectorTools.equals(velocityListNew.get(0), sNew.getVelocityList().get(0)));
-        assertEquals(0, sNew.getState());
+        assertEquals(0, sNew.getStateTime());
     }
 
     @Test
