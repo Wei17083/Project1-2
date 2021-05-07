@@ -28,7 +28,7 @@ public class SolarSystemTest {
         SolarSystem system = new SolarSystem(bodies);
         assertTrue(VectorTools.equals(state.getPositionList().get(0), system.getState().getPositionList().get(0)));
         assertTrue(VectorTools.equals(state.getVelocityList().get(0), system.getState().getVelocityList().get(0)));
-        assertEquals(0, system.getState().getState());
+        assertEquals(0, system.getState().getStateTime());
         assertEquals(bodies[0].getName(), system.getBodies()[0].getName());
     }
 

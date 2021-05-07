@@ -74,6 +74,10 @@ public class VectorTools {
         return sum;
     }
 
+    public static Vector3dInterface clone(Vector3dInterface v) {
+        return new Vector(v.getX(), v.getY(), v.getZ());
+    }
+
     public static void drawProbe(Vector3dInterface position) {
         double a = GUI.getScale() * 2;
         if (a > 10) {
