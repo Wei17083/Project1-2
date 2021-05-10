@@ -14,21 +14,22 @@ public class RungeExp {
     
     public static void main(String[] args) {
         RungeExp answer = new RungeExp();
-        System.out.println(answer.RungeExp1(4));
+        State w = answer.RungeExpAnswer(10); // with stepsize h
+        System.out.println(w);
     }
 
-    private State RungeExp1(double h){
+    private State RungeExpAnswer(double h){
         Body[] bodies = new Body[10];
         bodies = getBodies();
-        State A = getFirstState();
+        State currentState = getFirstState();
 
-        ArrayList<State> results = new ArrayList<State>();
-
-        for (double i=0; i<31556926/60; i=i+h) {
-            State newState = aid.stateStep(A, bodies, h);
-            A = newState;
-        }
-        return A; 
+        ArrayList<State> results = new ArrayList<State>(); // if needed can be saved in intervals
+        
+        for (double i=0; i<3.1554926E7; i=i+h) {
+            State newState = aid.stateStep(currentState, bodies, h);
+            currentState = newState;
+        } 
+        return currentState; 
     } 
 
     private static State getFirstState(){
