@@ -3,6 +3,7 @@ package titan;
 public class RungeKutta {
     
     public double dydx(double x, double y) { 
+
         return ((x-y)/2); // y′=F(x,y), this return is an example
     }
 

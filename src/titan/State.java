@@ -8,7 +8,8 @@ public class State implements StateInterface {
     // position and velocity at time tState
     ArrayList<Vector3dInterface> positionList;
     ArrayList<Vector3dInterface> velocityList;
-    double tState;
+
+    double stateTime;
 
     public ArrayList<Vector3dInterface> getPositionList() {
         return positionList;
@@ -18,14 +19,16 @@ public class State implements StateInterface {
         return velocityList;
     }
 
-    public double gettState() {
-        return tState;
+
+
+    public double getStateTime() {
+        return stateTime;
     }
 
     public State(double t0, ArrayList<Vector3dInterface> positionList, ArrayList<Vector3dInterface> velocityList) {
         this.positionList = positionList;
         this.velocityList = velocityList;
-        tState = t0;
+        stateTime = t0;
     }
 
     /**
@@ -36,7 +39,7 @@ public class State implements StateInterface {
      * @return The new state after the update. Required to have the same class as 'this'.
      */
     @Override
-    public StateInterface addMul(double step, RateInterface rate) {
+    public State addMul(double step, RateInterface rate) {
         ChangeRate rate1 = (ChangeRate) rate;
         ArrayList<Vector3dInterface> newPositions = new ArrayList<>();
         ArrayList<Vector3dInterface> newVelocities = new ArrayList<>();
@@ -45,7 +48,17 @@ public class State implements StateInterface {
             newVelocities.add(i, velocityList.get(i).addMul(step, rate1.getVelocityChanges().get(i)));
         }
 
-        return new State(tState + step, newPositions, newVelocities);
+        return new State(stateTime + step, newPositions, newVelocities);
+    }
+
+    public State add(double step, ChangeRate rate) {
+        State returnState = this.addMul(1, rate);
+        returnState.setStateTime(stateTime+step);
+        return  returnState;
+    }
+
+    public void setStateTime(double time) {
+        stateTime = time;
     }
 
     public String toString() {
@@ -65,29 +78,3 @@ public class State implements StateInterface {
 
 }
 
-class ChangeRate implements RateInterface {
-    private final ArrayList<Vector3dInterface> positionChanges;
-    private final ArrayList<Vector3dInterface> velocityChanges;
-
-
-    public ChangeRate() {
-        positionChanges = new ArrayList<Vector3dInterface>();
-        velocityChanges = new ArrayList<Vector3dInterface>();
-    }
-
-    public void addPositionChange(Vector3dInterface v){
-        positionChanges.add(v);
-    }
-
-    public void addVelocityChange(Vector3dInterface v) {
-        velocityChanges.add(v);
-    }
-
-    public ArrayList<Vector3dInterface> getPositionChanges() {
-        return positionChanges;
-    }
-
-    public ArrayList<Vector3dInterface> getVelocityChanges() {
-        return velocityChanges;
-    }
-}

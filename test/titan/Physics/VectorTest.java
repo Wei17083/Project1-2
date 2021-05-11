@@ -11,72 +11,103 @@ import static org.junit.jupiter.api.Assertions.*;
 class VectorTest {
 
     @org.junit.jupiter.api.Test
-    void getSet() {
-        Vector v = new Vector(1,2,3);
-        assertEquals(v.getX(), 1);
-        assertEquals(v.getY(), 2);
-        assertEquals(v.getZ(), 3);
-
-        v.setX(2);
-        v.setY(3);
-        v.setZ(4);
-        assertEquals(v.getX(), 2);
-        assertEquals(v.getY(), 3);
-        assertEquals(v.getZ(), 4);
-    }
-
-
-    @org.junit.jupiter.api.Test
-    void add() {
-        Vector v1 = new Vector(1,2,3);
-        Vector v2 = new Vector(1,1,1);
-        Vector3dInterface v3 = v1.add(v2);
-        assertEquals(v3.getX(), 2);
-        assertEquals(v3.getY(), 3);
-        assertEquals(v3.getZ(), 4);
+    void testGetX() {
+        Vector3dInterface v = new Vector(-1.1, 0.1, 1.1);
+        assertEquals(-1.1, v.getX());
     }
 
     @org.junit.jupiter.api.Test
-    void sub() {
-        Vector v1 = new Vector(1,2,3);
-        Vector v2 = new Vector(1,1,1);
-        Vector3dInterface v3 = v1.sub(v2);
-        assertEquals(v3.getX(), 0);
-        assertEquals(v3.getY(), 1);
-        assertEquals(v3.getZ(), 2);
+    void testSetX() {
+        Vector3dInterface v = new Vector();
+        v.setX(-1.1);
+        assertEquals(-1.1, v.getX());
     }
 
     @org.junit.jupiter.api.Test
-    void mul() {
-        Vector v1 = new Vector(1,2,3);
-        Vector3dInterface v2 = v1.mul(2);
-        assertEquals(2, v2.getX());
-        assertEquals(4, v2.getY());
-        assertEquals(6, v2.getZ());
+    void testGetY() {
+        Vector3dInterface v = new Vector(-1.1, 0.1, 1.1);
+        assertEquals(0.1, v.getY());
     }
 
     @org.junit.jupiter.api.Test
-    void addMul() {
-        Vector v1 = new Vector(1,2,3);
-        Vector v2 = new Vector(1,1,1);
-        Vector3dInterface v3 = v1.addMul(2, v2);
-        assertEquals(3,v3.getX());
-        assertEquals(4,v3.getY());
-        assertEquals(5,v3.getZ());
+    void testSetY() {
+        Vector3dInterface v = new Vector();
+        v.setY(0.1);
+        assertEquals(0.1, v.getY());
     }
 
     @org.junit.jupiter.api.Test
-    void norm() {
-        Vector v1 = new Vector(3,4,0);
-        assertEquals(5, v1.norm());
+    void testGetZ() {
+        Vector3dInterface v = new Vector(-1.1, 0.1, 1.1);
+        assertEquals(1.1, v.getZ());
     }
 
     @org.junit.jupiter.api.Test
-    void dist() {
-        Vector v1 = new Vector(0,0,0);
-        Vector v2 = new Vector(3,4,0);
-        assertEquals(5, v1.dist(v2));
+    void testSetZ() {
+        Vector3dInterface v = new Vector();
+        v.setZ(1.0);
+        assertEquals(1.0, v.getZ());
     }
+
+    @org.junit.jupiter.api.Test
+    void testAddVector3d() {
+        Vector3dInterface a = new Vector(-1.1, 0.1, 1.1);
+        Vector3dInterface b = new Vector( 0.5, 0.6, 0.7);
+        Vector3dInterface ab = a.add(b);
+        assertEquals(-1.1+0.5, ab.getX());
+        assertEquals( 0.1+0.6, ab.getY());
+        assertEquals( 1.1+0.7, ab.getZ());
+    }
+
+    @org.junit.jupiter.api.Test
+    void testSub() {
+        Vector3dInterface a = new Vector(-1.1, 0.1, 1.1);
+        Vector3dInterface b = new Vector( 0.5, 0.6, 0.7);
+        Vector3dInterface ab = a.sub(b);
+        assertEquals(-1.1-0.5, ab.getX());
+        assertEquals( 0.1-0.6, ab.getY());
+        assertEquals( 1.1-0.7, ab.getZ());
+    }
+
+    @org.junit.jupiter.api.Test
+    void testMul() {
+        Vector3dInterface a = new Vector(-1.1, 0.1, 1.1);
+        Vector3dInterface b = a.mul(0.5);
+        assertEquals(-1.1*0.5, b.getX());
+        assertEquals( 0.1*0.5, b.getY());
+        assertEquals( 1.1*0.5, b.getZ());
+    }
+
+    @org.junit.jupiter.api.Test
+    void testAddMul() {
+        Vector3dInterface a = new Vector( 0.6, 0.7, 0.8);
+        Vector3dInterface b = new Vector(-1.1, 0.1, 1.1);
+        Vector3dInterface ab = a.addMul(0.5, b);
+        assertEquals(0.6 + 0.5*(-1.1), ab.getX());
+        assertEquals(0.7 + 0.5*0.1,    ab.getY());
+        assertEquals(0.8 + 0.5*1.1,    ab.getZ());
+    }
+
+    @org.junit.jupiter.api.Test
+    void testNorm() {
+        Vector3dInterface v = new Vector(3.0, -2.0, 6.0);
+        assertEquals(7.0, v.norm());
+    }
+
+    @org.junit.jupiter.api.Test
+    void testDist() {
+        Vector3dInterface a = new Vector(3.0, 4.0,  8.0);
+        Vector3dInterface b = new Vector(0.5, 0.25, 0.5);
+        assertEquals(8.75, a.dist(b));
+    }
+
+    @org.junit.jupiter.api.Test
+    void testToString() {
+        Vector3dInterface v = new Vector(-1.1, 2.1, -3.1);
+        String stringV = "(-1.1,2.1,-3.1)";
+        assertEquals(stringV, v.toString());
+    }
+
 
     @org.junit.jupiter.api.Test
     void directionUnitVector() {
@@ -98,5 +129,12 @@ class VectorTest {
         vectorList.add(v3);
         Vector3dInterface v4 = VectorTools.sumAll(vectorList);
         assertTrue(VectorTools.equals(v4, new Vector(5, 18, -6)));
+    }
+
+    @org.junit.jupiter.api.Test
+    void testEquals() {
+        Vector3dInterface x = new Vector(2,5,7);
+        Vector3dInterface y = new Vector(2,5,7);
+        assertTrue(VectorTools.equals(x,y));
     }
 }
