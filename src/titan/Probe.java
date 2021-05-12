@@ -5,9 +5,13 @@ import java.util.ArrayList;
 public class Probe implements ProbeSimulatorInterface{
 
     public SolarSystem system;
-    public final double MASS = 15000;
+    public final double MASS = 78000;
     public StateInterface[] stateList;
     private Vector3dInterface[] probeVelocities;
+    final double GRAV_CONSTANT = 6.674E-11;
+    final double MASS_TITAN = 1.34553e23;
+    final double RADIUS_TITAN = 2.5755e6;
+
 
     public Probe (SolarSystem system, StateInterface[] states){
         stateList = states;
@@ -111,4 +115,10 @@ public class Probe implements ProbeSimulatorInterface{
     public Vector3dInterface[] getProbeVelocities() {
         return probeVelocities;
     }
+
+    public double normVelocityforObit(){
+        double r = RADIUS_TITAN+300;
+        return Math.sqrt((GRAV_CONSTANT*MASS_TITAN)/r);
+    }
+
 }

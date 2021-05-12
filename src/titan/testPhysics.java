@@ -129,6 +129,9 @@ public class testPhysics {
 
                 Probe spaceship = new Probe(system, states);
                 Vector3dInterface[] trajectory = spaceship.trajectory(position, velocityTotal, 31556926, stepSize);
+                Vector3dInterface[] velocities = spaceship.getProbeVelocities();
+                System.out.println("orbit velocity: "+spaceship.normVelocityforObit());
+
                 // System.out.println("Minimum distance: " + BruteForce.getMinimum(trajectory,
                 // states, 8)[0]);
                 // System.out.println("Steps: " + BruteForce.getMinimum(trajectory, states,
@@ -138,7 +141,7 @@ public class testPhysics {
                 // System.out.println("Minimum distance Saturn: " +
                 // BruteForce.getMinimum(trajectory, states, 7)[0]);
                 //
-
+                //BruteForce.bruteforce(system);
                 // generate csv files for data
                 ArrayList<StateInterface> arListPositions = new ArrayList<>(Arrays.asList(stateList2));
                 ToolsCSV csv = new ToolsCSV(arListPositions, bodies.length, "data", "trajectory");
@@ -149,7 +152,7 @@ public class testPhysics {
                 Vector3dInterface v = new Vector(34479.14521, -47015.88941, -635.4333416);
                 Vector3dInterface u = VectorTools.getUnitVector(v);
                 Vector3dInterface p = EarthP.addMul(EarthR, u);
-                System.out.println(p.sub(EarthP).toString());
+                //System.out.println(p.sub(EarthP).toString());
 
         }
 }

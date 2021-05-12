@@ -13,12 +13,20 @@ import java.util.ArrayList;
  */
 public class DerivativeVelocity implements Derivative {
     private final ArrayList<Vector3dInterface> POSITIONS;
+    private  Vector3dInterface POSITION;
     private final Body[] BODY_LIST;
 
     public DerivativeVelocity(ArrayList<Vector3dInterface> positions, Body[] bodyList) {
         POSITIONS = positions;
         BODY_LIST = bodyList;
     }
+
+    public DerivativeVelocity(ArrayList<Vector3dInterface> positions, Vector3dInterface position, Body[] bodyList) {
+        POSITIONS = positions;
+        POSITION = position;
+        BODY_LIST = bodyList;
+    }
+
 
     /** calculates the acceleration at point p in the solar system,
      *  not taking any bodies in account that are situated at point p
@@ -34,6 +42,15 @@ public class DerivativeVelocity implements Derivative {
             if (!(ID == body.getID()))  {
                 acceleration.add(GravitationalForce.acceleration(currentPosition, POSITIONS.get(body.getID()),body.getMass()));
             }
+        }
+        return acceleration;
+    }
+
+    public Vector3dInterface getDerivative(){
+        Vector3dInterface acceleration = new Vector();
+        Vector3dInterface currentPosition = POSITION;
+        for (Body body:BODY_LIST) {
+            acceleration.add(GravitationalForce.acceleration(currentPosition, POSITIONS.get(body.getID()),body.getMass()));
         }
         return acceleration;
     }

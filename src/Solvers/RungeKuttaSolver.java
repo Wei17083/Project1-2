@@ -1,9 +1,14 @@
 package Solvers;
 
 import Solvers.derivatives.Derivative;
+import Solvers.derivatives.DerivativePosition;
+import Solvers.derivatives.DerivativeVelocity;
 import titan.Body;
 import titan.ChangeRate;
 import titan.State;
+import titan.Vector3dInterface;
+
+import java.util.ArrayList;
 
 public class RungeKuttaSolver extends DifferentialEquationSolver{
 
@@ -39,4 +44,7 @@ public class RungeKuttaSolver extends DifferentialEquationSolver{
 
         return returnState;
     }
+
+
+
 }
