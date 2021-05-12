@@ -24,15 +24,15 @@ public class RungeKuttaSolver extends DifferentialEquationSolver{
         //TODO: use the getAllDerivatives to calculates the "k's"
         ChangeRate k1 = new ChangeRate(dfPositions.getAllDerivatives(), dfVelocities.getAllDerivatives()).mul(h);
         State s1 = currentState.addMul(0.5, k1);
-        double coefficientK1 = 1.0/0.6;
-        ChangeRate k2 = new ChangeRate(createPositionDerivative(s1).getAllDerivatives(), createVelocityDerivative(s1, bodyList).getAllDerivatives());
+        double coefficientK1 = 1.0/6;
+        ChangeRate k2 = new ChangeRate(createPositionDerivative(s1).getAllDerivatives(), createVelocityDerivative(s1, bodyList).getAllDerivatives()).mul(h);
         State s2 = currentState.addMul(0.5, k2);
-        double coefficientK2 = 2.0/0.6;
-        ChangeRate k3 = new ChangeRate(createPositionDerivative(s2).getAllDerivatives(), createVelocityDerivative(s2, bodyList).getAllDerivatives());
+        double coefficientK2 = 2.0/6;
+        ChangeRate k3 = new ChangeRate(createPositionDerivative(s2).getAllDerivatives(), createVelocityDerivative(s2, bodyList).getAllDerivatives()).mul(h);
         State s3 = currentState.addMul(1, k3);
-        double coefficientK3 = 2.0/0.6;
-        ChangeRate k4 = new ChangeRate(createPositionDerivative(s3).getAllDerivatives(), createVelocityDerivative(s3, bodyList).getAllDerivatives());
-        double coefficientK4 = 1.0/0.6;
+        double coefficientK3 = 2.0/6;
+        ChangeRate k4 = new ChangeRate(createPositionDerivative(s3).getAllDerivatives(), createVelocityDerivative(s3, bodyList).getAllDerivatives()).mul(h);
+        double coefficientK4 = 1.0/6;
 
         State returnState = currentState.addMul(coefficientK1, k1).addMul(coefficientK2,k2).addMul(coefficientK3,k3).addMul(coefficientK4,k4);
         returnState.setStateTime(currentState.getStateTime() + h);

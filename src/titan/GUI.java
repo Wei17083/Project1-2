@@ -2,6 +2,7 @@ package titan;
 
 import java.awt.event.KeyEvent;
 import java.util.*;
+import System.SolarSystem;
 
 public class GUI {
     // has to be more than 100 000

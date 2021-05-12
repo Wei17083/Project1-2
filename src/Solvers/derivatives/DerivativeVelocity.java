@@ -32,7 +32,7 @@ public class DerivativeVelocity implements Derivative {
         for (Body body:BODY_LIST) {
             Vector3dInterface bodyPosition = POSITIONS.get(body.getID());
             if (!(ID == body.getID()))  {
-                acceleration.add(GravitationalForce.acceleration(currentPosition, POSITIONS.get(body.getID()),body.getMass()));
+                acceleration = acceleration.add(GravitationalForce.acceleration(currentPosition, POSITIONS.get(body.getID()),body.getMass()));
             }
         }
         return acceleration;
@@ -41,7 +41,7 @@ public class DerivativeVelocity implements Derivative {
     public ArrayList<Vector3dInterface> getAllDerivatives(){
         ArrayList<Vector3dInterface> accelerations = new ArrayList<>();
         for (Body body:BODY_LIST) {
-            accelerations.add(getDerivative(body.getID()));
+            accelerations.add(this.getDerivative(body.getID()));
         }
         return accelerations;
     }

@@ -1,6 +1,7 @@
 package GA;
 
 import BruteForce.BruteForce;
+import Probe.Probe;
 import titan.*;
 
 import java.awt.*;
