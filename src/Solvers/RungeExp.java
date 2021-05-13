@@ -15,7 +15,12 @@ public class RungeExp {
     public static void main(String[] args) {
         RungeExp answer = new RungeExp();
         ArrayList<State> w = answer.RungeExpAnswer(60); // with stepsize h
-        System.out.println(w.get(w.size()-1).getPositionList().get(3));
+
+        for (int i=0; i<w.size(); i++) {
+                System.out.println(w.get(i).getPositionList().get(3));
+        }
+        
+        
     }
 
     private ArrayList<State> RungeExpAnswer(double h){
@@ -27,16 +32,18 @@ public class RungeExp {
         int a=0;
 
         ArrayList<State> exp = new ArrayList<State>(); // saves the result after every interval you want
-        int interval = 31536000/365; // at the moment saves after everyday
+        double interval = 31536000.0/12.0; // at the moment saves after every month
         exp.add(currentState);
+        int b=1;
 
         for (double i=0; i<31536000; i=i+h) { // runs until 1 year
             State newState = aid.stateStep(results.get(a), bodies, h);
             results.add(newState);
             a++;
 
-            if(i==interval) {
-            exp.add(newState);
+            if(interval==i/b) {
+                b++;
+                exp.add(newState);
             }
         } 
         return exp; // returns the interval results
