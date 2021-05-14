@@ -13,7 +13,7 @@ public class verletExp {
     public static void main(String[] args) {
 
         double timeStep = 60; //in seconds
-        int numOfSteps = 31556926/60; // 1 year = 31556926 steps of 1 second
+        int numOfSteps = 525600; // 1 year = 31556926 steps of 1 second
         int interval = 12; // interval = 12 means it will print earth position at each month
 
         printResults(timeStep, numOfSteps, interval);

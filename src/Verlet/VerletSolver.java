@@ -17,15 +17,14 @@ public class VerletSolver {
     private final ArrayList<Vector3dInterface> velocities = new ArrayList<>();
     private final Vector3dInterface[] acceleration;
 
-    private final ArrayList<State> states = new ArrayList<>();
+    private final ArrayList<State> stateListResults = new ArrayList<>();
 
-    private final double timeStep;
+    private final double stepSize;
     private final double numOfSteps;
-
 
     public VerletSolver(State ogState, double timeStep, double numOfSteps){
 
-        this.states.add(ogState);
+        this.stateListResults.add(ogState);
 
         for(Vector3dInterface v : ogState.getPositionList()) {
             positions.add(v);
@@ -38,21 +37,20 @@ public class VerletSolver {
 
         updateAcceleration();
 
-        this.timeStep = timeStep;
+        this.stepSize = timeStep;
         this.numOfSteps = numOfSteps;
     }
 
     public ArrayList<State> doVerlet(){
 
-        //use velocity verlet on first step to get previous and present position
-        nextPositionVV();
-        addNewState(1);
+        findFirstPositionWithVV();
+        addNewStateToResults(1);
 
         for(int i = 2; i < numOfSteps; i++) {
             nextPosition();
-            addNewState(i*timeStep);
+            addNewStateToResults(i* stepSize);
         }
-        return this.states;
+        return this.stateListResults;
     }
 
     public void nextPosition() {
@@ -60,7 +58,7 @@ public class VerletSolver {
 
             Vector3dInterface pos = positions.get(i).mul(2);
             Vector3dInterface pre_pos = previousPositions.get(i).mul(-1);
-            Vector3dInterface acc = acceleration[i].mul(timeStep*timeStep);
+            Vector3dInterface acc = acceleration[i].mul(stepSize * stepSize);
 
             ArrayList<Vector3dInterface> vs = new ArrayList<>();
             vs.add(pos);
@@ -73,15 +71,14 @@ public class VerletSolver {
         updateAcceleration();
     }
 
-    public void nextPositionVV(){
+    public void findFirstPositionWithVV(){
 
         // update position
         for(int i = 0; i < positions.size(); i++){
 
-
             Vector3dInterface pos = positions.get(i);
-            Vector3dInterface vel = velocities.get(i).mul(timeStep);
-            Vector3dInterface acc = acceleration[i].mul(timeStep*timeStep*(0.5));
+            Vector3dInterface vel = velocities.get(i).mul(stepSize);
+            Vector3dInterface acc = acceleration[i].mul(stepSize * stepSize *(0.5));
 
             ArrayList<Vector3dInterface> vs = new ArrayList<>();
             vs.add(pos);
@@ -90,7 +87,7 @@ public class VerletSolver {
 
             positions.set(i, VectorTools.sumAll(vs));
         }
-        //update acceleration
+
         updateAcceleration();
     }
 
@@ -134,5 +131,5 @@ public class VerletSolver {
         return forceDirection.mul(force);
     }
 
-    private void addNewState(double time){ states.add(new State(time, new ArrayList<>(this.positions), this.velocities)); }
+    private void addNewStateToResults(double time){ stateListResults.add(new State(time, new ArrayList<>(this.positions), this.velocities)); }
 }
