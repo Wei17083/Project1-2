@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class SolarSystem {
 
-        public final String SOLVER = "eul";
+        public final String SOLVER = "euler";
 
         public final double GRAV_CONSTANT = 6.674E-11;
         // One AU is approximately the average distance between the Earth and the Sun
@@ -23,7 +23,7 @@ public class SolarSystem {
 
         private final Body[] bodies;
         private State initialState;
-        private final String SOLVERS = "Rung";
+        private final String SOLVERS = "euler";
 
         public SolarSystem(Body[] bodies) {
                 this.bodies = bodies;
