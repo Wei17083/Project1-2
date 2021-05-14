@@ -17,6 +17,11 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
         private static double stepSize = 0.1;
 
         private final Body[] bodies;
+
+        public State getInitialState() {
+                return initialState;
+        }
+
         private State initialState;
 
         public SolarSystem(Body[] bodies) {
@@ -145,7 +150,7 @@ public class SolarSystem implements ODESolverInterface, ODEFunctionInterface {
          * [state]/[time].
          */
         @Override
-        public RateInterface call(double t, StateInterface y) {
+        public ChangeRate call(double t, StateInterface y) {
                 State y1 = (State) y;
                 ChangeRate rate = new ChangeRate();
                 for (Body b : bodies) {

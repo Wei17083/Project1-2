@@ -1,6 +1,7 @@
-package Solvers.derivatives;
+package Solvers;
 
 import Solvers.DifferentialEquationSolver;
+import Solvers.derivatives.Derivative;
 import titan.Body;
 import titan.ChangeRate;
 import titan.State;
