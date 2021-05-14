@@ -42,8 +42,8 @@ public class RungeExp {
             a++;
 
             if(interval==i/b) {
-                b++;
                 exp.add(newState);
+                b++;
             }
         } 
         return exp; // returns the interval results
