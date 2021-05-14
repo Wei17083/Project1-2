@@ -130,4 +130,11 @@ class VectorTest {
         Vector3dInterface v4 = VectorTools.sumAll(vectorList);
         assertTrue(VectorTools.equals(v4, new Vector(5, 18, -6)));
     }
+
+    @org.junit.jupiter.api.Test
+    void testEquals() {
+        Vector3dInterface x = new Vector(2,5,7);
+        Vector3dInterface y = new Vector(2,5,7);
+        assertTrue(VectorTools.equals(x,y));
+    }
 }
