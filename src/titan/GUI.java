@@ -11,7 +11,7 @@ public class GUI {
     private static double panOffsetY = 0;
     private static double scale = 1;
     // animation only draws every nth position (n = skip)
-    private static int skipSize = 10;
+    private static int skipSize = 1;
     private static int skip = skipSize;
     private static double daysPerStep;
     private static int currentDay;
