@@ -26,6 +26,6 @@ public class NewtonRhapson {
             //invert jacobian matrix
 
         //Find desired initial velocity
-        return new Vector(0,0,0);
+
     }
 }
