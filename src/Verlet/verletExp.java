@@ -16,11 +16,11 @@ public class verletExp {
         int numOfSteps = 525600; // 1 year = 31556926 steps of 1 second
         int interval = 12; // interval = 12 means it will print earth position at each month
 
-        printResults(timeStep, numOfSteps, interval);
+        /**printResults(timeStep, numOfSteps, interval);*/
 
     }
 
-    private static void printResults(double timeStep, int numOfSteps, int interval){
+   /** private static void printResults(double timeStep, int numOfSteps, int interval){
 
         ArrayList<State> results = new VerletSolver(getOgState(), timeStep, numOfSteps).doVerlet();
 
@@ -30,7 +30,7 @@ public class verletExp {
         }
         System.out.println("("+results.get(results.size()-1).getPositionList().get(3).getX()+", "+results.get(results.size()-1).getPositionList().get(3).getY()+", "+results.get(results.size()-1).getPositionList().get(3).getZ()+")");
 
-    }
+    }*/
     private static State getOgState(){
         Body sun = new Body("Sun", 0, 1.988500e30,
                 new Vector(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06),

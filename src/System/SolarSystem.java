@@ -3,6 +3,7 @@ package System;
 import Solvers.DifferentialEquationSolver;
 import Solvers.EulerSolver;
 import Solvers.RungeKuttaSolver;
+import Verlet.VerletSolver;
 import titan.*;
 
 import java.awt.*;
@@ -37,6 +38,8 @@ public class SolarSystem {
                 State initialState = createInitialState(bodies);
                 DifferentialEquationSolver solver;
                 if(SOLVERS.equals("euler"))  solver = new EulerSolver();
+                else if(SOLVERS.equals("verlet"))
+                        return new VerletSolver(initialState, stepSize, (finalTime/stepSize)).doVerlet();
                 else  solver = new RungeKuttaSolver();
 
                 return solver.solve(bodies, initialState, finalTime, stepSize);

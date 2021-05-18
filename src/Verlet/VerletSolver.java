@@ -1,16 +1,17 @@
 package Verlet;
 
-import titan.Probe;
-import titan.State;
-import titan.Vector3dInterface;
-import titan.VectorTools;
+import Solvers.DifferentialEquationSolver;
+import titan.*;
 
 import java.util.ArrayList;
 
 public class VerletSolver {
 
-    private double[] MASSES = new double[]{1.988500e30, 3.302e23, 4.8685e24, 5.97219e24, 7.349e22, 6.4171e23, 1.89813e27, 5.6834e26, 1.34553e23, 8.6813e25, 1.02413e26};
     private final double GRAV_CONSTANT = 6.674E-11;
+
+    private final Body[] bodyList = BodyList.getBodyList();
+    private final double[] MASSES = new double[bodyList.length];
+
 
     private final ArrayList<Vector3dInterface> positions = new ArrayList<>();
     private final ArrayList<Vector3dInterface> previousPositions = new ArrayList<>();
@@ -23,6 +24,10 @@ public class VerletSolver {
     private final double numOfSteps;
 
     public VerletSolver(State ogState, double timeStep, double numOfSteps){
+
+        for(int i = 0; i < bodyList.length; i++){
+            MASSES[i] = bodyList[i].getMass();
+        }
 
         this.stateListResults.add(ogState);
 
@@ -41,7 +46,7 @@ public class VerletSolver {
         this.numOfSteps = numOfSteps;
     }
 
-    public ArrayList<State> doVerlet(){
+    public State[] doVerlet(){
 
         findFirstPositionWithVV();
         addNewStateToResults(1);
@@ -50,7 +55,8 @@ public class VerletSolver {
             nextPosition();
             addNewStateToResults(i* stepSize);
         }
-        return this.stateListResults;
+
+        return this.stateListResults.toArray(new State[0]);
     }
 
     public void nextPosition() {
@@ -109,19 +115,6 @@ public class VerletSolver {
             }
             acceleration[i] = VectorTools.sumAll(forces).mul(1/mass1);
         }
-    }
-
-    public void addProbe(Probe probe, Vector3dInterface position, Vector3dInterface velocity){
-
-        double[] massesWithProbe = new double[MASSES.length+1];
-        System.arraycopy(MASSES, 0, massesWithProbe, 0, MASSES.length);
-        massesWithProbe[massesWithProbe.length-1] = probe.MASS;
-        MASSES = massesWithProbe;
-
-        positions.add(position);
-        previousPositions.add(position);
-        velocities.add(velocity);
-
     }
 
     private Vector3dInterface gravitationalPull(double mass1, double mass2, Vector3dInterface p1, Vector3dInterface p2) {
