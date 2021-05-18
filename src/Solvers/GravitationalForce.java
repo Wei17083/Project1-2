@@ -25,10 +25,12 @@ public class GravitationalForce {
      * @return acceleration at point p
      */
     public static Vector3dInterface acceleration(Vector3dInterface p, Vector3dInterface pMass, double mass) {
-        final double GRAV_CONSTANT = 6.674E-11;
+        final double GRAV_CONSTANT = 6.67408E-11;
         double distance = pMass.dist(p);
         Vector3dInterface accelerationDirection = VectorTools.directionVector(p, pMass);
         double force = GRAV_CONSTANT * mass / Math.pow(distance, 2);
         return accelerationDirection.mul(force);
     }
+
+
 }

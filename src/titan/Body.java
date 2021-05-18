@@ -65,15 +65,6 @@ public class Body {
     }
 
 
-//    /**
-//     * Sets the path of the body
-//     *
-//     * @param path path consisting of VectorPositions and corresponding stepSize
-//     */
-//    public void setPath(Path path) {
-//        this.path = path;
-//    }
-
     /**
      * Changes the mass of the body
      *

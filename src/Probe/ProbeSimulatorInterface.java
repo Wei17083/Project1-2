@@ -6,9 +6,12 @@ Schueller
 * This interface serves as the API for students in phase 1. 
 */
 
-package titan;
+package Probe;
 
-public interface ProbeSimulatorInterface {    
+
+import titan.Vector3dInterface;
+
+public interface ProbeSimulatorInterface {
     /*     
     * Simulate the solar system, including a probe fired from Earth at 00:00h on 1April 2020.     
     *     
@@ -19,7 +22,7 @@ public interface ProbeSimulatorInterface {
     *          taken relative to the Solar System barycentre.     
     */
 
-    Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double[] ts);    
+    Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double[] ts);
     /*     
     * Simulate the solar system with steps of an equal size.     
     * The final step may have a smaller size, if the step-size does not exactly divide the solution time range.     
