@@ -69,7 +69,7 @@ public class RunAnimation {
 
                 ToolsCSV csv = new ToolsCSV(null, bodies.length, "data", "trajectory");
                 GUI.visualise(bodies, ToolsCSV.getAllPositions(), ToolsCSV.getProbeTrajectory(),
-                                ToolsCSV.getFinalProbePosition());
+                                ToolsCSV.getFinalProbePosition(), ToolsCSV.getCSVVelocities(11));
 
         }
 }

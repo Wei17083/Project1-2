@@ -11,13 +11,13 @@ public class GUI {
     private static double panOffsetY = 0;
     private static double scale = 1;
     // animation only draws every nth position (n = skip)
-    private static int skipSize = 10;
+    private static int skipSize = 1;
     private static int skip = skipSize;
     private static double daysPerStep;
     private static int currentDay;
 
     public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions,
-            Vector3dInterface[] trajectory, int finalPos) throws InterruptedException {
+            Vector3dInterface[] trajectory, int finalPos, List<Vector3dInterface> probeveloc) throws InterruptedException {
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
 
@@ -25,6 +25,7 @@ public class GUI {
         scale = 0.5;
         StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
         StdDraw.setYscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
+
 
         daysPerStep = (double) 365 / allPositions.get(0).size();
         double x = trajectory.length * daysPerStep;
@@ -38,11 +39,11 @@ public class GUI {
         // phase 2
         int phase2 = finalPos / 4 * 3;
 
-        // indicates wether the automatic panning is active or not
+        // indicates whether the automatic panning is active or not
         boolean interrupted = false;
-        // indicates wether the automatic zoom is active or not
+        // indicates whether the automatic zoom is active or not
         boolean zoomInterrupted = false;
-        // indicates wether the animation is paused or not
+        // indicates whether the animation is paused or not
         boolean paused = true;
         // lock to make sure one button press doesnt toggle pause on/off multiple times
         boolean pauseLock = false;
@@ -55,7 +56,7 @@ public class GUI {
         for (Body body : bodies) {
             body.draw();
         }
-        VectorTools.drawProbe(trajectory[0]);
+        VectorTools.drawProbe(trajectory[0], probeveloc.get(0));
         StdDraw.show();
 
         // start animation loop (animation starts paused)
@@ -173,11 +174,11 @@ public class GUI {
                 body.draw();
             }
             if (i <= 0) // if animation hasnt started yet
-                VectorTools.drawProbe(trajectory[0]);
+                VectorTools.drawProbe(trajectory[0], probeveloc.get(0));
             else if (i > finalPos) {
-                VectorTools.drawProbe(trajectory[finalPos]);
+                VectorTools.drawProbe(trajectory[finalPos],probeveloc.get(probeveloc.size()-1));
             } else {
-                VectorTools.drawProbe(trajectory[i]);
+                VectorTools.drawProbe(trajectory[i], probeveloc.get(i));
             }
             StdDraw.text(-0.9 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, timePassed + currentDay);
             StdDraw.text(0, -0.9 * scale * SolarSystem.AU, instructions);
