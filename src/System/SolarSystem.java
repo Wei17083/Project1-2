@@ -30,9 +30,6 @@ public class SolarSystem {
                 this.bodies = bodies;
         }
 
-        public SolarSystem(Body[] bodies, Vector3dInterface probePosition, Vector3dInterface probeVelocity) {
-                this.bodies = bodies;
-        }
 
         public State[] calculateTrajectories(double finalTime, double stepSize){
                 State initialState = createInitialState(bodies);
