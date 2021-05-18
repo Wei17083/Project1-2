@@ -1,84 +1,54 @@
-package GA;
+package Solvers;
 
-import BruteForce.BruteForce;
-import Probe.Probe;
-import titan.*;
+import titan.Body;
+import titan.State;
+import titan.Vector;
+import titan.Vector3dInterface;
 
 import java.awt.*;
+import java.util.ArrayList;
 
-public class Individual {
+public class RungeExp {
 
-    private final Vector3dInterface EarthP = new Vector(-1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06);
-    private final Vector3dInterface EarthV = new Vector(5.427193405797901e+03, -2.931056622265021e+04, 6.575428158157592e-01);
-    private final double EarthR = 6.371e6;
-    private final double minSpeed = 12000;//m/s
-    private final double maxSpeed = 60000;//m/s
-    private double minDistance;
-
-
-    private Vector3dInterface initPosition;
-    private Vector3dInterface initVelocity;
-    private double fitness;
-
-    public Individual(Vector3dInterface initP, Vector3dInterface initV){
-        this.initPosition = initP;
-        this.initVelocity = initV;
-        this.minDistance = calcMinDistance();
+    RungeKuttaSolver aid = new RungeKuttaSolver();
+    
+    public static void main(String[] args) {
+        RungeExp answer = new RungeExp();
+        State w = answer.RungeExpAnswer(10); // with stepsize h
+        System.out.println(w);
     }
 
-    public Individual(){
-        Vector3dInterface unitVector = VectorTools.randUnitVector();
-        this.initPosition = EarthP.addMul(EarthR, unitVector);
-        double launchSpeed = Math.random()*(maxSpeed-minSpeed) + minSpeed;
-        this.initVelocity = EarthV.addMul(launchSpeed, unitVector);
-        this.minDistance = calcMinDistance();
-    }
+    private State RungeExpAnswer(double h){
+        Body[] bodies = new Body[10];
+        bodies = getBodies();
+        State currentState = getFirstState();
 
-    public void calcFitness(){
+        ArrayList<State> results = new ArrayList<State>(); // if needed can be saved in intervals
+        
+        for (double i=0; i<3.1554926E7; i=i+h) {
+            State newState = aid.stateStep(currentState, bodies, h);
+            currentState = newState;
+        } 
+        return currentState; 
+    } 
 
-        //get titan radius
-        double TITAN_RAD = 2.5755e6;
+    private static State getFirstState(){
+        
+        Body[] bodies = new Body[10];
+        bodies = getBodies();
 
-        if(minDistance <= TITAN_RAD)
-            this.fitness = 1.0;
-        else
-            this.fitness = (TITAN_RAD/this.minDistance);
-    }
+        ArrayList<Vector3dInterface> positions = new ArrayList<>();
+        ArrayList<Vector3dInterface> velocities = new ArrayList<>();
 
-    public double calcMinDistance(){
-        SolarSystem system = getSolarSystem();
-        StateInterface[] stateList = system.solve(system, system.getState(), 31556926, 1000);
-
-        //get positions at each time step
-        Probe spaceship = new Probe(system, stateList);
-        Vector3dInterface[] trajectory = spaceship.trajectory(this.initPosition, this.initVelocity, 31556926, 1000);
-
-        return BruteForce.getMinimum(trajectory, stateList,8)[0];
-    }
-
-    /**public double calcFitnessValue(Vector3dInterface[] trajectory, StateInterface[] statesList){
-        Vector3dInterface minimum = trajectory[0];
-        State initialState = (State)statesList[0];
-        int step = 0;
-        double minimumDistance = minimum.dist(initialState.getPositionList().get(9));
-        for (int i = 1; i < trajectory.length; i++) {
-            State temp = (State)statesList[i];
-            if(trajectory[i].dist(temp.getPositionList().get(9)) < minimumDistance){
-                minimum = trajectory[i];
-                minimumDistance = trajectory[i].dist(temp.getPositionList().get(9));
-                step = i;
-            }
+        for(Body b : bodies) {
+            positions.add(b.getPosition());
+            velocities.add(b.getVelocity());
         }
-        return 0.0;
-    }*/
 
-    double getFitness(){return this.fitness;}
+        return new State(0, positions, velocities);
+    }
 
-    public Vector3dInterface getInitPosition(){return this.initPosition;}
-
-    public Vector3dInterface getInitVelocity(){return this.initVelocity;}
-
-    SolarSystem getSolarSystem(){
+    private static Body[] getBodies(){
         Body sun = new Body("Sun", 0, 1.988500e30,
                 new Vector(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06),
                 new Vector(-1.420511669610689e+01, -4.954714716629277e+00, 3.994237625449041e-01),
@@ -100,7 +70,7 @@ public class Individual {
                 6.371e6, new Color(114, 213, 190)); // green+blue+grey
 
         Body moon = new Body("Moon", 4, 7.349e22,
-                new Vector(-1.472343904597218e+11, -2.822578361503422e+10, 1.052790970065631e+07),
+                new Vector(-1.472343904597218e11, -2.822578361503422e+10, 1.052790970065631e+07),
                 new Vector(4.433121605215677e+03, -2.948453614110320e+04, 8.896598225322805e+01),
                 1.7375e6, Color.gray);
 
@@ -134,13 +104,9 @@ public class Individual {
                 new Vector(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02),
                 2.4622e7, Color.blue);
 
-
-        // create arrays of bodies and corresponding forces
         Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
                 neptune};
 
-        return new SolarSystem(bodies);
-    }
-
-    public double getMinDistance(){return this.minDistance;}
+            return bodies;
+}
 }
