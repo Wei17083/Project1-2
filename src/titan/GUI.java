@@ -17,7 +17,7 @@ public class GUI {
     private static int currentDay;
 
     public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions,
-            Vector3dInterface[] trajectory, int finalPos) throws InterruptedException {
+            Vector3dInterface[] trajectory, int finalPos, List<Vector3dInterface> probeveloc) throws InterruptedException {
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
 
@@ -25,6 +25,7 @@ public class GUI {
         scale = 0.5;
         StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
         StdDraw.setYscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
+
 
         daysPerStep = (double) 365 / allPositions.get(0).size();
         double x = trajectory.length * daysPerStep;
@@ -55,7 +56,7 @@ public class GUI {
         for (Body body : bodies) {
             body.draw();
         }
-        VectorTools.drawProbe(trajectory[0]);
+        VectorTools.drawProbe(trajectory[0], probeveloc.get(0));
         StdDraw.show();
 
         // start animation loop (animation starts paused)
@@ -173,11 +174,11 @@ public class GUI {
                 body.draw();
             }
             if (i <= 0) // if animation hasnt started yet
-                VectorTools.drawProbe(trajectory[0]);
+                VectorTools.drawProbe(trajectory[0], probeveloc.get(0));
             else if (i > finalPos) {
-                VectorTools.drawProbe(trajectory[finalPos]);
+                VectorTools.drawProbe(trajectory[finalPos],probeveloc.get(probeveloc.size()-1));
             } else {
-                VectorTools.drawProbe(trajectory[i]);
+                VectorTools.drawProbe(trajectory[i], probeveloc.get(i));
             }
             StdDraw.text(-0.9 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, timePassed + currentDay);
             StdDraw.text(0, -0.9 * scale * SolarSystem.AU, instructions);

@@ -3,6 +3,7 @@ package titan;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class VectorTools {
@@ -82,13 +83,29 @@ public class VectorTools {
         return new Vector(v.getX(), v.getY(), v.getZ());
     }
 
-    public static void drawProbe(Vector3dInterface position) {
+    public static void drawProbe(Vector3dInterface position, Vector3dInterface probeVector) {
         double a = GUI.getScale() * 2;
         if (a > 10) {
             a = 10;
         }
-        StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), "spaceship.png",
+       /* StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), "spaceship.png",
                 7e9 * a, 7e9 * a, 210);
+        */
+
+        Vector nVector = new Vector(1,-1   ,0);
+        double pzscalar = nVector.getX()*probeVector.getX()+nVector.getY()*probeVector.getY()+nVector.getZ()*probeVector.getZ();
+        //System.out.println(pzscalar);
+        //double pzscalar = position.getX()*probeVector.getX()+position.getY()*probeVector.getY()+position.getZ()*probeVector.getZ();
+        //double pzscalar = position.getX()*nVector.getX()+position.getY()*nVector.getY()+position.getZ()*nVector.getZ();
+        double angle = 0;
+        if(probeVector.norm() != 0) {
+            angle = Math.acos(pzscalar / (nVector.norm() * probeVector.norm()));
+            angle = (angle / 2 * Math.PI) * 360;
+        }
+        //System.out.println(angle);
+        StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), "spaceship.png",
+                7e9 * a, 7e9 * a, angle);
+
     }
 
     /**
