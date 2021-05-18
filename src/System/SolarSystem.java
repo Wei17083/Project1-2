@@ -3,6 +3,7 @@ package System;
 import Solvers.DifferentialEquationSolver;
 import Solvers.EulerSolver;
 import Solvers.RungeKuttaSolver;
+import Solvers.SolverToUse;
 import Verlet.VerletSolver;
 import titan.*;
 
@@ -15,7 +16,6 @@ import java.util.Random;
 
 public class SolarSystem {
 
-        public final String SOLVER = "euler";
 
         public final double GRAV_CONSTANT = 6.674E-11;
         // One AU is approximately the average distance between the Earth and the Sun
@@ -24,7 +24,7 @@ public class SolarSystem {
 
         private final Body[] bodies;
         private State initialState;
-        private final String SOLVERS = "verlet";
+
 
         public SolarSystem(Body[] bodies) {
                 this.bodies = bodies;
@@ -37,9 +37,10 @@ public class SolarSystem {
         public State[] calculateTrajectories(double finalTime, double stepSize){
                 State initialState = createInitialState(bodies);
                 DifferentialEquationSolver solver;
-                if(SOLVERS.equals("euler"))  solver = new EulerSolver();
-                else if(SOLVERS.equals("verlet"))
-                        return new VerletSolver(initialState, stepSize, (finalTime/stepSize)).doVerlet();
+                String solverToUse = SolverToUse.getSolver();
+                if(solverToUse.equals("euler"))  solver = new EulerSolver();
+                else if(solverToUse.equals("verlet"))
+                        return new VerletSolver(initialState, stepSize, (finalTime/stepSize+1)).doVerlet();
                 else  solver = new RungeKuttaSolver();
 
                 return solver.solve(bodies, initialState, finalTime, stepSize);
