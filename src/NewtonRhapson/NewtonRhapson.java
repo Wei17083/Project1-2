@@ -1,6 +1,7 @@
 package NewtonRhapson;
 
 import titan.State;
+import titan.Vector;
 import titan.Vector3dInterface;
 
 public class NewtonRhapson {
@@ -25,5 +26,6 @@ public class NewtonRhapson {
             //invert jacobian matrix
 
         //Find desired initial velocity
+        return new Vector(0,0,0);
     }
 }
