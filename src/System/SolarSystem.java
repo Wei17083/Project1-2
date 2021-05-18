@@ -24,7 +24,7 @@ public class SolarSystem {
 
         private final Body[] bodies;
         private State initialState;
-        private final String SOLVERS = "euler";
+        private final String SOLVERS = "verlet";
 
         public SolarSystem(Body[] bodies) {
                 this.bodies = bodies;
