@@ -1,7 +1,6 @@
 package Verlet;
 
-import titan.Probe;
-import titan.State;
+import titan.*;
 import titan.Vector3dInterface;
 import titan.VectorTools;
 
@@ -114,11 +113,11 @@ public class VerletSolver {
         }
     }
 
-    public void addProbe(Probe probe, Vector3dInterface position, Vector3dInterface velocity){
+    public void addProbe(Body probe, Vector3dInterface position, Vector3dInterface velocity){
 
         double[] massesWithProbe = new double[MASSES.length+1];
         System.arraycopy(MASSES, 0, massesWithProbe, 0, MASSES.length);
-        massesWithProbe[massesWithProbe.length-1] = probe.MASS;
+        massesWithProbe[massesWithProbe.length-1] = probe.getMass();
         MASSES = massesWithProbe;
 
         positions.add(position);
