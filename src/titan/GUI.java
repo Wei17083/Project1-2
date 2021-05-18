@@ -11,7 +11,7 @@ public class GUI {
     private static double panOffsetY = 0;
     private static double scale = 1;
     // animation only draws every nth position (n = skip)
-    private static int skipSize = 10;
+    private static int skipSize = 1;
     private static int skip = skipSize;
     private static double daysPerStep;
     private static int currentDay;
@@ -39,11 +39,11 @@ public class GUI {
         // phase 2
         int phase2 = finalPos / 4 * 3;
 
-        // indicates wether the automatic panning is active or not
+        // indicates whether the automatic panning is active or not
         boolean interrupted = false;
-        // indicates wether the automatic zoom is active or not
+        // indicates whether the automatic zoom is active or not
         boolean zoomInterrupted = false;
-        // indicates wether the animation is paused or not
+        // indicates whether the animation is paused or not
         boolean paused = true;
         // lock to make sure one button press doesnt toggle pause on/off multiple times
         boolean pauseLock = false;
