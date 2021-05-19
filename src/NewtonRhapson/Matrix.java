@@ -4,8 +4,9 @@ public class Matrix {
 
     public double[][] matrix;
     public double[][] cofactorMatrix = new double[3][3];
-    public double[][] adjustedMatrix = new double[3][3];
+    public double[][] signMatrix = new double[3][3];
     public double[][] minorMatrix = new double[2][2];
+    public double[][] adjointMatrix = new double[3][3];
 
     public Matrix (double[][] originalMatrix){
         matrix = originalMatrix;
@@ -13,12 +14,12 @@ public class Matrix {
 
     public double[][] inverse(){
         double[][] inverse = new double[3][3];
-        cofactorMatrix = cofactorMatrix();
-        adjustedMatrix = adjustSign();
+        cofactorMatrix();
+        adjustSign();
+        adjointMatrix();
         for(int i = 0; i < matrix.length; i++){
             for(int j = 0; j < matrix.length; j++){
-                print(adjustedMatrix);
-                inverse[i][j] = adjustedMatrix[i][j]*1/getDeterminant();
+                inverse[i][j] = (adjointMatrix[i][j])*(1/getDeterminant());
             }
         }
         return inverse;
@@ -28,14 +29,13 @@ public class Matrix {
         return minorMatrix[0][0]*minorMatrix[1][1]-minorMatrix[0][1]*minorMatrix[1][0];
     }
 
-    public double[][] cofactorMatrix(){
+    public void cofactorMatrix(){
         for(int i = 0; i < matrix.length; i++){
             for(int j = 0; j < matrix.length; j++){
                 minorMatrix = getMinorMatrix(i,j);
                 cofactorMatrix[i][j] = cofactor(minorMatrix);
             }
         }
-        return cofactorMatrix;
     }
 
     public double[][] getMinorMatrix(int row, int column){
@@ -56,43 +56,41 @@ public class Matrix {
         return minorMatrix;
     }
 
-    public double[][] adjustSign(){
+    public void adjustSign(){
         for(int i = 0; i < matrix.length; i++){
             for(int j = 0; j < matrix.length; j++){
                 if(i%2 == 0){
                     if(j == 1){
-                        adjustedMatrix[i][j] = -cofactorMatrix[i][j];
+                        signMatrix[i][j] = -cofactorMatrix[i][j];
                     }else{
-                        adjustedMatrix[i][j] = cofactorMatrix[i][j];
+                        signMatrix[i][j] = cofactorMatrix[i][j];
                     }
                 } else {
                     if(j%2 == 0){
-                        adjustedMatrix[i][j] = -cofactorMatrix[i][j];
+                        signMatrix[i][j] = -cofactorMatrix[i][j];
                     } else {
-                        adjustedMatrix[i][j] = cofactorMatrix[i][j];
+                        signMatrix[i][j] = cofactorMatrix[i][j];
                     }
                 }
             }
         }
-        return adjustedMatrix;
     }
 
     public double getDeterminant(){
         return matrix[0][0]*cofactorMatrix[0][0]-matrix[0][1]*cofactorMatrix[0][1]+matrix[0][2]*cofactorMatrix[0][2];
     }
 
-    public static void main(String[] args){
-        double[][] matrix = {{-1, -2, 2},{2, 1, 1},{3, 4, 5}};
-        Matrix m = new Matrix(matrix);
-        System.out.println(m.inverse()[0][1]);
-    }
-
-    public void print(double[][] matrix){
+    public void adjointMatrix(){
         for(int i = 0; i < matrix.length; i++){
-            for(int j = 0; j < matrix.length; j++){
-                System.out.print(matrix[i][j] + " ");
+            for(int j = 0;j < matrix.length; j++){
+                if(i == j){
+                    adjointMatrix[i][j] = signMatrix[i][j];
+                } else {
+                    adjointMatrix[i][j] = signMatrix[j][i];
+                }
             }
-            System.out.println("");
         }
     }
+
+
 }
