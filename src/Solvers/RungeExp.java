@@ -14,10 +14,11 @@ public class RungeExp {
     
     public static void main(String[] args) {
         RungeExp answer = new RungeExp();
-        ArrayList<State> w = answer.RungeExpAnswer(60); // with stepsize h
+        ArrayList<State> w = answer.RungeExpAnswer(1500); // with stepsize h
 
         for (int i=0; i<w.size(); i++) {
-                System.out.println(w.get(i).getPositionList().get(3));
+                System.out.println(w.get(i).getPositionList().get(3)); // only checking earth position, because otherwise 
+                                                                       // experimenting would take time
         }
         
         
@@ -126,5 +127,26 @@ public class RungeExp {
                                 neptune, probe };
 
             return bodies;
+
+/* results:
+
+        stepSize 1500;
+        
+        stepsize 1000;
+                
+        stepSize 500;
+
+        stepSize 100;
+
+        stepSize 60;
+
+        stepSize 40;
+
+*/
+
 }
 }
+
+
+
+
