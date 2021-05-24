@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import Probe.ProbeSimulator;
+import Solvers.SolverToUse;
 import System.SolarSystem;
 
 public class testPhysics {
@@ -70,6 +71,7 @@ public class testPhysics {
                 Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
                                 neptune, probe };
 
+                SolverToUse.solver = "euler";
                 SolarSystem system = new SolarSystem(bodies);
                 double day = 24*60*60;
                 double year = 365.25*day;
