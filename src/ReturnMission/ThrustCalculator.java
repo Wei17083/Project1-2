@@ -4,7 +4,7 @@ public class ThrustCalculator {
 
     private static final double Ve = 20000; //m/s
     private static final double mdot_max = 15000; //kg/s
-    private static double step_size = 1;
+    private static double step_size = 500;
 
     /**
      * calculates how much fuel (mass) is needed to reach a certain velocity
