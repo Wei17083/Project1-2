@@ -1,6 +1,6 @@
 package Probe;
 
-import org.junit.jupiter.api.Order;
+import ReturnMission.ThrustCalculator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,7 +12,7 @@ class ThrustCalculatorTest {
 
     @Test
     void getFuelForVelocity() {
-        assertEquals(0.5,ThrustCalculator.getFuelForVelocity(100,10,110));
+        assertEquals(0.5, ThrustCalculator.getFuelForVelocity(100,10,110));
     }
 
     @Test
