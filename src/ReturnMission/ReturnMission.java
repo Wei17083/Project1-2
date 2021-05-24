@@ -1,12 +1,15 @@
 package ReturnMission;
 
 import titan.BodyList;
+import titan.Vector;
+import titan.Vector3dInterface;
 
 public class ReturnMission {
     public final double GRAV_CONSTANT = 6.674E-11;
     final double velocityOrbit;
     final double radius = BodyList.getBodyList()[8].getRadius()+200000;
     final double stepsize = 500;
+    final Vector3dInterface INITIAL_VELOCITY_ESTIMATE = new Vector(33573.34843239226, -69124.95246248483, -703.6818444149116);
 
     public ReturnMission(){
         velocityOrbit = velocityOrbit();
@@ -29,7 +32,7 @@ public class ReturnMission {
         System.out.println("time "+r.timeOrbit());
 
         /* TODO
-            1: calculate launch velocity with correct solver
+            1: calculate launch velocity with correct solver (do Newton rhapson)
             2: have loop or something to handle launch (first x steps)
             3: at certain intervals call newton rhapson and adjust trajectory to reach titan
             4: slow down to orbit titan
