@@ -9,6 +9,7 @@ import System.SolarSystem;
 public class NewtonRhapson {
 
     private State initialState;
+    private State initialStateNewAttempt;
     private boolean firstMission = true;
     private Vector3dInterface initialVelocity;
     private State[] statesNewAttempt;
@@ -50,7 +51,10 @@ public class NewtonRhapson {
 
         Matrix jacobianMatrix = getJacobianMatrix();
 
-        Vector3dInterface vectorToSub = jacobianMatrix.inverse().mul(distanceFromDestination);
+        Vector3dInterface vectorToSub = jacobianMatrix.inverse().mul(initialVelocity);
+        initialStateNewAttempt = initialStateNewAttempt.setVelocityByID(PROBE_ID, vectorToSub);
+        SolarSystem newSystem = new SolarSystem(BodyList.getBodyList(), initialStateNewAttempt);
+        statesNewAttempt = newSystem.calculateTrajectories(finalTime, stepSize);
 
         newX = oldX - vectorToSub.getX();
         newY = oldY - vectorToSub.getY();
@@ -141,7 +145,7 @@ public class NewtonRhapson {
      * @param initialVelocity velocity to calculate the derivative
      * @return
      */
-    public double getPartialDerivative(char var1, char var2, Vector3dInterface initialPosition, Vector3dInterface initialVelocity){
+    public double getPartialDerivative(char var1, char var2, Vector3dInterface initialVelocity){
         double velocityComponent1 = getVectorComponent(var1, initialVelocity);
         double velocityComponent2 = getVectorComponent(var2, initialVelocity);
 
@@ -153,24 +157,21 @@ public class NewtonRhapson {
         Vector3dInterface velocityPositiveChange = changeVelocity(var1, change, initialVelocity);
         Vector3dInterface velocityNegativeChange = changeVelocity(var1, -change, initialVelocity);
 
-        State initialStatePlus = initialState.setVelocityByID(PROBE_ID, velocityPositiveChange);
-        State initialStateMinus = initialState.setVelocityByID(PROBE_ID, velocityNegativeChange);
-        SolarSystem systemPlus = new SolarSystem(BodyList.getBodyList(), initialStatePlus);
-        SolarSystem systemMinus = new SolarSystem(BodyList.getBodyList(), initialStateMinus);
-
-        State[] stateListPlus = systemPlus.calculateTrajectories(finalTime, stepSize);
-        State[] stateListMinus = systemMinus.calculateTrajectories(finalTime, stepSize);
+        State[] stateListPlus = getStatesChangedVelocity(velocityPositiveChange);
+        State[] stateListMinus = getStatesChangedVelocity(velocityNegativeChange);
 
         Vector3dInterface directionVectorPlus = calculateDistanceVectorFromDestination(stateListPlus);
         Vector3dInterface directionVectorMinus = calculateDistanceVectorFromDestination(stateListMinus);
 
-        double derivative = (getVectorComponent(var2, directionVectorPlus)-getVectorComponent(var2, directionVectorMinus)/2*change);
-        return derivative;
+        return (getVectorComponent(var2, directionVectorPlus)-getVectorComponent(var2, directionVectorMinus)/2*change);
     }
 
-    public double getPartialDerivative(char var1, char var2, Vector3dInterface differenceVectorPlus, Vector3dInterface differenceVectorMinus) {
-
+    public State[] getStatesChangedVelocity(Vector3dInterface newVelocity){
+        State newInitialState = initialState.setVelocityByID(PROBE_ID, newVelocity);
+        SolarSystem system = new SolarSystem(BodyList.getBodyList(), newInitialState);
+        return system.calculateTrajectories(finalTime, stepSize);
     }
+
 
     private double getVectorComponent(char var, Vector3dInterface initialVelocity) {
         double velocityComponent = 0;
