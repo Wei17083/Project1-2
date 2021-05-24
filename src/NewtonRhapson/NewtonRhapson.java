@@ -21,6 +21,7 @@ public class NewtonRhapson {
 
     private final int PROBE_ID = 11;
     private final int TITAN_ID = 8;
+    private final int EARTH_ID = 3;
 
     public NewtonRhapson(State initialState, double finalTime, double stepSize){
         this.initialState = initialState;
@@ -48,9 +49,10 @@ public class NewtonRhapson {
 
         Vector3dInterface distanceFromDestination = calculateDistanceVectorFromDestination(statesLastAttempt); // g(vk)
 
-        Matrix jacobianMatrix = getJacobianMatrix();
+        Matrix jacobianMatrix = calculateJacobianMatrix();
 
-        Vector3dInterface vectorToSub = jacobianMatrix.inverse().mul(distanceFromDestination);
+        Matrix zeMatrix  = jacobianMatrix.inverse();
+        Vector3dInterface vectorToSub = zeMatrix.multiplicationMatrixVector(distanceFromDestination);
 
         newX = oldX - vectorToSub.getX();
         newY = oldY - vectorToSub.getY();
@@ -99,9 +101,9 @@ public class NewtonRhapson {
 
         int destinationPlanetID;
         if(firstMission)
-            destinationPlanetID = 8; // titan ID
+            destinationPlanetID = TITAN_ID; // titan ID
         else
-            destinationPlanetID = 3; // earth ID
+            destinationPlanetID = EARTH_ID; // earth ID
 
         Vector3dInterface destinationPlanetPosition = BodyList.getBodyList()[destinationPlanetID].getPosition();
 
@@ -128,11 +130,20 @@ public class NewtonRhapson {
     }
 
     private Matrix calculateJacobianMatrix(){
-        // returns the jacobian derivative matrix  given Vk
+
+        double[][] jacobianMatrix = new double[3][3];
+        char[] vars = new char[]{'x', 'y', 'z'};
+
+        for(int i = 0; i < jacobianMatrix.length; i++){
+            for(int j = 0; j < jacobianMatrix.length; j++){
+                jacobianMatrix[i][j] = getPartialDerivative(vars[i], vars[j], this.initialVelocity);
+            }
+        }
+
+        return new Matrix(jacobianMatrix);
     }
 
     public void startComingBack(){ this.firstMission = false; }
-
 
     /**
      *  Will calculate the partial derivative of var1 to var 2
@@ -141,7 +152,7 @@ public class NewtonRhapson {
      * @param initialVelocity velocity to calculate the derivative
      * @return
      */
-    public double getPartialDerivative(char var1, char var2, Vector3dInterface initialPosition, Vector3dInterface initialVelocity){
+    public double getPartialDerivative(char var1, char var2, Vector3dInterface initialVelocity){
         double velocityComponent1 = getVectorComponent(var1, initialVelocity);
         double velocityComponent2 = getVectorComponent(var2, initialVelocity);
 
@@ -166,10 +177,6 @@ public class NewtonRhapson {
 
         double derivative = (getVectorComponent(var2, directionVectorPlus)-getVectorComponent(var2, directionVectorMinus)/2*change);
         return derivative;
-    }
-
-    public double getPartialDerivative(char var1, char var2, Vector3dInterface differenceVectorPlus, Vector3dInterface differenceVectorMinus) {
-
     }
 
     private double getVectorComponent(char var, Vector3dInterface initialVelocity) {
