@@ -90,4 +90,8 @@ public class SolarSystem {
                 return AU;
         }
 
+        public double velocityOrbit(){
+                return  Math.sqrt((GRAV_CONSTANT*bodies[8].getMass())/(bodies[8].getRadius()+200000));
+        }
+
 }
