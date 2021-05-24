@@ -19,6 +19,8 @@ public class VectorTools {
         return VectorTools.getUnitVector(difference);
     }
 
+
+
     /**
      * Compares two vectors and returns true if they are the same, false otherwise
      *

@@ -1,16 +1,34 @@
 package NewtonRhapson;
 
 import titan.*;
-import Probe.ProbeSimulator;
 import titan.State;
 import titan.Vector;
 import titan.Vector3dInterface;
+import System.SolarSystem;
 
 public class NewtonRhapson {
 
+    private State initialState;
     private boolean firstMission = true;
     private Vector3dInterface initialVelocity;
+    private State[] statesNewAttempt;
+    private State[] statesLastAttempt;
     private Vector3dInterface finalPosition;
+    private int stepClosestPositionLastAttempt;
+
+    private double finalTime;
+    private double stepSize;
+
+    private final int PROBE_ID = 11;
+    private final int TITAN_ID = 8;
+
+    public NewtonRhapson(State initialState, double finalTime, double stepSize){
+        this.initialState = initialState;
+        this.finalTime = finalTime;
+        this.stepSize = stepSize;
+        SolarSystem system = new SolarSystem(BodyList.getBodyList(), initialState);
+        statesLastAttempt = system.calculateTrajectories(finalTime, stepSize);
+    }
 
     public Vector3dInterface findInitialVelocity(State initialState, Vector3dInterface finalPosition, double stepSize, double finalTime) {
 
@@ -20,7 +38,28 @@ public class NewtonRhapson {
         }
     }
 
-    private Vector3dInterface calculateDistanceFromDestination(){ // basically g(v)
+    private Vector3dInterface getNextAttempt(){
+
+        double oldX = this.initialVelocity.getX();
+        double oldY = this.initialVelocity.getY();
+        double oldZ = this.initialVelocity.getZ();
+
+        double newX, newY, newZ;
+
+        Vector3dInterface distanceFromDestination = calculateDistanceVectorFromDestination(statesLastAttempt); // g(vk)
+
+        Matrix jacobianMatrix = getJacobianMatrix();
+
+        Vector3dInterface vectorToSub = jacobianMatrix.inverse().mul(distanceFromDestination);
+
+        newX = oldX - vectorToSub.getX();
+        newY = oldY - vectorToSub.getY();
+        newZ = oldZ - vectorToSub.getZ();
+
+        return new Vector(newX, newY, newZ);
+    }
+
+    private Vector3dInterface calculateDistanceVectorFromDestination(State[] stateList){ // basically g(v)
 
         int destinationPlanetID;
         if(firstMission)
@@ -28,14 +67,33 @@ public class NewtonRhapson {
         else
             destinationPlanetID = 3; // earth ID
 
-        Vector3dInterface destinationPlanet = BodyList.getBodyList()[destinationPlanetID].getPosition();
+        int stepClosestPosition = getStepClosestPosition(stateList, destinationPlanetID);
+        return getDistanceVectorAtStep(stateList ,stepClosestPosition, destinationPlanetID);
+    }
 
-        double x = destinationPlanet.getX() - finalPosition.getX();
-        double y = destinationPlanet.getY() - finalPosition.getY();
-        double z = destinationPlanet.getZ() - finalPosition.getZ();
+    public int getStepClosestPosition(State[] statesList, int planetID){
+        Vector3dInterface minimum = statesList[0].getPositionList().get(PROBE_ID);
+        State initialState = (State)statesList[0];
+        int step = 0;
+        double minimumDistance = minimum.dist(initialState.getPositionList().get(planetID));
+        for (int i = 0; i < statesList.length -1; i++) {
+            State temp = statesList[i];
+            Vector3dInterface currentPositionProbe = statesList[i].getPositionList().get(PROBE_ID);
+            Vector3dInterface currentPositionPlanet = temp.getPositionList().get(planetID);
+            if(currentPositionProbe.dist(currentPositionPlanet) < minimumDistance){
+                minimum = currentPositionProbe;
+                minimumDistance = currentPositionProbe.dist(currentPositionPlanet);
+                step = i;
+            }
+        }
+        //directionVector = VectorTools.directionVector(trajectory[step], ((State) statesList[step]).getPositionList().get(planetID));
+        return step;
+    }
 
-        return new Vector(x, y, z);
-
+    public Vector3dInterface getDistanceVectorAtStep(State[] stateList, int step, int planet_id) {
+        Vector3dInterface positionProbe = stateList[step].getPositionList().get(PROBE_ID);
+        Vector3dInterface positionPlanet = stateList[step].getPositionList().get(planet_id);
+        return positionPlanet.sub(positionProbe);
     }
 
     private boolean closeEnough() {
@@ -66,27 +124,6 @@ public class NewtonRhapson {
         return false;
     }
 
-    private Vector3dInterface getNextAttempt(){
-
-        double oldX = this.initialVelocity.getX();
-        double oldY = this.initialVelocity.getY();
-        double oldZ = this.initialVelocity.getZ();
-
-        double newX, newY, newZ;
-
-        Vector3dInterface distanceFromDestination = calculateDistanceFromDestination(); // g(vk)
-
-        Matrix jacobianMatrix = getJacobianMatrix();
-
-        Vector3dInterface vectorToSub = jacobianMatrix.inverse().mul(distanceFromDestination);
-
-        newX = oldX - vectorToSub.getX();
-        newY = oldY - vectorToSub.getY();
-        newZ = oldZ - vectorToSub.getZ();
-
-        return new Vector(newX, newY, newZ);
-    }
-
     private Vector3dInterface getMinDistance(){
         // returns position where probe gets given velocity
     }
@@ -112,19 +149,26 @@ public class NewtonRhapson {
         double relativeChange = 0.0001;
         double change = Math.abs(velocityComponent1*relativeChange);
 
-        ProbeSimulator probe = new ProbeSimulator();
+        Body[] bodies = BodyList.getBodyList();
 
         Vector3dInterface velocityPositiveChange = changeVelocity(var1, change, initialVelocity);
         Vector3dInterface velocityNegativeChange = changeVelocity(var1, -change, initialVelocity);
 
-        Vector3dInterface[] trajectoryPlus = probe.trajectoryAbsoluteInitialVelocity(initialPosition,velocityPositiveChange, tf, h);
-        Vector3dInterface[] trajectoryMinus = probe.trajectoryAbsoluteInitialVelocity(initialPosition, velocityNegativeChange, tf, h);
 
-        Vector3dInterface directionVectorPlus = calculateDistanceFromDestination(trajectoryPlus);
-        Vector3dInterface directionVectorMinus = calculateDistanceFromDestination(trajectoryMinus);
+        SolarSystem system = new SolarSystem(BodyList.getBodyList());
+
+        State[] StatesPlus = probe.trajectoryAbsoluteInitialVelocity(initialPosition,velocityPositiveChange, finalTime, stepSize);
+        State[] trajectoryMinus = probe.trajectoryAbsoluteInitialVelocity(initialPosition, velocityNegativeChange, finalTime, stepSize);
+
+        Vector3dInterface directionVectorPlus = calculateDistanceVectorFromDestination(stateList);
+        Vector3dInterface directionVectorMinus = calculateDistanceVectorFromDestination(stateList);
 
         double derivative = (getVectorComponent(var2, directionVectorPlus)-getVectorComponent(var2, directionVectorMinus)/2*change);
         return derivative;
+    }
+
+    public double getPartialDerivative(char var1, char var2, Vector3dInterface differenceVectorPlus, Vector3dInterface differenceVectorMinus) {
+
     }
 
     private double getVectorComponent(char var, Vector3dInterface initialVelocity) {

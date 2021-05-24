@@ -23,16 +23,20 @@ public class SolarSystem {
         public static final double AU = 1.495978707e11;
 
         private final Body[] bodies;
-        private State initialState;
+        private State initialState = null;
 
 
         public SolarSystem(Body[] bodies) {
                 this.bodies = bodies;
         }
+        public SolarSystem(Body[] bodies, State initialState) {
+                this.bodies = bodies;
+                this.initialState = initialState;
+        }
 
 
         public State[] calculateTrajectories(double finalTime, double stepSize){
-                State initialState = createInitialState(bodies);
+                if(initialState == null) initialState = createInitialState(bodies);
                 DifferentialEquationSolver solver;
                 String solverToUse = SolverToUse.getSolver();
                 if(solverToUse.equals("euler"))  solver = new EulerSolver();

@@ -5,6 +5,7 @@ import Solvers.derivatives.Derivative;
 import titan.Body;
 import titan.ChangeRate;
 import titan.State;
+import titan.Vector3dInterface;
 
 public class EulerSolver extends DifferentialEquationSolver {
 
@@ -13,6 +14,13 @@ public class EulerSolver extends DifferentialEquationSolver {
         Derivative dfVelocities = createVelocityDerivative(currentState, bodyList);
         ChangeRate rate = new ChangeRate(dfPositions.getAllDerivatives(), dfVelocities.getAllDerivatives());
         return currentState.addMul(h, rate);
+    }
+
+    //TODO if there's time make more efficient newton rhapson
+    public Vector3dInterface[] bodyPositionStep(State currentState, Body[] bodyList, int bodyID){
+        Derivative dfPositions = createPositionDerivative(currentState);
+        Derivative dfVelocities = createVelocityDerivative(currentState, bodyList);
+        Vector3dInterface[] positionAndVelocity =
     }
 
 //    public State eulerStepState(State currentState, Derivative dfPositions, Derivative dfVelocities, double h) {
