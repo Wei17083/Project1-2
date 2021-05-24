@@ -16,12 +16,7 @@ public class EulerSolver extends DifferentialEquationSolver {
         return currentState.addMul(h, rate);
     }
 
-    //TODO if there's time make more efficient newton rhapson
-    public Vector3dInterface[] bodyPositionStep(State currentState, Body[] bodyList, int bodyID){
-        Derivative dfPositions = createPositionDerivative(currentState);
-        Derivative dfVelocities = createVelocityDerivative(currentState, bodyList);
-        Vector3dInterface[] positionAndVelocity =
-    }
+
 
 //    public State eulerStepState(State currentState, Derivative dfPositions, Derivative dfVelocities, double h) {
 //        ChangeRate rate = new ChangeRate(dfPositions.getAllDerivatives(), dfVelocities.getAllDerivatives());
