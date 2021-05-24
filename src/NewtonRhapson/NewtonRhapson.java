@@ -60,7 +60,6 @@ public class NewtonRhapson {
     }
 
     private Vector3dInterface calculateDistanceVectorFromDestination(State[] stateList){ // basically g(v)
-
         int destinationPlanetID;
         if(firstMission)
             destinationPlanetID = 8; // titan ID
@@ -154,14 +153,16 @@ public class NewtonRhapson {
         Vector3dInterface velocityPositiveChange = changeVelocity(var1, change, initialVelocity);
         Vector3dInterface velocityNegativeChange = changeVelocity(var1, -change, initialVelocity);
 
+        State initialStatePlus = initialState.setVelocityByID(PROBE_ID, velocityPositiveChange);
+        State initialStateMinus = initialState.setVelocityByID(PROBE_ID, velocityNegativeChange);
+        SolarSystem systemPlus = new SolarSystem(BodyList.getBodyList(), initialStatePlus);
+        SolarSystem systemMinus = new SolarSystem(BodyList.getBodyList(), initialStateMinus);
 
-        SolarSystem system = new SolarSystem(BodyList.getBodyList());
+        State[] stateListPlus = systemPlus.calculateTrajectories(finalTime, stepSize);
+        State[] stateListMinus = systemMinus.calculateTrajectories(finalTime, stepSize);
 
-        State[] StatesPlus = probe.trajectoryAbsoluteInitialVelocity(initialPosition,velocityPositiveChange, finalTime, stepSize);
-        State[] trajectoryMinus = probe.trajectoryAbsoluteInitialVelocity(initialPosition, velocityNegativeChange, finalTime, stepSize);
-
-        Vector3dInterface directionVectorPlus = calculateDistanceVectorFromDestination(stateList);
-        Vector3dInterface directionVectorMinus = calculateDistanceVectorFromDestination(stateList);
+        Vector3dInterface directionVectorPlus = calculateDistanceVectorFromDestination(stateListPlus);
+        Vector3dInterface directionVectorMinus = calculateDistanceVectorFromDestination(stateListMinus);
 
         double derivative = (getVectorComponent(var2, directionVectorPlus)-getVectorComponent(var2, directionVectorMinus)/2*change);
         return derivative;
