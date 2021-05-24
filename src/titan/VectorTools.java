@@ -67,6 +67,12 @@ public class VectorTools {
         return v.mul(1 / v.norm());
     }
 
+    public static Vector3dInterface crossProduct(Vector3dInterface v1, Vector3dInterface v2){
+        double x  = v1.getY()*v2.getZ() - v1.getZ()*v2.getY();
+        double y = v1.getZ()*v2.getX() - v1.getX()* v2.getZ();
+        double z = v1.getX()*v2.getY() - v1.getY()*v2.getX();
+        return new Vector(x, y ,z);
+    }
     /**
      * Returns sum of all vectors in an ArrayList
      *

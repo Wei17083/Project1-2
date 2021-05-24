@@ -33,7 +33,7 @@ public class RunNewtonRhapson {
 
         double day = 24*60*60;
         double year = 365.25*day;
-        NewtonRhapson newtonRhapson = new NewtonRhapson(initialState, year, 500);
+        NewtonRhapson newtonRhapson = new NewtonRhapson(initialState, year, 500, true);
 
 
         newtonRhapson.findInitialVelocity(initialState);
