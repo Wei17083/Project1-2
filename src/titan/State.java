@@ -75,6 +75,35 @@ public class State implements StateInterface {
         return returnString.toString();
     }
 
+    public State setVelocityByID(int id, Vector3dInterface newVelocity){
+        ArrayList<Vector3dInterface> newPositionList = new ArrayList<>();
+        ArrayList<Vector3dInterface> newVelocityList = new ArrayList<>();
+        for (int i = 0; i <positionList.size() ; i++) {
+            if(i == id) {
+                newVelocityList.add(newVelocity);
+            } else {
+                newVelocityList.add(VectorTools.clone(velocityList.get(i)));
+            }
+            newPositionList.add(VectorTools.clone(positionList.get(i)));
+
+        }
+        return new State(stateTime, newPositionList, newVelocityList);
+    }
+
+    public State setPositionByID(int id, Vector3dInterface newPosition){
+        ArrayList<Vector3dInterface> newPositionList = new ArrayList<>();
+        ArrayList<Vector3dInterface> newVelocityList = new ArrayList<>();
+        for (int i = 0; i <positionList.size() ; i++) {
+            if(i == id) {
+                newPositionList.add(newPosition);
+            } else {
+                newPositionList.add(VectorTools.clone(positionList.get(i)));
+            }
+            newVelocityList.add(VectorTools.clone(velocityList.get(i)));
+        }
+        return new State(stateTime, newPositionList, newVelocityList);
+    }
+
 
 }
 

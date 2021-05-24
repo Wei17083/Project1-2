@@ -5,6 +5,7 @@ import Solvers.derivatives.Derivative;
 import titan.Body;
 import titan.ChangeRate;
 import titan.State;
+import titan.Vector3dInterface;
 
 public class EulerSolver extends DifferentialEquationSolver {
 
@@ -14,6 +15,8 @@ public class EulerSolver extends DifferentialEquationSolver {
         ChangeRate rate = new ChangeRate(dfPositions.getAllDerivatives(), dfVelocities.getAllDerivatives());
         return currentState.addMul(h, rate);
     }
+
+
 
 //    public State eulerStepState(State currentState, Derivative dfPositions, Derivative dfVelocities, double h) {
 //        ChangeRate rate = new ChangeRate(dfPositions.getAllDerivatives(), dfVelocities.getAllDerivatives());
