@@ -10,17 +10,17 @@ import java.util.regex.Matcher;
 
 public class NewtonRhapson {
 
-    private State initialState;
+    private final State initialState;
     private State initialStateNewAttempt;
     private boolean firstMission = true;
     private Vector3dInterface initialVelocity;
     private State[] statesNewAttempt;
     private State[] statesLastAttempt;
     private Vector3dInterface finalPosition;
-    private int stepClosestPositionNewAttempt;
+    private int stepClosestPosition;
 
-    private double finalTime;
-    private double stepSize;
+    private final double finalTime;
+    private final double stepSize;
 
     private final int PROBE_ID = 11;
     private final int TITAN_ID = 8;
@@ -31,25 +31,33 @@ public class NewtonRhapson {
         this.finalTime = finalTime;
         this.stepSize = stepSize;
         SolarSystem system = new SolarSystem(BodyList.getBodyList(), initialState);
-        statesLastAttempt = system.calculateTrajectories(finalTime, stepSize);
+        statesNewAttempt = system.calculateTrajectories(finalTime, stepSize);
+        stepClosestPosition = getStepClosestPosition(statesNewAttempt, TITAN_ID);
+        System.out.println(stepClosestPosition);
     }
 
-    public Vector3dInterface findInitialVelocity(State initialState, Vector3dInterface finalPosition, double stepSize, double finalTime) {
-    initialStateNewAttempt = initialState.setVelocityByID(PROBE_ID, VectorTools.clone(initialState.getVelocityList().get(PROBE_ID)));
+    public Vector3dInterface findInitialVelocity(State initialState, double stepSize, double finalTime) {
 
-        if (!closeEnough()){ //get next
+        initialStateNewAttempt = initialState.setVelocityByID(PROBE_ID, VectorTools.clone(initialState.getVelocityList().get(PROBE_ID)));
+        this.initialVelocity = initialState.getVelocityList().get(PROBE_ID);
+        System.out.println("initial Velocity: " + initialVelocity);
+
+        do { //get next
             this.initialVelocity = getNextAttempt();
-            initialStateNewAttempt = initialStateNewAttempt.setVelocityByID(PROBE_ID, initialVelocity);
+            initialStateNewAttempt = initialState.setVelocityByID(PROBE_ID, initialVelocity);
             SolarSystem newSystem = new SolarSystem(BodyList.getBodyList(), initialStateNewAttempt);
             statesNewAttempt = newSystem.calculateTrajectories(finalTime, stepSize);
+            System.out.println("size statesNewAttempt: " + statesNewAttempt.length);
             setFinalPosition();
-        }
+            System.out.println("New initial velocity: " + initialVelocity.toString());
+        } while (!closeEnough());
+
         return initialVelocity;
     }
 
     private Vector3dInterface getNextAttempt(){
 
-        Vector3dInterface distanceFromDestination = calculateDistanceVectorFromDestination(statesLastAttempt); // g(vk)
+        Vector3dInterface distanceFromDestination = calculateDistanceVectorFromDestination(statesNewAttempt); // g(vk)
 
         Matrix jacobianMatrix = calculateJacobianMatrix();
         Matrix inverseMatrix = jacobianMatrix.inverse();
@@ -94,9 +102,10 @@ public class NewtonRhapson {
 
         int destinationPlanetID = getDestinationPlanetID();
 
-        Vector3dInterface destinationPlanetPosition = statesNewAttempt[stepClosestPositionNewAttempt].getPositionList().get(destinationPlanetID);
+        Vector3dInterface destinationPlanetPosition = statesNewAttempt[stepClosestPosition].getPositionList().get(destinationPlanetID);
 
         double distance = finalPosition.dist(destinationPlanetPosition);
+        System.out.println("Distance to Titan: " + distance);
 
         double destinationPlanetRadius = BodyList.getBodyList()[destinationPlanetID].getRadius();
 
@@ -105,8 +114,8 @@ public class NewtonRhapson {
 
     private void setFinalPosition(){
         int destinationPlanetID = getDestinationPlanetID();
-        stepClosestPositionNewAttempt = getStepClosestPosition(statesNewAttempt, destinationPlanetID);
-        finalPosition = statesLastAttempt[stepClosestPositionNewAttempt].getPositionList().get(PROBE_ID);
+        //stepClosestPositionNewAttempt = getStepClosestPosition(statesNewAttempt, destinationPlanetID);
+        finalPosition = statesNewAttempt[stepClosestPosition].getPositionList().get(PROBE_ID);
     }
 
     private Matrix calculateJacobianMatrix(){
