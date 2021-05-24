@@ -1,5 +1,8 @@
 package NewtonRhapson;
 
+import titan.Vector;
+import titan.Vector3dInterface;
+
 public class Matrix {
 
     public double[][] matrix;
@@ -12,7 +15,7 @@ public class Matrix {
         matrix = originalMatrix;
     }
 
-    public double[][] inverse(){
+    public Matrix inverse(){
         double[][] inverse = new double[3][3];
         cofactorMatrix();
         adjustSign();
@@ -22,7 +25,7 @@ public class Matrix {
                 inverse[i][j] = (adjointMatrix[i][j])*(1/getDeterminant());
             }
         }
-        return inverse;
+        return new Matrix(inverse);
     }
 
     public double cofactor(double[][] minorMatrix){
@@ -91,6 +94,22 @@ public class Matrix {
             }
         }
     }
+
+    public Vector3dInterface multiplicationMatrixVector(Vector3dInterface v){
+        Vector3dInterface result = new Vector(0,0,0);
+        double[] resultArray = new double[3];
+        double[] vector = {v.getX(), v.getY(), v.getZ()};
+        for(int i = 0; i < matrix.length; i++){
+            for(int j = 0; j < matrix.length; j++){
+                resultArray[i] = resultArray[i] + matrix[i][j]*vector[j];
+            }
+        }
+        result.setX(resultArray[0]);
+        result.setY(resultArray[1]);
+        result.setZ(resultArray[2]);
+        return result;
+    }
+
 
 
 }
