@@ -6,6 +6,8 @@ import titan.Vector;
 import titan.Vector3dInterface;
 import System.SolarSystem;
 
+import java.util.regex.Matcher;
+
 public class NewtonRhapson {
 
     private State initialState;
@@ -36,6 +38,10 @@ public class NewtonRhapson {
 
         if (!closeEnough()){ //get next
             this.initialVelocity = getNextAttempt();
+            initialStateNewAttempt = initialStateNewAttempt.setVelocityByID(PROBE_ID, initialVelocity);
+            SolarSystem newSystem = new SolarSystem(BodyList.getBodyList(), initialStateNewAttempt);
+            statesNewAttempt = newSystem.calculateTrajectories(finalTime, stepSize);
+
             finalPosition = getMinDistance();
         }
     }
@@ -51,17 +57,14 @@ public class NewtonRhapson {
         Vector3dInterface distanceFromDestination = calculateDistanceVectorFromDestination(statesLastAttempt); // g(vk)
 
         Matrix jacobianMatrix = calculateJacobianMatrix();
+        Matrix inverseMatrix = jacobianMatrix.inverse();
 
-        Vector3dInterface vectorToSub = jacobianMatrix.inverse().mul(initialVelocity);
-        initialStateNewAttempt = initialStateNewAttempt.setVelocityByID(PROBE_ID, vectorToSub);
-        SolarSystem newSystem = new SolarSystem(BodyList.getBodyList(), initialStateNewAttempt);
-        statesNewAttempt = newSystem.calculateTrajectories(finalTime, stepSize);
+        Vector3dInterface velocityChange = inverseMatrix.multiplicationMatrixVector(distanceFromDestination);
+        Vector3dInterface newVelocity = initialVelocity.sub(velocityChange);
+        return newVelocity;
 
-        newX = oldX - vectorToSub.getX();
-        newY = oldY - vectorToSub.getY();
-        newZ = oldZ - vectorToSub.getZ();
 
-        return new Vector(newX, newY, newZ);
+
     }
 
     private Vector3dInterface calculateDistanceVectorFromDestination(State[] stateList){ // basically g(v)
