@@ -19,7 +19,7 @@ public class RunNewtonRhapson {
 
         double earthRadius = 6.371e6;
 
-        Vector3dInterface initialRelativeVelocity = new Vector(-30146, -41027, -680);
+        Vector3dInterface initialRelativeVelocity = new Vector(27000, -40239, -769);
         Vector3dInterface initialRelativePosition = VectorTools.getUnitVector(initialRelativeVelocity).mul(earthRadius);
 
         Vector3dInterface initialVelocity = bodies[3].getVelocity().add(initialRelativeVelocity);

@@ -27,6 +27,19 @@ public class ReturnMission {
         System.out.println("radius "+r.radius);
         System.out.println("mass "+BodyList.getBodyList()[8].getMass());
         System.out.println("time "+r.timeOrbit());
+
+        /* TODO
+            1: calculate launch velocity with correct solver
+            2: have loop or something to handle launch (first x steps)
+            3: at certain intervals call newton rhapson and adjust trajectory to reach titan
+            4: slow down to orbit titan
+            5: orbit titan a few times
+            6: Use newton rhapson to find velocity to return to earth
+            7: escape from orbit of titan
+            8: same as step 3 but with goal Earth
+            9: crash into earth
+         */
+
     }
 
 
