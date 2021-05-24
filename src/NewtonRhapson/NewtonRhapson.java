@@ -19,6 +19,9 @@ public class NewtonRhapson {
     private Vector3dInterface finalPosition;
     private int stepClosestPosition;
 
+    private final Vector3dInterface TARGET;
+    private final boolean isFirstMission;
+
     private final double finalTime;
     private final double stepSize;
 
@@ -26,17 +29,24 @@ public class NewtonRhapson {
     private final int TITAN_ID = 8;
     private final int EARTH_ID = 3;
 
-    public NewtonRhapson(State initialState, double finalTime, double stepSize){
+    public NewtonRhapson(State initialState, double finalTime, double stepSize, boolean isFirstMission){
         this.initialState = initialState;
         this.finalTime = finalTime;
         this.stepSize = stepSize;
+        this.isFirstMission = isFirstMission;
+
         SolarSystem system = new SolarSystem(BodyList.getBodyList(), initialState);
         statesNewAttempt = system.calculateTrajectories(finalTime, stepSize);
-        stepClosestPosition = getStepClosestPosition(statesNewAttempt, TITAN_ID);
+        stepClosestPosition = (int) (finalTime/stepSize);
+        TARGET = setTarget();
+//        System.out.println("Final position Titan: " + statesNewAttempt[statesNewAttempt.length-1].getPositionList().get(TITAN_ID).toString());
+        System.out.println("Target: " + TARGET.toString());
+
+        System.out.println(stepClosestPosition);
         System.out.println(stepClosestPosition);
 
-        double distance = getDistanceVectorAtStep(statesNewAttempt, stepClosestPosition, getDestinationPlanetID()).norm();
-        System.out.println("Distance to Titan: " + distance);
+        double distance = getDistanceVectorAtStep(statesNewAttempt).norm();
+        System.out.println("Distance to TARGET: " + distance);
     }
 
     public Vector3dInterface findInitialVelocity(State initialState) {
@@ -70,8 +80,7 @@ public class NewtonRhapson {
     }
 
     private Vector3dInterface calculateDistanceVectorFromDestination(State[] stateList){ // basically g(v)
-        int destinationPlanetID = getDestinationPlanetID();
-        return getDistanceVectorAtStep(stateList ,stepClosestPosition, destinationPlanetID);
+        return getDistanceVectorAtStep(stateList);
     }
 
     public int getStepClosestPosition(State[] statesList, int planetID){
@@ -92,18 +101,17 @@ public class NewtonRhapson {
         return step;
     }
 
-    public Vector3dInterface getDistanceVectorAtStep(State[] stateList, int step, int planet_id) {
-        Vector3dInterface positionProbe = stateList[step].getPositionList().get(PROBE_ID);
-        Vector3dInterface positionPlanet = stateList[step].getPositionList().get(planet_id);
-        return positionPlanet.sub(positionProbe);
+    public Vector3dInterface getDistanceVectorAtStep(State[] stateList) {
+        Vector3dInterface positionProbe = stateList[stepClosestPosition].getPositionList().get(PROBE_ID);
+        return TARGET.sub(positionProbe);
     }
 
 
     private boolean closeEnough() {
 
 
-        double distance = getDistanceVectorAtStep(statesNewAttempt, stepClosestPosition, getDestinationPlanetID()).norm();
-        System.out.println("Distance to Titan: " + distance);
+        double distance = getDistanceVectorAtStep(statesNewAttempt).norm();
+        System.out.println("Distance to TARGET: " + distance);
         double destinationPlanetRadius = BodyList.getBodyList()[getDestinationPlanetID()].getRadius();
 
         return (destinationPlanetRadius + 100000) < distance && distance < (destinationPlanetRadius + 300000);
@@ -193,5 +201,25 @@ public class NewtonRhapson {
             return TITAN_ID; // titan ID
         else
             return EARTH_ID; // earth ID
+    }
+
+    private Vector3dInterface setTarget() {
+        if (isFirstMission) {
+            Vector3dInterface zUnitVector = new Vector(0, 0, 1);
+            Vector3dInterface finalPositionTitan = statesNewAttempt[statesNewAttempt.length-1].getPositionList().get(TITAN_ID);
+            Vector3dInterface startPositionProbe = statesNewAttempt[0].getPositionList().get(PROBE_ID);
+            Vector3dInterface startToEndVector = finalPositionTitan.sub(startPositionProbe);
+
+            Vector3dInterface rightAngleVector = VectorTools.crossProduct(startToEndVector, zUnitVector);
+            Vector3dInterface rightAngleUnitVector = VectorTools.getUnitVector(rightAngleVector);
+            double radiusTitan = BodyList.getBodyList()[TITAN_ID].getRadius();
+            double orbitHeight = 200000;
+
+            Vector3dInterface target = finalPositionTitan.add(rightAngleUnitVector.mul(radiusTitan + orbitHeight));
+
+            return target;
+        } else {
+            return statesNewAttempt[statesNewAttempt.length-1].getPositionList().get(EARTH_ID);
+        }
     }
 }
