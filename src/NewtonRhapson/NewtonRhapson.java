@@ -34,9 +34,12 @@ public class NewtonRhapson {
         statesNewAttempt = system.calculateTrajectories(finalTime, stepSize);
         stepClosestPosition = getStepClosestPosition(statesNewAttempt, TITAN_ID);
         System.out.println(stepClosestPosition);
+
+        double distance = getDistanceVectorAtStep(statesNewAttempt, stepClosestPosition, getDestinationPlanetID()).norm();
+        System.out.println("Distance to Titan: " + distance);
     }
 
-    public Vector3dInterface findInitialVelocity(State initialState, double stepSize, double finalTime) {
+    public Vector3dInterface findInitialVelocity(State initialState) {
 
         initialStateNewAttempt = initialState.setVelocityByID(PROBE_ID, VectorTools.clone(initialState.getVelocityList().get(PROBE_ID)));
         this.initialVelocity = initialState.getVelocityList().get(PROBE_ID);
@@ -47,7 +50,6 @@ public class NewtonRhapson {
             initialStateNewAttempt = initialState.setVelocityByID(PROBE_ID, initialVelocity);
             SolarSystem newSystem = new SolarSystem(BodyList.getBodyList(), initialStateNewAttempt);
             statesNewAttempt = newSystem.calculateTrajectories(finalTime, stepSize);
-            System.out.println("size statesNewAttempt: " + statesNewAttempt.length);
             setFinalPosition();
             System.out.println("New initial velocity: " + initialVelocity.toString());
         } while (!closeEnough());
@@ -69,7 +71,6 @@ public class NewtonRhapson {
 
     private Vector3dInterface calculateDistanceVectorFromDestination(State[] stateList){ // basically g(v)
         int destinationPlanetID = getDestinationPlanetID();
-        int stepClosestPosition = getStepClosestPosition(stateList, destinationPlanetID);
         return getDistanceVectorAtStep(stateList ,stepClosestPosition, destinationPlanetID);
     }
 
@@ -97,24 +98,20 @@ public class NewtonRhapson {
         return positionPlanet.sub(positionProbe);
     }
 
-    //TODO fix close enough
+
     private boolean closeEnough() {
 
-        int destinationPlanetID = getDestinationPlanetID();
 
-        Vector3dInterface destinationPlanetPosition = statesNewAttempt[stepClosestPosition].getPositionList().get(destinationPlanetID);
-
-        double distance = finalPosition.dist(destinationPlanetPosition);
+        double distance = getDistanceVectorAtStep(statesNewAttempt, stepClosestPosition, getDestinationPlanetID()).norm();
         System.out.println("Distance to Titan: " + distance);
-
-        double destinationPlanetRadius = BodyList.getBodyList()[destinationPlanetID].getRadius();
+        double destinationPlanetRadius = BodyList.getBodyList()[getDestinationPlanetID()].getRadius();
 
         return (destinationPlanetRadius + 100000) < distance && distance < (destinationPlanetRadius + 300000);
     }
 
     private void setFinalPosition(){
         int destinationPlanetID = getDestinationPlanetID();
-        //stepClosestPositionNewAttempt = getStepClosestPosition(statesNewAttempt, destinationPlanetID);
+        //stepClosestPosition = getStepClosestPosition(statesNewAttempt, destinationPlanetID);
         finalPosition = statesNewAttempt[stepClosestPosition].getPositionList().get(PROBE_ID);
     }
 
@@ -143,16 +140,16 @@ public class NewtonRhapson {
      * @return
      */
     public double getPartialDerivative(char var1, char var2, Vector3dInterface initialVelocity){
-        double velocityComponent1 = getVectorComponent(var1, initialVelocity);
-        double velocityComponent2 = getVectorComponent(var2, initialVelocity);
+        double velocityComponent1 = getVectorComponent(var2, initialVelocity);
 
         double relativeChange = 0.0001;
         double change = Math.abs(velocityComponent1*relativeChange);
 
+
         Body[] bodies = BodyList.getBodyList();
 
-        Vector3dInterface velocityPositiveChange = changeVelocity(var1, change, initialVelocity);
-        Vector3dInterface velocityNegativeChange = changeVelocity(var1, -change, initialVelocity);
+        Vector3dInterface velocityPositiveChange = changeVelocity(var2, change, initialVelocity);
+        Vector3dInterface velocityNegativeChange = changeVelocity(var2, -change, initialVelocity);
 
         State[] stateListPlus = getStatesChangedVelocity(velocityPositiveChange);
         State[] stateListMinus = getStatesChangedVelocity(velocityNegativeChange);
@@ -160,7 +157,8 @@ public class NewtonRhapson {
         Vector3dInterface directionVectorPlus = calculateDistanceVectorFromDestination(stateListPlus);
         Vector3dInterface directionVectorMinus = calculateDistanceVectorFromDestination(stateListMinus);
 
-        return (getVectorComponent(var2, directionVectorPlus)-getVectorComponent(var2, directionVectorMinus)/2*change);
+        double paritalDerivative = ((getVectorComponent(var1, directionVectorPlus)-getVectorComponent(var1, directionVectorMinus))/(2*change));
+        return paritalDerivative;
     }
 
     public State[] getStatesChangedVelocity(Vector3dInterface newVelocity){

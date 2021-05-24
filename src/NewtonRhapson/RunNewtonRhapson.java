@@ -19,7 +19,7 @@ public class RunNewtonRhapson {
 
         double earthRadius = 6.371e6;
 
-        Vector3dInterface initialRelativeVelocity = new Vector(31146.60907, -43027.5195177548, -678.364169826266);
+        Vector3dInterface initialRelativeVelocity = new Vector(-30146, -41027, -680);
         Vector3dInterface initialRelativePosition = VectorTools.getUnitVector(initialRelativeVelocity).mul(earthRadius);
 
         Vector3dInterface initialVelocity = bodies[3].getVelocity().add(initialRelativeVelocity);
@@ -30,10 +30,12 @@ public class RunNewtonRhapson {
 
         System.out.println("initial velocity should be: " + initialState.getVelocityList().get(11));
 
-        NewtonRhapson newtonRhapson = new NewtonRhapson(initialState, 365*24*60*60, 500);
 
         double day = 24*60*60;
         double year = 365.25*day;
-        newtonRhapson.findInitialVelocity(initialState, year, day);
+        NewtonRhapson newtonRhapson = new NewtonRhapson(initialState, year, 500);
+
+
+        newtonRhapson.findInitialVelocity(initialState);
     }
 }
