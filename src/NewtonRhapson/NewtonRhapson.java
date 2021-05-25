@@ -114,7 +114,7 @@ public class NewtonRhapson {
         System.out.println("Distance to TARGET: " + distance);
         double destinationPlanetRadius = BodyList.getBodyList()[getDestinationPlanetID()].getRadius();
 
-        return (destinationPlanetRadius + 100000) < distance && distance < (destinationPlanetRadius + 300000);
+        return distance < 1000;
     }
 
     private void setFinalPosition(){

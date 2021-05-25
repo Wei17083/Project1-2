@@ -137,6 +137,10 @@ public class ReturnMission {
 
     public static void main(String[] args){
         ReturnMission r = new ReturnMission();
+        State[] states = r.doMission();
+        System.out.println(states[states.length-1].getPositionList().get(3));
+        System.out.println(states[states.length-1].getPositionList().get(11));
+        // random comment so i can comit
 
         /* TODO
             1: calculate launch velocity with correct solver (do Newton rhapson)
