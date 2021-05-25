@@ -11,13 +11,14 @@ public class GUI {
     private static double panOffsetY = 0;
     private static double scale = 1;
     // animation only draws every nth position (n = skip)
-    private static int skipSize = 1;
+    private static int skipSize = 10;
     private static int skip = skipSize;
+
     private static double daysPerStep;
     private static int currentDay;
 
     public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions,
-            Vector3dInterface[] trajectory, int finalPos, List<Vector3dInterface> probeveloc) throws InterruptedException {
+                                 Vector3dInterface[] trajectory, int finalPos, int titanApproachPosition, List<Vector3dInterface> probeveloc) throws InterruptedException {
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
 
@@ -62,11 +63,15 @@ public class GUI {
         // start animation loop (animation starts paused)
         for (int i = 0; i < allPositions.get(0).size(); i += skip) {
             currentDay = (int) (i * daysPerStep + 1);
-            if (i >= finalPos - 3 * skip) {
+            if(i>titanApproachPosition*0.9-skipSize&&i<titanApproachPosition*1.1){
+                skip=1;
+            }
+            else if (i >= finalPos - 3 * skip) {
                 skip = 1; // slow down for last frames
-                if (i > finalPos)
+                if (i > finalPos-1)
                     i--; // stay on last position
             }
+            else skip=skipSize;
             // pause/unpause entire animation
             if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
                 if (!pauseLock) {

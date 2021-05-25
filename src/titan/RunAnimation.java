@@ -69,7 +69,7 @@ public class RunAnimation {
 
                 ToolsCSV csv = new ToolsCSV(null, bodies.length, "Euler5000Data", "Euler5000Trajectory");
                 GUI.visualise(bodies, ToolsCSV.getAllPositions(), ToolsCSV.getProbeTrajectory(),
-                                ToolsCSV.getFinalProbePosition(), ToolsCSV.getCSVVelocities(11));
+                                ToolsCSV.getFinalProbePosition(), ToolsCSV.getTitanApproachPosition(), ToolsCSV.getCSVVelocities(11));
 
         }
 }

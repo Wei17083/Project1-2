@@ -12,6 +12,7 @@ import java.util.Arrays;
 import System.SolarSystem;
 
 public class ReturnMission {
+    private static int titanApproach=0;
     public final double GRAV_CONSTANT = 6.674E-11;
     final double STEPSIZE = 5000;
     final double TIME_TO_TITAN = 300*24*60*60;
@@ -70,6 +71,7 @@ public class ReturnMission {
         //slow down last step to achieve orbital speed
             //get last position
         State finalStatePreOrbit = statesArrayList.get(statesArrayList.size()-1);
+        titanApproach = statesArrayList.size()-1; //record time step at which we slow down
         Vector3dInterface finalVelocityWithoutBoost = finalStatePreOrbit.getVelocityList().get(PROBE_ID);
             //calculate required speed at right angle to titan
         Vector3dInterface finalVelocityAfterBoost = getRightAngleVector(finalStatePreOrbit).mul(velocityOrbit);
@@ -153,7 +155,7 @@ public class ReturnMission {
         for (int i = 0; i < stateArrayList.size() ; i++) {
             stateInterfaceArrayList.add((StateInterface) stateArrayList.get(i));
         }
-         ToolsCSV cvsTool = new ToolsCSV(stateInterfaceArrayList, 12, "Euler" + r.STEPSIZE + "Data" ,"Euler" + r.STEPSIZE + "Trajectory");
+         ToolsCSV cvsTool = new ToolsCSV(stateInterfaceArrayList, 12, "Euler" + (int)r.STEPSIZE + "Data" ,"Euler" + (int)r.STEPSIZE + "Trajectory");
 
         Vector3dInterface[] trajectory = new Vector3dInterface[stateArrayList.size()];
         for (int i = 0; i < stateArrayList.size() ; i++) {
@@ -163,7 +165,7 @@ public class ReturnMission {
         try {
 
             cvsTool.createCSV();
-            cvsTool.createProbeCSV(trajectory, trajectory.length);
+            cvsTool.createProbeCSV(trajectory, trajectory.length, titanApproach);
         } catch (FileNotFoundException e) {System.out.println(e);}
 
 

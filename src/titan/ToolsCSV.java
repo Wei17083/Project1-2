@@ -42,18 +42,32 @@ public class ToolsCSV {
                 out.println(s.velocityList.get(i).getZ() + ", "); //// 8th column: Z-Velocity
             }
         }
+        // add one extra line per body so that animation doesnt stop at the end
+        for (int i = 0; i < ((State)listStates.get(0)).positionList.size(); i++) {
+            out.print("1, ");
+            out.print(i + ", ");
+            out.print("1, ");
+            out.print("1, ");
+            out.print("1, ");
+            out.print("1, ");
+            out.print("1, ");
+            out.println("1, ");
+        }
         out.close();
     }
 
-    public static void createProbeCSV(Vector3dInterface[] trajectory, double finalPos) throws FileNotFoundException {
+    public static void createProbeCSV(Vector3dInterface[] trajectory, double finalPos, int titanApproach) throws FileNotFoundException {
         File csvFile = new File(trajectoryFile);
         PrintWriter out = new PrintWriter(csvFile);
 
         out.println("X-Position, Y-Position, Z-Position");// , X-Velocity, Y-Velocity, Z-Velocity");
         out.println(finalPos + ",");
+        out.println(titanApproach + ",");
         for (int i = 0; i < trajectory.length; i++) {
             out.println(VectorTools.csvCoordinates(trajectory[i]) + ",");
         }
+        // add 1 extra line so that animation doesnt stop at the end
+        out.println("1,1,1,");
         out.close();
 
     }
@@ -128,20 +142,31 @@ public class ToolsCSV {
         return (int) ind;
     }
 
+    public static int getTitanApproachPosition() throws FileNotFoundException {
+        FileReader f = new FileReader(trajectoryFile);
+        Scanner Reader = new Scanner(f);
+        Reader.useDelimiter(",");
+        skipLine(Reader, 2);
+        // skipColumn(Reader,1);
+        double ind = Double.parseDouble(Reader.next());
+        Reader.close();
+        return (int) ind;
+    }
+
     public static Vector3dInterface[] getProbeTrajectory() throws IOException {
         BufferedReader bfReader = new BufferedReader(new FileReader(trajectoryFile));
         int lines = 0;
         while (bfReader.readLine() != null)
             lines++;
         bfReader.close();
-        // create array with enough space for every line (-2 cause of title line and
-        // finalPos)
-        Vector3dInterface[] trajectory = new Vector3dInterface[lines - 2];
+        // create array with enough space for every line (-3 cause of title line and
+        // finalPos & titanApproach)
+        Vector3dInterface[] trajectory = new Vector3dInterface[lines - 3];
 
         FileReader f = new FileReader(trajectoryFile);
         Scanner Reader = new Scanner(f);
         Reader.useDelimiter(",");
-        skipLine(Reader, 2);
+        skipLine(Reader, 3);
 
         for (int i = 0; i < trajectory.length; i++) {
             //skipColumn(Reader, 1);
