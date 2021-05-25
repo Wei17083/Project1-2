@@ -122,7 +122,7 @@ public class ToolsCSV {
         Scanner Reader = new Scanner(f);
         Reader.useDelimiter(",");
         skipLine(Reader, 1);
-        skipColumn(Reader,1);
+       // skipColumn(Reader,1);
         double ind = Double.parseDouble(Reader.next());
         Reader.close();
         return (int) ind;
@@ -144,7 +144,7 @@ public class ToolsCSV {
         skipLine(Reader, 2);
 
         for (int i = 0; i < trajectory.length; i++) {
-            skipColumn(Reader, 1);
+            //skipColumn(Reader, 1);
             double x = Double.parseDouble(Reader.next());
             double y = Double.parseDouble(Reader.next());
             double z = Double.parseDouble(Reader.next());

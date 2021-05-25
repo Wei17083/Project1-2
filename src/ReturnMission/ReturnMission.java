@@ -3,6 +3,7 @@ package ReturnMission;
 import NewtonRhapson.NewtonRhapson;
 import titan.*;
 
+import java.io.FileNotFoundException;
 import java.lang.management.ThreadInfo;
 import java.time.Year;
 import java.util.ArrayList;
@@ -12,15 +13,17 @@ import System.SolarSystem;
 
 public class ReturnMission {
     public final double GRAV_CONSTANT = 6.674E-11;
-    final double STEPSIZE = 500;
+    final double STEPSIZE = 5000;
     final double TIME_TO_TITAN = 300*24*60*60;
     final double TIME_TO_EARTH = 2*TIME_TO_TITAN;
     final double PROBE_MASS = BodyList.getBodyList()[11].getMass();
     final double velocityOrbit;
     final double radius = BodyList.getBodyList()[8].getRadius()+200000;
-    final double stepsize = 500;
+
     final Vector3dInterface INITIAL_VELOCITY_ESTIMATE = new Vector(33573.34843239226, -69124.95246248483, -703.6818444149116);
     final ArrayList<Thrust> thrusts = new ArrayList<>();
+
+    final double NUMBER_OF_ORBITS = 1.5;
 
     final int PROBE_ID = 11;
     final int TITAN_ID = 8;
@@ -53,7 +56,7 @@ public class ReturnMission {
         return state.setVelocityByID(11, bestVelocity);
     }
 
-    private State[] doMission(){
+    private ArrayList<State> doMission(){
         ArrayList<State> statesArrayList = new ArrayList<>();
         //launch
             //adjust Trajectory
@@ -62,7 +65,7 @@ public class ReturnMission {
         launchState = adjustTrajectory(launchState, TIME_TO_TITAN, isFirstMission);
         statesArrayList.add(launchState);
         SolarSystem launchSystem = new SolarSystem(launchState);
-        addStates(statesArrayList, launchSystem.calculateTrajectories(TIME_TO_TITAN, stepsize));
+        addStates(statesArrayList, launchSystem.calculateTrajectories(TIME_TO_TITAN, STEPSIZE));
 
         //slow down last step to achieve orbital speed
             //get last position
@@ -78,10 +81,10 @@ public class ReturnMission {
         statesArrayList.set(statesArrayList.size()-1,finalStatePreOrbit);
 
         //orbit around titan
-        int stepsOneAndHalfOrbit = (int) (Math.round(timeOrbit()/stepsize)*1.5);
-        double finalOrbitTime = stepsOneAndHalfOrbit*stepsize;
+        int stepsOneAndHalfOrbit = (int) (Math.round(timeOrbit()/STEPSIZE)*NUMBER_OF_ORBITS);
+        double finalOrbitTime = stepsOneAndHalfOrbit*STEPSIZE;
         SolarSystem orbitSystem = new SolarSystem(finalStatePreOrbit);
-        addStates(statesArrayList, orbitSystem.calculateTrajectories(finalOrbitTime, stepsize));
+        addStates(statesArrayList, orbitSystem.calculateTrajectories(finalOrbitTime, STEPSIZE));
 
         //go back to earth
 
@@ -90,9 +93,16 @@ public class ReturnMission {
         finalStatePostOrbit = adjustTrajectory(finalStatePostOrbit,TIME_TO_EARTH, isFirstMission);
         statesArrayList.set(statesArrayList.size()-1, finalStatePostOrbit);
         SolarSystem returnSystem = new SolarSystem(finalStatePostOrbit);
-        addStates(statesArrayList, returnSystem.calculateTrajectories(TIME_TO_EARTH, stepsize));
+        addStates(statesArrayList, returnSystem.calculateTrajectories(TIME_TO_EARTH, STEPSIZE));
 
-        return statesArrayList.toArray(new State[0]);
+        double totalMass = 0;
+        for (Thrust thrust: thrusts
+             ) {
+            totalMass += thrust.massUsed;
+        }
+        System.out.println("Total mass used: " + totalMass);
+        //return statesArrayList.toArray(new State[0]);
+        return  statesArrayList;
 
     }
 
@@ -137,9 +147,29 @@ public class ReturnMission {
 
     public static void main(String[] args){
         ReturnMission r = new ReturnMission();
-        State[] states = r.doMission();
-        System.out.println(states[states.length-1].getPositionList().get(3));
-        System.out.println(states[states.length-1].getPositionList().get(11));
+        //State[] states = r.doMission();
+        ArrayList<State> stateArrayList = r.doMission();
+        ArrayList<StateInterface> stateInterfaceArrayList = new ArrayList<>();
+        for (int i = 0; i < stateArrayList.size() ; i++) {
+            stateInterfaceArrayList.add((StateInterface) stateArrayList.get(i));
+        }
+         ToolsCSV cvsTool = new ToolsCSV(stateInterfaceArrayList, 12, "Euler" + r.STEPSIZE + "Data" ,"Euler" + r.STEPSIZE + "Trajectory");
+
+        Vector3dInterface[] trajectory = new Vector3dInterface[stateArrayList.size()];
+        for (int i = 0; i < stateArrayList.size() ; i++) {
+            trajectory[i] = stateArrayList.get(i).getPositionList().get(r.PROBE_ID);
+        }
+
+        try {
+
+            cvsTool.createCSV();
+            cvsTool.createProbeCSV(trajectory, trajectory.length);
+        } catch (FileNotFoundException e) {System.out.println(e);}
+
+
+
+//        System.out.println(states[states.length-1].getPositionList().get(3));
+//        System.out.println(states[states.length-1].getPositionList().get(11));
         // random comment so i can comit
 
         /* TODO
