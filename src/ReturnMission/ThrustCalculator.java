@@ -1,5 +1,7 @@
 package ReturnMission;
 
+import titan.Vector3dInterface;
+
 public class ThrustCalculator {
 
     private static final double Ve = 20000; //m/s
@@ -13,9 +15,9 @@ public class ThrustCalculator {
      * @param Vr desired velocity
      * @return mass of fuel needed in kg
      */
-    public static double getFuelForVelocity(double M, double V0, double Vr){
-        double m = M*(Vr-V0)/Ve;
-        return(m);
+    public static double getFuelForVelocity(double M, Vector3dInterface V0, Vector3dInterface Vr){
+        double velocityChange = Vr.sub(V0).norm();
+        return (M*(velocityChange)/Ve);
     }
 
     /**

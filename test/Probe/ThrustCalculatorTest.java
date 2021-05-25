@@ -10,10 +10,10 @@ class ThrustCalculatorTest {
     private static final double mdot_max = 15000;
     private double step_size = 1;
 
-    @Test
-    void getFuelForVelocity() {
-        assertEquals(0.5, ThrustCalculator.getFuelForVelocity(100,10,110));
-    }
+//    @Test
+//    void getFuelForVelocity() {
+//        assertEquals(0.5, ThrustCalculator.getFuelForVelocity(100,10,110));
+//    }
 
     @Test
     void convertFuelToTime() {

@@ -30,8 +30,8 @@ public class SolarSystem {
                 this.bodies = bodies;
         }
 
-        public SolarSystem(Body[] bodies, State initialState) {
-                this.bodies = bodies;
+        public SolarSystem(State initialState) {
+                this.bodies = BodyList.getBodyList();
                 this.initialState = initialState;
         }
 

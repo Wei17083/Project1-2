@@ -35,7 +35,7 @@ public class NewtonRhapson {
         this.stepSize = stepSize;
         this.isFirstMission = isFirstMission;
 
-        SolarSystem system = new SolarSystem(BodyList.getBodyList(), initialState);
+        SolarSystem system = new SolarSystem(initialState);
         statesNewAttempt = system.calculateTrajectories(finalTime, stepSize);
         stepClosestPosition = (int) (finalTime/stepSize);
         TARGET = setTarget();
@@ -58,7 +58,7 @@ public class NewtonRhapson {
         do { //get next
             this.initialVelocity = getNextAttempt();
             initialStateNewAttempt = initialState.setVelocityByID(PROBE_ID, initialVelocity);
-            SolarSystem newSystem = new SolarSystem(BodyList.getBodyList(), initialStateNewAttempt);
+            SolarSystem newSystem = new SolarSystem(initialStateNewAttempt);
             statesNewAttempt = newSystem.calculateTrajectories(finalTime, stepSize);
             setFinalPosition();
             System.out.println("New initial velocity: " + initialVelocity.toString());
@@ -171,7 +171,7 @@ public class NewtonRhapson {
 
     public State[] getStatesChangedVelocity(Vector3dInterface newVelocity){
         State newInitialState = initialState.setVelocityByID(PROBE_ID, newVelocity);
-        SolarSystem system = new SolarSystem(BodyList.getBodyList(), newInitialState);
+        SolarSystem system = new SolarSystem( newInitialState);
         return system.calculateTrajectories(finalTime, stepSize);
     }
 
