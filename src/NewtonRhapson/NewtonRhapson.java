@@ -9,6 +9,7 @@ import System.SolarSystem;
 import java.util.regex.Matcher;
 
 public class NewtonRhapson {
+    private final boolean DEBUG = false;
 
     private final State initialState;
     private State initialStateNewAttempt;
@@ -40,20 +41,20 @@ public class NewtonRhapson {
         stepClosestPosition = (int) (finalTime/stepSize);
         TARGET = setTarget();
 //        System.out.println("Final position Titan: " + statesNewAttempt[statesNewAttempt.length-1].getPositionList().get(TITAN_ID).toString());
-        System.out.println("Target: " + TARGET.toString());
+        if(DEBUG) System.out.println("Target: " + TARGET.toString());
 
-        System.out.println(stepClosestPosition);
-        System.out.println(stepClosestPosition);
+        if(DEBUG) System.out.println(stepClosestPosition);
+        if(DEBUG) System.out.println(stepClosestPosition);
 
         double distance = getDistanceVectorAtStep(statesNewAttempt).norm();
-        System.out.println("Distance to TARGET: " + distance);
+        if(DEBUG) System.out.println("Distance to TARGET: " + distance);
     }
 
     public Vector3dInterface findInitialVelocity(State initialState) {
 
         initialStateNewAttempt = initialState.setVelocityByID(PROBE_ID, VectorTools.clone(initialState.getVelocityList().get(PROBE_ID)));
         this.initialVelocity = initialState.getVelocityList().get(PROBE_ID);
-        System.out.println("initial Velocity: " + initialVelocity);
+        if(DEBUG) System.out.println("initial Velocity: " + initialVelocity);
 
         do { //get next
             this.initialVelocity = getNextAttempt();
@@ -61,7 +62,7 @@ public class NewtonRhapson {
             SolarSystem newSystem = new SolarSystem(initialStateNewAttempt);
             statesNewAttempt = newSystem.calculateTrajectories(finalTime, stepSize);
             setFinalPosition();
-            System.out.println("New initial velocity: " + initialVelocity.toString());
+            if(DEBUG) System.out.println("New initial velocity: " + initialVelocity.toString());
         } while (!closeEnough());
 
         return initialVelocity;
@@ -111,7 +112,7 @@ public class NewtonRhapson {
 
 
         double distance = getDistanceVectorAtStep(statesNewAttempt).norm();
-        System.out.println("Distance to TARGET: " + distance);
+        if (DEBUG) System.out.println("Distance to TARGET: " + distance);
         double destinationPlanetRadius = BodyList.getBodyList()[getDestinationPlanetID()].getRadius();
 
         return distance < 1000;
@@ -211,6 +212,7 @@ public class NewtonRhapson {
             Vector3dInterface startToEndVector = finalPositionTitan.sub(startPositionProbe);
 
             Vector3dInterface rightAngleVector = VectorTools.crossProduct(startToEndVector, zUnitVector);
+            rightAngleVector.setZ(finalPositionTitan.getZ());
             Vector3dInterface rightAngleUnitVector = VectorTools.getUnitVector(rightAngleVector);
             double radiusTitan = BodyList.getBodyList()[TITAN_ID].getRadius();
             double orbitHeight = 200000;

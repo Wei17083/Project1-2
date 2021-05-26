@@ -1,5 +1,6 @@
 package titan.Physics;
 
+import org.junit.Test;
 import titan.Vector;
 import titan.Vector3dInterface;
 import titan.VectorTools;
@@ -136,5 +137,16 @@ class VectorTest {
         Vector3dInterface x = new Vector(2,5,7);
         Vector3dInterface y = new Vector(2,5,7);
         assertTrue(VectorTools.equals(x,y));
+    }
+
+    @org.junit.jupiter.api.Test
+    void testCrossProduct() {
+        Vector3dInterface x = new Vector(1, 2 ,3);
+        Vector3dInterface y = new Vector(0, 0, 1);
+        Vector3dInterface crossProduct = VectorTools.crossProduct(x,y);
+        Vector3dInterface expectedVector = new Vector(2.0, -1.0, 0.0);
+        System.out.println(crossProduct.toString());
+        System.out.println(expectedVector.toString());
+        assertTrue(VectorTools.equals(expectedVector, crossProduct));
     }
 }

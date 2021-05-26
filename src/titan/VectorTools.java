@@ -31,9 +31,9 @@ public class VectorTools {
     public static boolean equals(Vector3dInterface v1, Vector3dInterface v2) {
         final double ACCURACY = 1E-5;
 
-        return ((v1.getX() - v2.getX()) / v1.getX() < ACCURACY) &&
-                ((v1.getY() - v2.getY()) / v1.getY() < ACCURACY) &&
-                ((v1.getZ() - v2.getZ()) / v1.getZ() < ACCURACY);
+        return ((v1.getX() - v2.getX()) < ACCURACY) &&
+                ((v1.getY() - v2.getY())  < ACCURACY) &&
+                ((v1.getZ() - v2.getZ())  < ACCURACY);
     }
 
     /**
@@ -71,6 +71,10 @@ public class VectorTools {
         double y = v1.getZ() * v2.getX() - v1.getX() * v2.getZ();
         double z = v1.getX() * v2.getY() - v1.getY() * v2.getX();
         return new Vector(x, y, z);
+    }
+
+    public static double dotProduct(Vector3dInterface x, Vector3dInterface y ) {
+        return x.getX()*y.getX() + x.getY()*y.getY() + x.getZ()*y.getZ();
     }
 
     /**

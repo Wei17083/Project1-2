@@ -73,8 +73,10 @@ public class ReturnMission {
         State finalStatePreOrbit = statesArrayList.get(statesArrayList.size()-1);
         titanApproach = statesArrayList.size()-1; //record time step at which we slow down
         Vector3dInterface finalVelocityWithoutBoost = finalStatePreOrbit.getVelocityList().get(PROBE_ID);
+
             //calculate required speed at right angle to titan
-        Vector3dInterface finalVelocityAfterBoost = getRightAngleVector(finalStatePreOrbit).mul(velocityOrbit);
+        Vector3dInterface finalRelativeVelocityAfterBoost = getRightAngleVector(finalStatePreOrbit).mul(velocityOrbit);
+        Vector3dInterface finalVelocityAfterBoost = finalRelativeVelocityAfterBoost.add(finalStatePreOrbit.getVelocityList().get(TITAN_ID));
             //calculate fuel
         double fuel = ThrustCalculator.getFuelForVelocity(PROBE_MASS, finalVelocityWithoutBoost, finalVelocityAfterBoost);
         int timestep = (int)(finalStatePreOrbit.getStateTime()/STEPSIZE)-1;
@@ -83,11 +85,27 @@ public class ReturnMission {
         statesArrayList.set(statesArrayList.size()-1,finalStatePreOrbit);
 
         //orbit around titan
-        int stepsOneAndHalfOrbit = (int) (Math.round(timeOrbit()/STEPSIZE)*NUMBER_OF_ORBITS);
-        double finalOrbitTime = stepsOneAndHalfOrbit*STEPSIZE;
-        SolarSystem orbitSystem = new SolarSystem(finalStatePreOrbit);
         double stepSizeOrbit = 50;
-        addStates(statesArrayList, orbitSystem.calculateTrajectories(finalOrbitTime, stepSizeOrbit));
+        int stepsOneAndHalfOrbit = (int) (Math.round(timeOrbit()/stepSizeOrbit)*NUMBER_OF_ORBITS);
+        double finalOrbitTime = stepsOneAndHalfOrbit*stepSizeOrbit;
+
+
+        SolarSystem orbitSystem = new SolarSystem(finalStatePreOrbit);
+
+        State[] orbitStates = orbitSystem.calculateTrajectories(finalOrbitTime, stepSizeOrbit);
+
+//        for (State s: orbitStates
+//             ) {
+//
+//                Vector3dInterface probePosition = s.getPositionList().get(PROBE_ID);
+//                Vector3dInterface positionTitan = s.getPositionList().get(TITAN_ID);
+//                Vector3dInterface relativePositionProbe = probePosition.sub(positionTitan);
+//                System.out.println("Position relative to titan: " + relativePositionProbe);
+//                System.out.println("Distance to Titan's surface: " + (relativePositionProbe.norm()-BodyList.getBodyList()[8].getRadius()));
+//                System.out.println("Dotproduct relative position and velocity: " + VectorTools.dotProduct(relativePositionProbe, s.getVelocityList().get(PROBE_ID)));
+//
+//        }
+        addStates(statesArrayList, orbitStates);
 
         //go back to earth
 
