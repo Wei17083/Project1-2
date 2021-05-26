@@ -24,7 +24,7 @@ public class ReturnMission {
     final Vector3dInterface INITIAL_VELOCITY_ESTIMATE = new Vector(33573.34843239226, -69124.95246248483, -703.6818444149116);
     final ArrayList<Thrust> thrusts = new ArrayList<>();
 
-    final double NUMBER_OF_ORBITS = 1.5;
+    final double NUMBER_OF_ORBITS = 5.5;
 
     final int PROBE_ID = 11;
     final int TITAN_ID = 8;
@@ -86,7 +86,8 @@ public class ReturnMission {
         int stepsOneAndHalfOrbit = (int) (Math.round(timeOrbit()/STEPSIZE)*NUMBER_OF_ORBITS);
         double finalOrbitTime = stepsOneAndHalfOrbit*STEPSIZE;
         SolarSystem orbitSystem = new SolarSystem(finalStatePreOrbit);
-        addStates(statesArrayList, orbitSystem.calculateTrajectories(finalOrbitTime, STEPSIZE));
+        double stepSizeOrbit = 50;
+        addStates(statesArrayList, orbitSystem.calculateTrajectories(finalOrbitTime, stepSizeOrbit));
 
         //go back to earth
 
@@ -138,7 +139,7 @@ public class ReturnMission {
 
         Vector3dInterface initialPosition = bodies[3].getPosition().add(initialRelativePosition);
 
-        initialState = initialState.setVelocityByID(11, INITIAL_VELOCITY_ESTIMATE);
+        initialState = initialState.setVelocityByID(11, bodies[3].getVelocity());
         initialState = initialState.setPositionByID(11, initialPosition);
         return initialState;
     }
