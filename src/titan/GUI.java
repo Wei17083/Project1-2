@@ -11,7 +11,7 @@ public class GUI {
     private static double panOffsetY = 0;
     private static double scale = 1;
     // animation only draws every nth position (n = skip)
-    private static int skipSize = 10;
+    private static int skipSize = 50;
     private static int skip = skipSize;
 
     public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions,
@@ -60,7 +60,7 @@ public class GUI {
         // start animation loop (animation starts paused)
         for (int i = 0; i < allPositions.get(0).size(); i += skip) {
             //slow down around titan
-            if(i>titanApproachPosition*0.9-skipSize&&i<titanApproachPosition*1.05){
+            if(i>titanApproachPosition*0.99-skipSize&&i<titanApproachPosition*1.05){
                 skip=1;
             }
             else if (i >= finalPos - 3 * skip) {
