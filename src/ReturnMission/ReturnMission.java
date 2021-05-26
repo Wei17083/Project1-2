@@ -14,9 +14,9 @@ import System.SolarSystem;
 public class ReturnMission {
     private static int titanApproach=0;
     public final double GRAV_CONSTANT = 6.674E-11;
-    final double STEPSIZE = 5000;
+    final double STEPSIZE = 500;
     final double TIME_TO_TITAN = 300*24*60*60;
-    final double TIME_TO_EARTH = 2*TIME_TO_TITAN;
+    final double TIME_TO_EARTH = TIME_TO_TITAN;
     final double PROBE_MASS = BodyList.getBodyList()[11].getMass();
     final double velocityOrbit;
     final double radius = BodyList.getBodyList()[8].getRadius()+200000;
