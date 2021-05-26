@@ -21,7 +21,6 @@ public class VectorTools {
     }
 
 
-
     /**
      * Compares two vectors and returns true if they are the same, false otherwise
      *
@@ -32,9 +31,9 @@ public class VectorTools {
     public static boolean equals(Vector3dInterface v1, Vector3dInterface v2) {
         final double ACCURACY = 1E-5;
 
-        return ((v1.getX()-v2.getX())/v1.getX() < ACCURACY)&&
-                ((v1.getY()-v2.getY())/v1.getY() < ACCURACY) &&
-                ((v1.getZ()-v2.getZ())/v1.getZ() < ACCURACY);
+        return ((v1.getX() - v2.getX()) / v1.getX() < ACCURACY) &&
+                ((v1.getY() - v2.getY()) / v1.getY() < ACCURACY) &&
+                ((v1.getZ() - v2.getZ()) / v1.getZ() < ACCURACY);
     }
 
     /**
@@ -67,12 +66,13 @@ public class VectorTools {
         return v.mul(1 / v.norm());
     }
 
-    public static Vector3dInterface crossProduct(Vector3dInterface v1, Vector3dInterface v2){
-        double x  = v1.getY()*v2.getZ() - v1.getZ()*v2.getY();
-        double y = v1.getZ()*v2.getX() - v1.getX()* v2.getZ();
-        double z = v1.getX()*v2.getY() - v1.getY()*v2.getX();
-        return new Vector(x, y ,z);
+    public static Vector3dInterface crossProduct(Vector3dInterface v1, Vector3dInterface v2) {
+        double x = v1.getY() * v2.getZ() - v1.getZ() * v2.getY();
+        double y = v1.getZ() * v2.getX() - v1.getX() * v2.getZ();
+        double z = v1.getX() * v2.getY() - v1.getY() * v2.getX();
+        return new Vector(x, y, z);
     }
+
     /**
      * Returns sum of all vectors in an ArrayList
      *
@@ -96,24 +96,14 @@ public class VectorTools {
         if (a > 10) {
             a = 10;
         }
-       /* StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), "spaceship.png",
-                7e9 * a, 7e9 * a, 210);
-        */
 
-        Vector nVector = new Vector(1,-1   ,0);
-        double pzscalar = nVector.getX()*probeVector.getX()+nVector.getY()*probeVector.getY()+nVector.getZ()*probeVector.getZ();
-        //System.out.println(pzscalar);
-        //double pzscalar = position.getX()*probeVector.getX()+position.getY()*probeVector.getY()+position.getZ()*probeVector.getZ();
-        //double pzscalar = position.getX()*nVector.getX()+position.getY()*nVector.getY()+position.getZ()*nVector.getZ();
-        double angle = 0;
-        if(probeVector.norm() != 0) {
-            angle = Math.acos(pzscalar / (nVector.norm() * probeVector.norm()));
-            angle = (angle / 2 * Math.PI) * 360;
-        }
-        //System.out.println(angle);
+        double angle = Math.toDegrees(Math.atan(probeVector.getY() / probeVector.getX()));
+        //return flight goes into upper left quadrant
+        if (probeVector.getX() < 0) angle += 90;
+        //flight to titan goes into lower right quadrant
+        else if (probeVector.getX() > 0) angle -= 90;
         StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), "spaceship.png",
                 7e9 * a, 7e9 * a, angle);
-
     }
 
     /**
