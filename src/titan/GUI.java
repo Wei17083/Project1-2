@@ -14,31 +14,27 @@ public class GUI {
     private static int skipSize = 10;
     private static int skip = skipSize;
 
-    private static double daysPerStep;
-    private static int currentDay;
-
     public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions,
                                  Vector3dInterface[] trajectory, int finalPos, int titanApproachPosition, List<Vector3dInterface> probeveloc) throws InterruptedException {
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
 
         // setting up scale in order to display whole solar system
-        scale = 0.5;
+        scale = 1;
         StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
         StdDraw.setYscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
 
-
-        daysPerStep = (double) 365 / allPositions.get(0).size();
-        double x = trajectory.length * daysPerStep;
         // set up offset to start on earth
         panOffsetX = bodies[3].getPosition().getX();
         panOffsetY = bodies[3].getPosition().getY();
 
-        String timePassed = "Day ";
+        String animationSpeed = "Speed: "+skipSize+"x";
         String instructions = "Start/Stop: Spacebar, Follow Probe: F, Zoom: +/-, Pan: WASD or arrows, Restart: R";
 
-        // phase 2
-        int phase2 = finalPos / 4 * 3;
+        // animation phases
+        int phase2 = (int) (titanApproachPosition*0.9);
+        int phase3 = (int) (titanApproachPosition*1.05);
+        int phase4 = (int) (finalPos*0.9);
 
         // indicates whether the automatic panning is active or not
         boolean interrupted = false;
@@ -62,8 +58,8 @@ public class GUI {
 
         // start animation loop (animation starts paused)
         for (int i = 0; i < allPositions.get(0).size(); i += skip) {
-            currentDay = (int) (i * daysPerStep + 1);
-            if(i>titanApproachPosition*0.9-skipSize&&i<titanApproachPosition*1.1){
+            //slow down around titan
+            if(i>titanApproachPosition*0.9-skipSize&&i<titanApproachPosition*1.05){
                 skip=1;
             }
             else if (i >= finalPos - 3 * skip) {
@@ -72,6 +68,7 @@ public class GUI {
                     i--; // stay on last position
             }
             else skip=skipSize;
+            animationSpeed="Speed: "+skip+"x";
             // pause/unpause entire animation
             if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
                 if (!pauseLock) {
@@ -93,7 +90,7 @@ public class GUI {
                     bodies[j].setPosition(allPositions.get(j).get(i));
                 }
                 skip = skipSize;
-                scale = 0.5;
+                scale = 1;
                 panOffsetX = trajectory[i].getX();
                 panOffsetY = trajectory[i].getY();
             }
@@ -147,19 +144,15 @@ public class GUI {
                     panOffsetX = trajectory[i].getX();
                     panOffsetY = trajectory[i].getY();
                     if (!zoomInterrupted) {
-                        if (i <= phase2) {
-                            if (scale < 1) { // quickly zoom out
-                                scale *= 1.0 + (Math.log(msPerFrame * 10) / 500);
-                            } else if (scale < 8) { // slowly zoom out
-                                scale *= 1.0 + (Math.log(msPerFrame * 10) / 1000);
+                        if (i <= phase2 || (i >=phase3&&i<phase4)) {
+                            if (scale < 8) { // quickly zoom out
+                                scale *= 1.0 + (Math.log(msPerFrame * 10) / 250);
                             } else if (scale > 8.1) {
                                 scale /= 1.0 + (Math.log(msPerFrame * 10) / 1000);
                             }
-                        } else if (i > phase2 && i < finalPos) {
-                            if (scale > 4) { // slowly zoom in
-                                scale /= 1.0 + (Math.log(msPerFrame * 10) / 1000);
-                            } else if (scale > 1) { // zoom in quicker
-                                scale /= 1.0 + (Math.log(msPerFrame * 10) / 600);
+                        } else if ((i > phase2 && i < phase3 )|| i>=phase4) {
+                            if (scale > 0.5) { // zoom in
+                                scale /= 1.0 + (Math.log(msPerFrame * 10) / 250);
                             } else if (scale < 0.0005) {
                                 scale *= 1.0 + (Math.log(msPerFrame * 10) / 10000);
                             }
@@ -185,7 +178,7 @@ public class GUI {
             } else {
                 VectorTools.drawProbe(trajectory[i], probeveloc.get(i));
             }
-            StdDraw.text(-0.9 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, timePassed + currentDay);
+            StdDraw.text(-0.8 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, animationSpeed);
             StdDraw.text(0, -0.9 * scale * SolarSystem.AU, instructions);
             StdDraw.show();
             StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
