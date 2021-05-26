@@ -11,7 +11,7 @@ public class GUI {
     private static double panOffsetY = 0;
     private static double scale = 1;
     // animation only draws every nth position (n = skip)
-    private static int skipSize = 10;
+    private static int skipSize = 50;
     private static int skip = skipSize;
 
     public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions,
