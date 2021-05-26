@@ -29,6 +29,7 @@ public class GUI {
         panOffsetY = bodies[3].getPosition().getY();
 
         String animationSpeed = "Speed: "+skipSize+"x";
+        String probeVelocity = "Velocity: "+skipSize+" m/s";
         String instructions = "Start/Stop: Spacebar, Follow Probe: F, Zoom: +/-, Pan: WASD or arrows, Restart: R";
 
         // animation phases
@@ -69,6 +70,8 @@ public class GUI {
             }
             else skip=skipSize;
             animationSpeed="Speed: "+skip+"x";
+            probeVelocity="Velocity: "+(int)probeveloc.get(i).norm()+" m/s";;
+
             // pause/unpause entire animation
             if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
                 if (!pauseLock) {
@@ -179,6 +182,7 @@ public class GUI {
                 VectorTools.drawProbe(trajectory[i], probeveloc.get(i));
             }
             StdDraw.text(-0.8 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, animationSpeed);
+            StdDraw.text(+0.7 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, probeVelocity);
             StdDraw.text(0, -0.9 * scale * SolarSystem.AU, instructions);
             StdDraw.show();
             StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
