@@ -151,7 +151,7 @@ public class NewtonRhapson {
     public double getPartialDerivative(char var1, char var2, Vector3dInterface initialVelocity){
         double velocityComponent1 = getVectorComponent(var2, initialVelocity);
 
-        double relativeChange = 0.0001;
+        double relativeChange = 0.000001;
         double change = Math.abs(velocityComponent1*relativeChange);
 
 

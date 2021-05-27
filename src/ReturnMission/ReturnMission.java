@@ -24,7 +24,7 @@ public class ReturnMission {
     final Vector3dInterface INITIAL_VELOCITY_ESTIMATE = new Vector(33573.34843239226, -69124.95246248483, -703.6818444149116);
     final ArrayList<Thrust> thrusts = new ArrayList<>();
 
-    final double NUMBER_OF_ORBITS = 5.5;
+    final double NUMBER_OF_ORBITS = 5;
 
     final int PROBE_ID = 11;
     final int TITAN_ID = 8;
@@ -46,13 +46,15 @@ public class ReturnMission {
         //get best velocity with at that state
         NewtonRhapson newtonRhapson = new NewtonRhapson(state, finalTime, STEPSIZE, isFirstMission);
         Vector3dInterface bestVelocity = newtonRhapson.findInitialVelocity(state);
-        Vector3dInterface probeVelocity = state.getVelocityList().get(11);
+        Vector3dInterface probeVelocity = state.getVelocityList().get(PROBE_ID);
 
         //calculate thrust needed
-        double fuel = ThrustCalculator.getFuelForVelocity(PROBE_MASS, probeVelocity, bestVelocity);
+
+
+
         int timestep = (int)(state.getStateTime()/STEPSIZE)-1;
 
-        thrusts.add(new Thrust(fuel, timestep));
+        thrusts.add(new Thrust(bestVelocity.sub(probeVelocity).norm(), timestep));
 
         return state.setVelocityByID(11, bestVelocity);
     }
@@ -78,9 +80,8 @@ public class ReturnMission {
         Vector3dInterface finalRelativeVelocityAfterBoost = getRightAngleVector(finalStatePreOrbit).mul(velocityOrbit);
         Vector3dInterface finalVelocityAfterBoost = finalRelativeVelocityAfterBoost.add(finalStatePreOrbit.getVelocityList().get(TITAN_ID));
             //calculate fuel
-        double fuel = ThrustCalculator.getFuelForVelocity(PROBE_MASS, finalVelocityWithoutBoost, finalVelocityAfterBoost);
         int timestep = (int)(finalStatePreOrbit.getStateTime()/STEPSIZE)-1;
-        thrusts.add(new Thrust(fuel, timestep));
+        thrusts.add(new Thrust(finalVelocityAfterBoost.sub(finalVelocityWithoutBoost).norm(), timestep));
         finalStatePreOrbit = finalStatePreOrbit.setVelocityByID(PROBE_ID, finalVelocityAfterBoost);
         statesArrayList.set(statesArrayList.size()-1,finalStatePreOrbit);
 
@@ -116,12 +117,27 @@ public class ReturnMission {
         SolarSystem returnSystem = new SolarSystem(finalStatePostOrbit);
         addStates(statesArrayList, returnSystem.calculateTrajectories(TIME_TO_EARTH, STEPSIZE));
 
+
         double totalMass = 0;
-        for (Thrust thrust: thrusts
-             ) {
+        double totalVelocityChange = 0;
+        double massAfterThrust = PROBE_MASS;
+        ThrustCalculator.setVE(60000);
+        for (int i = thrusts.size() -1; i >=0 ; i--) {
+            if(i == 0) ThrustCalculator.setVE(4000);
+            Thrust thrust = thrusts.get(i);
+            thrust.setMassAfterThrust(massAfterThrust);
+            thrust.calculateMassUsed();
+            massAfterThrust = thrust.massBeforeThrust;
             totalMass += thrust.massUsed;
+//            System.out.println("TimeStep this thrust: " + thrust.getTimestepUsed());
+//            System.out.println("velocityChange this thrust: " + thrust.getVelocityChange());
+            totalVelocityChange += thrust.getVelocityChange();
         }
-        System.out.println("Total mass used: " + totalMass);
+//        System.out.println("Total velocityChange: " + totalVelocityChange);
+//        System.out.println("Initial mass probe: " + thrusts.get(0).massBeforeThrust);
+//        System.out.println("final mass probe: " + thrusts.get(thrusts.size()-1).massAfterThrust);
+//        System.out.println("Mass difference: " + (thrusts.get(0).massBeforeThrust - thrusts.get(thrusts.size()-1).massAfterThrust));
+        System.out.println("Total mass of fuel used: " + totalMass);
         //return statesArrayList.toArray(new State[0]);
         return  statesArrayList;
 
@@ -136,7 +152,7 @@ public class ReturnMission {
         Vector3dInterface rightAngleVector = VectorTools.crossProduct(titanToProbeVector, zUnitVector);
         Vector3dInterface rightAngleUnitVector = VectorTools.getUnitVector(rightAngleVector);
 
-        return rightAngleUnitVector;
+        return rightAngleUnitVector.mul(1);
     }
 
     private State createLaunchState(){
@@ -210,9 +226,29 @@ public class ReturnMission {
 class Thrust{
     double massUsed;
     double timestepUsed;
+    double velocityChange;
+    double massBeforeThrust;
+    double massAfterThrust;
 
-    Thrust(double massUsed, double timestepUsed){
-        this.massUsed = massUsed;
+    Thrust(double velocityChange, double timestepUsed){
+        this.velocityChange = velocityChange;
         this.timestepUsed = timestepUsed;
+    }
+
+    public void setMassAfterThrust(double massAfterThrust) {
+        this.massAfterThrust = massAfterThrust;
+    }
+
+    public void calculateMassUsed(){
+        massBeforeThrust = massAfterThrust*Math.exp(velocityChange/ThrustCalculator.getVe());
+        massUsed = massBeforeThrust-massAfterThrust;
+    }
+
+    public double getVelocityChange() {
+        return velocityChange;
+    }
+
+    public double getTimestepUsed() {
+        return timestepUsed;
     }
 }

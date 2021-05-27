@@ -56,7 +56,7 @@ public class BodyList {
             new Vector(4.382692942729203e+12, -9.093501655486243e+11, -8.227728929479486e+10),
             new Vector(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02),
             2.4622e7, Color.blue);
-    private static Body probe = new Body("Probe", 11, 15000, new Vector(0, 0, 0), new Vector(0, 0, 0), 100, null);
+    private static Body probe = new Body("Probe", 11, 78000, new Vector(0, 0, 0), new Vector(0, 0, 0), 100, null);
 
     // create arrays of bodies and corresponding forces
     private static Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,

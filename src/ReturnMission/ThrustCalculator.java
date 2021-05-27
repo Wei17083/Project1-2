@@ -4,7 +4,7 @@ import titan.Vector3dInterface;
 
 public class ThrustCalculator {
 
-    private static final double Ve = 20000; //m/s
+    private static double Ve = 60000; //m/s
     private static final double mdot_max = 15000; //kg/s
     private static double step_size = 500;
 
@@ -54,5 +54,9 @@ public class ThrustCalculator {
 
     public static void setStep_size(double step_size) {
         ThrustCalculator.step_size = step_size;
+    }
+
+    public static void setVE(double newVe){
+        Ve = newVe;
     }
 }
