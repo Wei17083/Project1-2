@@ -4,7 +4,7 @@ import titan.Vector3dInterface;
 
 public class ThrustCalculator {
 
-    private static final double Ve = 20000; //m/s
+    private static final double Ve = 4000; //m/s
     private static final double mdot_max = 15000; //kg/s
     private static double step_size = 500;
 
