@@ -148,7 +148,8 @@ public class GUI {
                     panOffsetY = trajectory[i].getY();
                     if (!zoomInterrupted) {
                         if (i <= phase2 || (i >= phase3 && i < phase4)) {
-                            if (scale < 1 &&(int) probeveloc.get(i).norm()>20000) scale = 1; //reset zoom when speeding away from titan
+                            if (scale < 1 &&(int) probeveloc.get(i).norm()>20000)
+                                scale += 0.005; //reset zoom when speeding away from titan
                             else if (scale < 4)
                                 scale *= 1.0 + (Math.log(msPerFrame * 10) / 150);
                             else if (scale < 8) { // quickly zoom out
