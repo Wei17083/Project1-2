@@ -1,6 +1,5 @@
 package titan.Physics;
 
-import org.junit.Test;
 import titan.Vector;
 import titan.Vector3dInterface;
 import titan.VectorTools;

@@ -2,6 +2,7 @@ package titan;
 
 import java.awt.event.KeyEvent;
 import java.util.*;
+
 import System.SolarSystem;
 
 public class GUI {
@@ -28,14 +29,14 @@ public class GUI {
         panOffsetX = bodies[3].getPosition().getX();
         panOffsetY = bodies[3].getPosition().getY();
 
-        String animationSpeed = "Speed: "+skipSize+"x";
-        String probeVelocity = "Velocity: "+skipSize+" m/s";
+        String animationSpeed = "Speed: " + skipSize + "x";
+        String probeVelocity = "Velocity: " + skipSize + " m/s";
         String instructions = "Start/Stop: Spacebar, Follow Probe: F, Zoom: +/-, Pan: WASD or arrows, Restart: R";
 
         // animation phases
-        int phase2 = (int) (titanApproachPosition*0.9);
-        int phase3 = (int) (titanApproachPosition*1.05);
-        int phase4 = (int) (finalPos*0.9);
+        int phase2 = (int) (titanApproachPosition * 0.9);
+        int phase3 = (int) (titanApproachPosition * 1.015);
+        int phase4 = (int) (finalPos * 0.9);
 
         // indicates whether the automatic panning is active or not
         boolean interrupted = false;
@@ -60,17 +61,16 @@ public class GUI {
         // start animation loop (animation starts paused)
         for (int i = 0; i < allPositions.get(0).size(); i += skip) {
             //slow down around titan
-            if(i>titanApproachPosition*0.99-skipSize&&i<titanApproachPosition*1.05){
-                skip=1;
-            }
-            else if (i >= finalPos - 3 * skip) {
+            if (i > titanApproachPosition * 0.99 - skipSize && i < titanApproachPosition * 1.02) {
+                skip = 1;
+            } else if (i >= finalPos - 3 * skipSize) {
                 skip = 1; // slow down for last frames
-                if (i > finalPos-1)
+                if (i > finalPos - 1)
                     i--; // stay on last position
-            }
-            else skip=skipSize;
-            animationSpeed="Speed: "+skip+"x";
-            probeVelocity="Velocity: "+(int)probeveloc.get(i).norm()+" m/s";;
+            } else skip = skipSize;
+            animationSpeed = "Speed: " + skip + "x";
+            probeVelocity = "Velocity: " + (int) probeveloc.get(i).norm() + " m/s";
+            ;
 
             // pause/unpause entire animation
             if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
@@ -147,16 +147,19 @@ public class GUI {
                     panOffsetX = trajectory[i].getX();
                     panOffsetY = trajectory[i].getY();
                     if (!zoomInterrupted) {
-                        if (i <= phase2 || (i >=phase3&&i<phase4)) {
-                            if (scale < 8) { // quickly zoom out
+                        if (i <= phase2 || (i >= phase3 && i < phase4)) {
+                            if (scale < 1 &&(int) probeveloc.get(i).norm()>20000) scale = 1; //reset zoom when speeding away from titan
+                            else if (scale < 4)
+                                scale *= 1.0 + (Math.log(msPerFrame * 10) / 150);
+                            else if (scale < 8) { // quickly zoom out
                                 scale *= 1.0 + (Math.log(msPerFrame * 10) / 250);
                             } else if (scale > 8.1) {
                                 scale /= 1.0 + (Math.log(msPerFrame * 10) / 1000);
                             }
-                        } else if ((i > phase2 && i < phase3 )|| i>=phase4) {
-                            if (scale > 0.5) { // zoom in
-                                scale /= 1.0 + (Math.log(msPerFrame * 10) / 250);
-                            } else if (scale < 0.0005) {
+                        } else if ((i > phase2 && i < phase3) || i >= phase4) {
+                            if (scale > 0.0001) { // zoom in
+                                scale /= 1.0 + (Math.log(msPerFrame * 10) / 200);
+                            } else if (scale < 0.00005) {
                                 scale *= 1.0 + (Math.log(msPerFrame * 10) / 10000);
                             }
                         }
@@ -177,7 +180,7 @@ public class GUI {
             if (i <= 0) // if animation hasnt started yet
                 VectorTools.drawProbe(trajectory[0], probeveloc.get(0));
             else if (i > finalPos) {
-                VectorTools.drawProbe(trajectory[finalPos],probeveloc.get(probeveloc.size()-1));
+                VectorTools.drawProbe(trajectory[finalPos], probeveloc.get(probeveloc.size() - 1));
             } else {
                 VectorTools.drawProbe(trajectory[i], probeveloc.get(i));
             }
