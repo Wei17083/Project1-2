@@ -16,7 +16,7 @@ public class GUI {
     private static int skip = skipSize;
 
     public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions,
-                                 Vector3dInterface[] trajectory, int finalPos, int titanApproachPosition, List<Vector3dInterface> probeveloc) throws InterruptedException {
+                                 Vector3dInterface[] trajectory, int finalPos, int titanApproachPosition, List<Vector3dInterface> probeveloc, List<Vector3dInterface> titanVelocities) throws InterruptedException {
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
 
@@ -55,7 +55,7 @@ public class GUI {
         for (Body body : bodies) {
             body.draw();
         }
-        VectorTools.drawProbe(trajectory[0], probeveloc.get(0));
+        VectorTools.drawProbe(trajectory[0], probeveloc.get(0),null);
         StdDraw.show();
 
         // start animation loop (animation starts paused)
@@ -179,11 +179,13 @@ public class GUI {
                 body.draw();
             }
             if (i <= 0) // if animation hasnt started yet
-                VectorTools.drawProbe(trajectory[0], probeveloc.get(0));
+                VectorTools.drawProbe(trajectory[0], probeveloc.get(0),null);
             else if (i > finalPos) {
-                VectorTools.drawProbe(trajectory[finalPos], probeveloc.get(probeveloc.size() - 1));
-            } else {
-                VectorTools.drawProbe(trajectory[i], probeveloc.get(i));
+                VectorTools.drawProbe(trajectory[finalPos], probeveloc.get(probeveloc.size() - 1), null);
+            } else if (i > phase2 && probeveloc.get(i).norm()<20000){ //titan appraoch until titan exit
+                VectorTools.drawProbe(trajectory[i], probeveloc.get(i), titanVelocities.get(i));
+            }else{
+                VectorTools.drawProbe(trajectory[i], probeveloc.get(i), null);
             }
             StdDraw.text(-0.8 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, animationSpeed);
             StdDraw.text(+0.7 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, probeVelocity);

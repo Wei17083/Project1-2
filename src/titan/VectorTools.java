@@ -3,7 +3,6 @@ package titan;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class VectorTools {
@@ -95,24 +94,27 @@ public class VectorTools {
         return new Vector(v.getX(), v.getY(), v.getZ());
     }
 
-    public static void drawProbe(Vector3dInterface position, Vector3dInterface probeVector) {
+    public static void drawProbe(Vector3dInterface position, Vector3dInterface probeVector, Vector3dInterface titanVelocity) {
         double a = GUI.getScale() * 2;
         if (a > 10) {
             a = 10;
         }
-
+        if (titanVelocity!=null){
+            probeVector = probeVector.sub(titanVelocity);
+        }
         double angle = Math.toDegrees(Math.atan(probeVector.getY() / probeVector.getX()));
         //return flight goes into upper left quadrant
         if (probeVector.getX() < 0 && probeVector.getY()>0)
             angle += 90;
         //upper right quadrant do nothing
-        //else if (probeVector.getX() > 0 && probeVector.getY()>0) angle =angle;
+        else if (probeVector.getX() > 0 && probeVector.getY()>0)
+            angle -=90;
         //flight to titan goes into lower right quadrant
         else if (probeVector.getX() > 0 && probeVector.getY()<0)
             angle -= 90;
         //lower left quadrant
         else if (probeVector.getX() < 0 && probeVector.getY()<0)
-            angle -= 180;
+            angle += 90;
         StdDraw.picture(position.getX() - GUI.getZoomOffsetX(), position.getY() - GUI.getZoomOffsetY(), "spaceship.png",
                 7e9 * a, 7e9 * a, angle);
     }
