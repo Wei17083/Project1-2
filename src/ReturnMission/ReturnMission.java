@@ -49,12 +49,10 @@ public class ReturnMission {
         Vector3dInterface probeVelocity = state.getVelocityList().get(11);
 
         //calculate thrust needed
-
         double fuel = ThrustCalculator.getFuelForVelocity(PROBE_MASS, probeVelocity, bestVelocity);
-
         int timestep = (int)(state.getStateTime()/STEPSIZE)-1;
 
-        thrusts.add(new Thrust(bestVelocity.sub(probeVelocity).norm(), timestep));
+        thrusts.add(new Thrust(fuel, timestep));
 
         return state.setVelocityByID(11, bestVelocity);
     }
@@ -75,8 +73,10 @@ public class ReturnMission {
         State finalStatePreOrbit = statesArrayList.get(statesArrayList.size()-1);
         titanApproach = statesArrayList.size()-1; //record time step at which we slow down
         Vector3dInterface finalVelocityWithoutBoost = finalStatePreOrbit.getVelocityList().get(PROBE_ID);
+
             //calculate required speed at right angle to titan
-        Vector3dInterface finalVelocityAfterBoost = getRightAngleVector(finalStatePreOrbit).mul(velocityOrbit);
+        Vector3dInterface finalRelativeVelocityAfterBoost = getRightAngleVector(finalStatePreOrbit).mul(velocityOrbit);
+        Vector3dInterface finalVelocityAfterBoost = finalRelativeVelocityAfterBoost.add(finalStatePreOrbit.getVelocityList().get(TITAN_ID));
             //calculate fuel
         double fuel = ThrustCalculator.getFuelForVelocity(PROBE_MASS, finalVelocityWithoutBoost, finalVelocityAfterBoost);
         int timestep = (int)(finalStatePreOrbit.getStateTime()/STEPSIZE)-1;
@@ -85,10 +85,27 @@ public class ReturnMission {
         statesArrayList.set(statesArrayList.size()-1,finalStatePreOrbit);
 
         //orbit around titan
-        int stepsOneAndHalfOrbit = (int) (Math.round(timeOrbit()/STEPSIZE)*NUMBER_OF_ORBITS);
-        double finalOrbitTime = stepsOneAndHalfOrbit*STEPSIZE;
+        double stepSizeOrbit = 50;
+        int stepsOneAndHalfOrbit = (int) (Math.round(timeOrbit()/stepSizeOrbit)*NUMBER_OF_ORBITS);
+        double finalOrbitTime = stepsOneAndHalfOrbit*stepSizeOrbit;
+
+
         SolarSystem orbitSystem = new SolarSystem(finalStatePreOrbit);
-        addStates(statesArrayList, orbitSystem.calculateTrajectories(finalOrbitTime, STEPSIZE));
+
+        State[] orbitStates = orbitSystem.calculateTrajectories(finalOrbitTime, stepSizeOrbit);
+
+//        for (State s: orbitStates
+//             ) {
+//
+//                Vector3dInterface probePosition = s.getPositionList().get(PROBE_ID);
+//                Vector3dInterface positionTitan = s.getPositionList().get(TITAN_ID);
+//                Vector3dInterface relativePositionProbe = probePosition.sub(positionTitan);
+//                System.out.println("Position relative to titan: " + relativePositionProbe);
+//                System.out.println("Distance to Titan's surface: " + (relativePositionProbe.norm()-BodyList.getBodyList()[8].getRadius()));
+//                System.out.println("Dotproduct relative position and velocity: " + VectorTools.dotProduct(relativePositionProbe, s.getVelocityList().get(PROBE_ID)));
+//
+//        }
+        addStates(statesArrayList, orbitStates);
 
         //go back to earth
 
@@ -99,20 +116,11 @@ public class ReturnMission {
         SolarSystem returnSystem = new SolarSystem(finalStatePostOrbit);
         addStates(statesArrayList, returnSystem.calculateTrajectories(TIME_TO_EARTH, STEPSIZE));
 
-
         double totalMass = 0;
-        double massAfterThrust = PROBE_MASS;
-        for (int i = thrusts.size() -1; i >=0 ; i--) {
-            Thrust thrust = thrusts.get(i);
-            thrust.setMassAfterThrust(massAfterThrust);
-            thrust.calculateMassUsed();
-            massAfterThrust = thrust.massBeforeThrust;
+        for (Thrust thrust: thrusts
+             ) {
             totalMass += thrust.massUsed;
         }
-
-        System.out.println("Initial mass probe: " + thrusts.get(0).massBeforeThrust);
-        System.out.println("final mass probe: " + thrusts.get(thrusts.size()-1).massAfterThrust);
-        System.out.println("Mass difference: " + (thrusts.get(0).massBeforeThrust - thrusts.get(thrusts.size()-1).massAfterThrust));
         System.out.println("Total mass used: " + totalMass);
         //return statesArrayList.toArray(new State[0]);
         return  statesArrayList;
@@ -202,21 +210,9 @@ public class ReturnMission {
 class Thrust{
     double massUsed;
     double timestepUsed;
-    double velocityChange;
-    double massBeforeThrust;
-    double massAfterThrust;
 
-    Thrust(double velocityChange, double timestepUsed){
-        this.velocityChange = velocityChange;
+    Thrust(double massUsed, double timestepUsed){
+        this.massUsed = massUsed;
         this.timestepUsed = timestepUsed;
-    }
-
-    public void setMassAfterThrust(double massAfterThrust) {
-        this.massAfterThrust = massAfterThrust;
-    }
-
-    public void calculateMassUsed(){
-        massBeforeThrust = massAfterThrust*Math.exp(velocityChange/ThrustCalculator.getVe());
-        massUsed = massBeforeThrust-massAfterThrust;
     }
 }
