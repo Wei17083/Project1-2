@@ -71,13 +71,16 @@ public class testPhysics {
                 Body[] bodies = new Body[] { sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus,
                                 neptune, probe };
 
-                SolverToUse.solver = "euler";
+                SolverToUse.solver = "verlet";
                 SolarSystem system = new SolarSystem(bodies);
                 double day = 24*60*60;
                 double year = 365.25*day;
-                ProbeSimulator p = new ProbeSimulator();
+ /*               ProbeSimulator p = new ProbeSimulator();
                 p.setRelativeProbeParameters(bodies, new Vector(6371e3,0,0),new Vector(52500.0,-27000.0,0));
-                Vector3dInterface[] trajectory = p.actualTrajectory(year, day);
+                Vector3dInterface[] trajectory = p.actualTrajectory(year, 500);*/
+
+                Vector3dInterface[] trajectory=system.trajectoryByID(3,year,day/24);
+                System.out.println("x, y, z:");
                 System.out.println(trajectory[trajectory.length-1]);
 
 
