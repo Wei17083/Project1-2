@@ -66,11 +66,14 @@ public class WindSimulator {
                     double midAltitude = (baseAltitudes[i+1] + baseAltitudes[i]) / 2;
                     double speed = baseSpeeds[i+1].getX();
 
-                    if ((0 <= altitude && 60000 > altitude) || (72000 <= altitude && 130000 > altitude)) { // for 60-0, 120-72, increases when altitude increases
+                    if ((0 <= altitude && 60000 > altitude)) { // for 60-0, increases when altitude increases
                         difOfAltitude = (altitude-midAltitude) / 1000; // for each 1k altitude difference speed will +/- by 1
                     }
+                    else if ((72000 <= altitude && 130000 > altitude)) {
+                        difOfAltitude = (altitude-midAltitude) / 500; // dividing with a smaller value, because 130-72 increases very fast
+                    }
                     else { // for 60km-72km, decreases when altitude increases
-                        difOfAltitude = -((altitude - midAltitude) / 1000); // only difference is that here, there is "-"
+                        difOfAltitude = -((altitude - midAltitude) / 500); // decreases fast and only difference is that here, there is "-"
                     }
 
                     windSpeedX = r.nextGaussian() * speed * variation + speed + difOfAltitude; // bigger speed, more variation
