@@ -3,19 +3,19 @@ package TitanLanding;
 import titan.*;
 
 public class WindValues {
-    private int[] altitudes;
+    private double[] altitudes;
     private Vector3dInterface[] speeds;
 
-    public WindValues(int[] altitudes, Vector3dInterface[] speeds) {
+    public WindValues(double[] altitudes, Vector3dInterface[] speeds) {
         this.altitudes = altitudes;
         this.speeds = speeds;
     }
 
-    public int[] getAltitudes() {
+    public double[] getAltitudes() {
         return altitudes;
     }
 
-    public void setAltitudes(int[] altitudes) {
+    public void setAltitudes(double[] altitudes) {
         this.altitudes = altitudes;
     }
 

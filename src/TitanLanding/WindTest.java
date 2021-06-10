@@ -7,9 +7,8 @@ public class WindTest {
 
     public static void main(String[] args) {
 
-        WindSimulator a = new WindSimulator();
         Vector3dInterface v = new Vector(0,0,0);
-        v = a.generateSingleValue(70000);
+        v = WindSimulator.generateSingleValue(70000);
         System.out.println(v.toString());
     }
 }
