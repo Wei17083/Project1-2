@@ -1,6 +1,7 @@
 package TitanLanding;
 
 import titan.*;
+import java.util.Random;
 
 public class WindSimulator {
     // list of altitude ranges; [i-1] < altitude <= [i]
@@ -34,9 +35,22 @@ public class WindSimulator {
      * @return the strength and direction of the wind
      */
     public static Vector3dInterface generateSingleValue(int altitude){
+        Random r = new Random();
+        double answer = 0;
+        Vector v = new Vector(0,0,0);
+
+        for (int i=0; i<baseAltitudes.length-1; i++) {
+            if (baseAltitudes[i+1]<altitude && altitude<=baseAltitudes[i]) {
+                answer = r.nextGaussian()*variation+baseSpeeds[i+1].getX();
+                v.setXandReturnNewVector(answer);
+                return v;
+            }
+        }
+
         return null;
     }
 
+        // used meters, 200km-0km
     private static int[] createAltitudes() {
         int[] arr = new int[19];
         arr[0]=200000;
@@ -74,8 +88,8 @@ public class WindSimulator {
         arr[14]=v.setXandReturnNewVector(15);
         arr[15]=v.setXandReturnNewVector(10);
         arr[16]=v.setXandReturnNewVector(5);
-        arr[17]=v.setXandReturnNewVector(1);
-        arr[18]=v.setXandReturnNewVector(0.3);
+        arr[17]=v.setXandReturnNewVector(1);    //100m
+        arr[18]=v.setXandReturnNewVector(0.3);  // 0m
 
         return arr;
     }
