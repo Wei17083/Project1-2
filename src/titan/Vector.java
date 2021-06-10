@@ -29,6 +29,11 @@ public class Vector implements Vector3dInterface {
         this.x = x;
     }
 
+    public Vector setXandReturnNewVector(double x) {
+        this.x = x;
+        return new Vector(this.x, this.y, this.z);
+    }
+
     @Override
     public double getY() {
         return y;
