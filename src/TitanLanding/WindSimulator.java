@@ -4,6 +4,8 @@ import titan.*;
 
 import java.util.Random;
 
+import static java.lang.Math.abs;
+
 public class WindSimulator {
     // list of altitude ranges; [i-1] < altitude <= [i]
     private final static double[] baseAltitudes = createAltitudes();
@@ -44,23 +46,43 @@ public class WindSimulator {
      * @param altitude the altitude of the wind
      * @return the strength and direction of the wind
      */
-    public static Vector3dInterface generateSingleValue(double altitude) {
+    public static Vector3dInterface generateSingleValue(double altitude) { // add 4 different cases; 60-0,72-60,130-72, over 130
         Random r = new Random();
         double windSpeedX = 0;
         Vector v = new Vector(0, 0, 0);
 
-        for (int i = 0; i < baseAltitudes.length; i++) {
-            if (altitude > baseAltitudes[i]) {
-                windSpeedX = r.nextGaussian() * baseSpeeds[i].getX() * variation + baseSpeeds[i].getX();
-                v.setX(windSpeedX);
-                return v;
+        // case 1, over 130km, fluctuates at 100
+        if ((130000 <= altitude && 200000 > altitude)) {
+            windSpeedX = r.nextGaussian() * 100 * variation + 100; // bigger speed, more variation
+            v.setX(windSpeedX);
+            return v;
+            }
+        // other cases
+        else if ((0<=altitude && 130000>altitude)){
+            double difOfAltitude = 0;
+
+            for (int i = 0; i < baseAltitudes.length-1; i++) { //starts from 200km to 0km
+                if (altitude > baseAltitudes[i+1] && altitude <= baseAltitudes[i]) {
+                    double midAltitude = (baseAltitudes[i+1] + baseAltitudes[i]) / 2;
+                    double speed = baseSpeeds[i+1].getX();
+
+                    if ((0 <= altitude && 60000 > altitude) || (72000 <= altitude && 130000 > altitude)) { // for 60-0, 120-72, increases when altitude increases
+                        difOfAltitude = (altitude-midAltitude) / 1000; // for each 1k altitude difference speed will +/- by 1
+                    }
+                    else { // for 60km-72km, decreases when altitude increases
+                        difOfAltitude = -((altitude - midAltitude) / 1000); // only difference is that here, there is "-"
+                    }
+
+                    windSpeedX = r.nextGaussian() * speed * variation + speed + difOfAltitude; // bigger speed, more variation
+                    v.setX(windSpeedX);
+                    return v;
+                }
             }
         }
-
         return null;
     }
 
-    // used meters, 300km-0km
+    // used meters, 200km-0km
     private static double[] createAltitudes() {
         double[] arr = new double[19];
         arr[0] = 200000;
@@ -97,7 +119,7 @@ public class WindSimulator {
         arr[13] = v.setXandReturnNewVector(20);
         arr[14] = v.setXandReturnNewVector(15);
         arr[15] = v.setXandReturnNewVector(10);
-        arr[16] = v.setXandReturnNewVector(5);
+        arr[16] = v.setXandReturnNewVector(5);    //10km
         arr[17] = v.setXandReturnNewVector(1);    //100m
         arr[18] = v.setXandReturnNewVector(0.3);  // 0m
 
