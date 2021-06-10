@@ -39,9 +39,19 @@ public class WindSimulator {
         double answer = 0;
         Vector v = new Vector(0,0,0);
 
-        for (int i=0; i<baseAltitudes.length-1; i++) {
+        for (int i=0; i<baseAltitudes.length-1; i++) { // starts from 200km to 0km
             if (baseAltitudes[i+1]<altitude && altitude<=baseAltitudes[i]) {
-                answer = r.nextGaussian()*variation+baseSpeeds[i+1].getX();
+                double midRange = (baseAltitudes[i+1]+baseAltitudes[i])/2;
+                double midOfSpeed = 0;
+
+                if (altitude<midRange) {
+                  midOfSpeed = (baseSpeeds[i+1].getX()+baseSpeeds[i+2].getX())/2;
+                }
+                else if (i!=0) {
+                    midOfSpeed = (baseSpeeds[i].getX()+baseSpeeds[i-1].getX())/2;
+                }
+
+                answer = r.nextGaussian()*variation+midOfSpeed;
                 v.setXandReturnNewVector(answer);
                 return v;
             }
