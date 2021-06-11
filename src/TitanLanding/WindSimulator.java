@@ -7,15 +7,13 @@ import java.util.Random;
 import static java.lang.Math.abs;
 
 public class WindSimulator {
-    // list of altitude ranges; [i-1] < altitude <= [i]
+    // list of altitude ranges (decreasing); altitude > baseAltitudes[i]
     private final static double[] baseAltitudes = createAltitudes();
 
     // list of corresponding wind speed vectors
-
     private final static Vector3dInterface[] baseSpeeds = createSpeeds();
 
     // determines how big the range of distribution is; range = x +- (x*variation)
-
     private final static double variation = 0.1;
 
     /**
@@ -41,51 +39,29 @@ public class WindSimulator {
     }
 
     /**
-     * generates the random wind speed for a certain altitude
+     * generates the random wind speed for a certain altitude up to 300km
      *
-     * @param altitude the altitude of the wind
-     * @return the strength and direction of the wind
+     * @param altitude the altitude of the wind in m (300 000 - 0)
+     * @return the strength and direction of the wind (as a Vector in m/s)
      */
-    public static Vector3dInterface generateSingleValue(double altitude) { // add 4 different cases; 60-0,72-60,130-72, over 130
+    public static Vector3dInterface generateSingleValue(double altitude) {
         Random r = new Random();
         double windSpeedX = 0;
         Vector v = new Vector(0, 0, 0);
 
-        // case 1, over 130km, fluctuates at 100
-        if ((130000 <= altitude && 200000 > altitude)) {
-            windSpeedX = r.nextGaussian() * 100 * variation + 100; // bigger speed, more variation
-            v.setX(windSpeedX);
-            return v;
-            }
-        // other cases
-        else if ((0<=altitude && 130000>altitude)){
-            double difOfAltitude = 0;
-
-            for (int i = 0; i < baseAltitudes.length-1; i++) { //starts from 200km to 0km
-                if (altitude > baseAltitudes[i+1] && altitude <= baseAltitudes[i]) {
-                    double midAltitude = (baseAltitudes[i+1] + baseAltitudes[i]) / 2;
-                    double speed = baseSpeeds[i+1].getX();
-
-                    if ((0 <= altitude && 60000 > altitude)) { // for 60-0, increases when altitude increases
-                        difOfAltitude = (altitude-midAltitude) / 1000; // for each 1k altitude difference speed will +/- by 1
-                    }
-                    else if ((72000 <= altitude && 130000 > altitude)) {
-                        difOfAltitude = (altitude-midAltitude) / 500; // dividing with a smaller value, because 130-72 increases very fast
-                    }
-                    else { // for 60km-72km, decreases when altitude increases
-                        difOfAltitude = -((altitude - midAltitude) / 500); // decreases fast and only difference is that here, there is "-"
-                    }
-
-                    windSpeedX = r.nextGaussian() * speed * variation + speed + difOfAltitude; // bigger speed, more variation
-                    v.setX(windSpeedX);
-                    return v;
-                }
+        for (int i = 0; i < baseAltitudes.length; i++) {
+            if(altitude>=baseAltitudes[i]) { //look for altitude range
+                windSpeedX = r.nextGaussian() * baseSpeeds[i].getX() * variation + baseSpeeds[i].getX();
+                v.setX(windSpeedX);
+                //TODO: add weak vertical winds
+                return v;
             }
         }
+
         return null;
     }
 
-    // used meters, 200km-0km
+    // used meters, 300km-0km
     private static double[] createAltitudes() {
         double[] arr = new double[19];
         arr[0] = 200000;
@@ -106,8 +82,8 @@ public class WindSimulator {
     private static Vector3dInterface[] createSpeeds() {
         Vector3dInterface[] arr = new Vector3dInterface[19];
         Vector v = new Vector(0, 0, 0);
-        arr[0] = v.setXandReturnNewVector(-200); //direction missing
-        arr[1] = v.setXandReturnNewVector(-1); //value and direction missing
+        arr[0] = v.setXandReturnNewVector(200);
+        arr[1] = v.setXandReturnNewVector(150);
         arr[2] = v.setXandReturnNewVector(100);
         arr[3] = v.setXandReturnNewVector(100);
         arr[4] = v.setXandReturnNewVector(100);
