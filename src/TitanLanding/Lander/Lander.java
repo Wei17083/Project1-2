@@ -11,4 +11,11 @@ public class Lander {
         this.state = ogState;
     }
 
+    public double getMASS() {
+        return MASS;
+    }
+
+    public double getRADIUS() {
+        return RADIUS;
+    }
 }
