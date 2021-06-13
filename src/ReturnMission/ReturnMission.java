@@ -15,7 +15,7 @@ public class ReturnMission {
     private static int titanApproach=0;
     public final double GRAV_CONSTANT = 6.674E-11;
     final double STEPSIZE = 500;
-    final double TIME_TO_TITAN = 300*24*60*60;
+    final double TIME_TO_TITAN = 1.5*300*24*60*60;
     final double TIME_TO_EARTH = TIME_TO_TITAN;
     final double PROBE_MASS = BodyList.getBodyList()[11].getMass();
     final double velocityOrbit;
@@ -123,14 +123,18 @@ public class ReturnMission {
         double massAfterThrust = PROBE_MASS;
         ThrustCalculator.setVE(60000);
         for (int i = thrusts.size() -1; i >=0 ; i--) {
-            if(i == 0) ThrustCalculator.setVE(4000);
             Thrust thrust = thrusts.get(i);
+            if(i == 0) {
+                ThrustCalculator.setVE(4000);
+                thrust.setVelocityChange(11190);
+            }
+
             thrust.setMassAfterThrust(massAfterThrust);
             thrust.calculateMassUsed();
             massAfterThrust = thrust.massBeforeThrust;
             totalMass += thrust.massUsed;
-//            System.out.println("TimeStep this thrust: " + thrust.getTimestepUsed());
-//            System.out.println("velocityChange this thrust: " + thrust.getVelocityChange());
+            System.out.println("TimeStep this thrust: " + thrust.getTimestepUsed());
+            System.out.println("velocityChange this thrust: " + thrust.getVelocityChange());
             totalVelocityChange += thrust.getVelocityChange();
         }
 //        System.out.println("Total velocityChange: " + totalVelocityChange);
@@ -250,5 +254,9 @@ class Thrust{
 
     public double getTimestepUsed() {
         return timestepUsed;
+    }
+
+    public void setVelocityChange(double velocityChange) {
+        this.velocityChange = velocityChange;
     }
 }
