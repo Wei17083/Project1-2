@@ -7,7 +7,7 @@ public class Lander {
     private final double MASS = 6000; // 6000 kg
     private final double forceMainThruster = 16000; //16000 N
     private final double forceSideThrusters = 440; // 440N
-    public LanderState state;
+    private LanderState state;
 
     public Lander(LanderState ogState){
         this.state = ogState;
@@ -27,5 +27,9 @@ public class Lander {
 
     public double getForceSideThrusters() {
         return forceSideThrusters;
+    }
+
+    public LanderState getState(){
+        return state;
     }
 }
