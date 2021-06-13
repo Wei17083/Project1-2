@@ -5,6 +5,7 @@ import titan.*;
 public class Lander {
     private final double RADIUS = 4; // 4 meters
     private final double MASS = 6000; // 6000 kg
+    private final double MOMENT = 38400;
     private final double forceMainThruster = 16000; //16000 N
     private final double forceSideThrusters = 440; // 440N
     public LanderState state;
@@ -27,5 +28,9 @@ public class Lander {
 
     public double getForceSideThrusters() {
         return forceSideThrusters;
+    }
+
+    public double getMOMENT() {
+        return MOMENT;
     }
 }
