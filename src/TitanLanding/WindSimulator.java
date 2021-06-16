@@ -63,7 +63,7 @@ public class WindSimulator {
 
     // used meters, 300km-0km
     private static double[] createAltitudes() {
-        double[] arr = new double[19];
+        double[] arr = new double[20];
         arr[0] = 200000;
         arr[1] = 150000;
         for (int i = 2; i < 9; i++) {
@@ -74,8 +74,9 @@ public class WindSimulator {
         for (int i = 11; i < 17; i++) {
             arr[i] = 150000 - (10000 * (i - 2));
         }
-        arr[17] = 100;
-        arr[18] = 0;
+        arr[17] = 6000;
+        arr[18] = 700;
+        arr[19] = 0;
         return arr;
     }
 
@@ -98,10 +99,10 @@ public class WindSimulator {
         arr[13] = v.setXandReturnNewVector(20);
         arr[14] = v.setXandReturnNewVector(15);
         arr[15] = v.setXandReturnNewVector(10);
-        arr[16] = v.setXandReturnNewVector(5);    //10km
-        arr[17] = v.setXandReturnNewVector(1);    //100m
-        arr[18] = v.setXandReturnNewVector(0.3);  // 0m
-
+        arr[16] = v.setXandReturnNewVector(5);    //until 10km
+        arr[17] = v.setXandReturnNewVector(1);    //until 6km
+        arr[18] = v.setXandReturnNewVector(-1);   //until 700m it blows the other way
+        arr[19] = v.setXandReturnNewVector(0.3);  // 0m
         return arr;
     }
 }
