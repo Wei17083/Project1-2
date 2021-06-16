@@ -108,6 +108,19 @@ public class GUI {
                 panOffsetY = trajectory[i].getY();
             }
 
+            if(StdDraw.isKeyPressed(KeyEvent.VK_Z)){ // animation slows
+                if(skipSize>=1){
+                    skipSize=skipSize-1;
+                    animationSpeed="Speed:"+skipSize+"x";
+                }
+            }
+
+            if(StdDraw.isKeyPressed(KeyEvent.VK_X)){ // animation accelerates
+                if(skipSize<100){
+                    skipSize=skipSize+1;
+                    animationSpeed="Speed:"+skipSize+"x";
+                }
+            }
             // changes are scaling based on log of msPerFrame*10 so that the zoom effect.
             // stays similar even when framerate changes.
             // msPerFrame has to be more than 0.1 for this to work, else log(1) = 0
