@@ -22,6 +22,10 @@ public class Lander {
         return RADIUS;
     }
 
+    public double getMOMENT() {
+        return MOMENT;
+    }
+
     public double getForceMainThruster() {
         return forceMainThruster;
     }
@@ -32,5 +36,9 @@ public class Lander {
 
     public LanderState getState(){
         return this.state;
+    }
+
+    public void setState(LanderState state) {
+        this.state = state;
     }
 }
