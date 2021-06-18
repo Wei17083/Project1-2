@@ -62,7 +62,7 @@ public class WindSimulator {
     }
 
     // used meters, 300km-0km
-    private static double[] createAltitudes() {
+    public static double[] createAltitudes() {
         double[] arr = new double[19];
         arr[0] = 200000;
         arr[1] = 150000;
@@ -79,7 +79,7 @@ public class WindSimulator {
         return arr;
     }
 
-    private static Vector3dInterface[] createSpeeds() {
+    public static Vector3dInterface[] createSpeeds() {
         Vector3dInterface[] arr = new Vector3dInterface[19];
         Vector v = new Vector(0, 0, 0);
         arr[0] = v.setXandReturnNewVector(200);
