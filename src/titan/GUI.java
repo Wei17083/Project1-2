@@ -15,6 +15,30 @@ public class GUI {
     private static int skipSize = 50;
     private static int skip = skipSize;
 
+    public static void main(String[] args) {
+        visualiseLander();
+    }
+
+    // animation for landing on titan
+    public static void visualiseLander(){
+        double AU = SolarSystem.getAU();
+        StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
+        StdDraw.setCanvasSize(750, 750);
+        scale = 1;
+        StdDraw.setXscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
+        StdDraw.setYscale(-scale * SolarSystem.getAU(), scale * SolarSystem.getAU());
+        StdDraw.text(-0.8 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, "yo test est");
+
+        StdDraw.clear(StdDraw.BLACK);
+/*        StdDraw.co;*/
+        StdDraw.text(-0.8 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, "yo test est");
+        StdDraw.show();
+        StdDraw.text(-0.8 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, "yo test est");
+
+
+    }
+
+    // animation for solar system
     public static void visualise(Body[] bodies, List<List<Vector3dInterface>> allPositions,
                                  Vector3dInterface[] trajectory, int finalPos, int titanApproachPosition, List<Vector3dInterface> probeveloc, List<Vector3dInterface> titanVelocities) throws InterruptedException {
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
