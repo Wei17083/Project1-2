@@ -8,7 +8,7 @@ public class LanderSolver {
 
     private Vector3dInterface totalForce;
     private double torque;
-    private Lander lander;
+    private final Lander lander;
 
     public LanderSolver(Vector3dInterface totalForce, double torque, Lander lander) {
         this.totalForce = totalForce;

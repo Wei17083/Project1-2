@@ -48,5 +48,9 @@ public class LanderForceCalculator {
         return controller.calculateThrust(lander.getState());
     }
 
+    public static Vector3dInterface getThrustDirection(double angle) {
+        return VectorTools.getUnitVector(new Vector(Math.sin(angle), Math.cos(angle), 0) );
+    }
+
 
 }
