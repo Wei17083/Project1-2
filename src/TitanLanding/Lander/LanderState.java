@@ -48,4 +48,12 @@ public class LanderState {
     public void setAngularVelocity(double angularVelocity) {
         this.angularVelocity = angularVelocity;
     }
+
+    @Override
+    public String toString(){
+        return "Position: " + position.toString() +"\n" +
+                "Velocity: " + velocity.toString() + "\n" +
+                "Angle: " + angle + "\n" +
+                "AngularVelocity: " + angularVelocity + "\n";
+    }
 }
