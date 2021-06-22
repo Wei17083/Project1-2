@@ -79,6 +79,7 @@ public class OpenLoopController {
             updateState(thrustVectorStop);
             rotations.add(0.0);
             mainThrusts.add(thrusterVector);
+
         }
         else if(landerX > destX){
 
@@ -98,6 +99,7 @@ public class OpenLoopController {
             rotations.add(angle);
             mainThrusts.add(thrusterVector2);
             updateState(thrusterVector2);
+
             //2
             double acc2 = (-1)*(2*distance)/(timeStep*timeStep);
             double stopForceNorm = acc2 * this.lander.getMASS();
@@ -137,6 +139,8 @@ public class OpenLoopController {
 
     private void goDownKeepingSameVelocity(){
         Vector3dInterface verticalAxis = new Vector(0, -1, 0);
+
+        int count = 1;
         while(lander.getState().getPosition().getY() > 0){
             Vector3dInterface resultant = getResultantForce();
             Vector3dInterface nullForce = new Vector(-1* resultant.getX(), -1* resultant.getY(), 0);
@@ -147,6 +151,7 @@ public class OpenLoopController {
             rotations.add(angle);
             mainThrusts.add(nullForce);
             updateState(nullForce);
+
         }
     }
 
