@@ -8,7 +8,7 @@ public class Lander {
     private final double MOMENT = 38400;
     private final double forceMainThruster = 16000; //16000 N
     private final double forceSideThrusters = 440; // 440N
-    public LanderState state;
+    private LanderState state;
 
     public Lander(LanderState ogState){
         this.state = ogState;
@@ -22,6 +22,10 @@ public class Lander {
         return RADIUS;
     }
 
+    public double getMOMENT() {
+        return MOMENT;
+    }
+
     public double getForceMainThruster() {
         return forceMainThruster;
     }
@@ -30,7 +34,11 @@ public class Lander {
         return forceSideThrusters;
     }
 
-    public double getMOMENT() {
-        return MOMENT;
+    public LanderState getState(){
+        return this.state;
+    }
+
+    public void setState(LanderState state) {
+        this.state = state;
     }
 }
