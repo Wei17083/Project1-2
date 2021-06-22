@@ -4,8 +4,8 @@ import TitanLanding.Lander.Lander;
 import TitanLanding.Lander.LanderState;
 import TitanLanding.LandingPhysics.LanderForceCalculator;
 import TitanLanding.LandingPhysics.LanderSolver;
-import TitanLanding.WindSimulation.*;
-import TitanLanding.WindSimulator;
+import TitanLanding.WindSimulation.WindSimulator;
+
 import titan.Vector;
 import titan.Vector3dInterface;
 
@@ -17,7 +17,7 @@ public class ClosedLoopController {
     private final LanderState initialState;
     double gravConst = -1.352;
     private boolean reachable;
-    private final boolean WIND = true;
+
 
     private double thrustRequired;
     private double crossPoint;
@@ -26,6 +26,8 @@ public class ClosedLoopController {
         this.initialState = initialState;
     }
 
+    private final boolean WIND = true;
+
     public static void main(String[] args) {
         Vector3dInterface initialPosition = new Vector(-500, 300000, 0);
         Vector3dInterface initialSpeed = new Vector(0, -100, 0);
@@ -33,19 +35,21 @@ public class ClosedLoopController {
         Lander lander = new Lander(initialState);
 
         ClosedLoopController controller = new ClosedLoopController(initialState);
-        double stepSize = 1;
+        double stepSize = 0.3;
         ArrayList<LanderState> descentStates = controller.getLanderDescent(stepSize);
+
         for (LanderState state: descentStates) {
             System.out.println(state.toString());
         }
-//        System.out.println("Time for landing: " + descentStates.size());
+        System.out.println("Time for landing: " + descentStates.size());
 
-        double count = 0;
+        // Print to copy to excel
+//        double count = 0;
 //        for (LanderState state: descentStates) {
-//            if(count % 100 == 0 || count == descentStates.size()-1) {
-//                System.out.println(state.getPosition().getX() +"," +state.getPosition().getY() + "," + state.getAngle() + ","+ state.getAngularVelocity());
+//            if(count % 10 == 0 || count == descentStates.size()-1) {
+//                System.out.println(state.getPosition().getX() +"," +state.getPosition().getY() + "," + state.getVelocity().getX() +"," + state.getVelocity().getY() + "," + state.getAngle() + ","+ state.getAngularVelocity());
 //            }
-//
+//            count++;
 //        }
     }
 
@@ -69,6 +73,7 @@ public class ClosedLoopController {
 //            System.out.println("point 2");
             LanderSolver solver = new LanderSolver(totalForce, torque, lander);
             descentStates.add(solver.stateStep(landerState, stepSize));
+            landerState = descentStates.get(descentStates.size()-1);
 
 //            System.out.println();
 //            System.out.println();
@@ -86,7 +91,7 @@ public class ClosedLoopController {
         double Yvelocity = landerState.getVelocity().getY();
     //    if(Yvelocity < 0) verticalAccelerationNeeded = Math.min(-landerState.getVelocity().getY()/2, verticalAccelerationNeeded);
 //        if(Yvelocity > 0) return new Vector(0,0,0);
-        thrustRequired = (verticalAccelerationNeeded-gravConst)*lander.getMASS()/Math.cos(landerState.getAngle())*0.98;
+        thrustRequired = (verticalAccelerationNeeded-gravConst)*lander.getMASS()/Math.cos(landerState.getAngle())*0.99;
 
         thrustRequired = Math.max(0, thrustRequired);
 //        System.out.println("Acceleration needed: " + verticalAccelerationNeeded);
@@ -119,7 +124,7 @@ public class ClosedLoopController {
     private double getExpectedPositionNextCrossPoint(LanderState landerState, double stepSize) {
         double crossPoint = getCrossPoint(landerState);
         double originalX = landerState.getPosition().getX();
-        while (landerState.getPosition().getY() > crossPoint + 1) {
+        while (landerState.getPosition().getY() > crossPoint + 0) {
             LanderSolver solver = new LanderSolver(calculateMainThrust(landerState, stepSize, true).add(LanderForceCalculator.calculateGravityForce(lander)), 0, lander );
             landerState = solver.stateStep(landerState, stepSize);
 //            System.out.println("while loop getExpectedPositionNextCrossPoint");
@@ -131,9 +136,9 @@ public class ClosedLoopController {
     }
 
     public double getCrossPoint(LanderState landerState) {
-        double distanceToCrossPoint = Math.max(landerState.getPosition().getY()/10, 5);
+        double distanceToCrossPoint = Math.max(landerState.getPosition().getY()/10, 3);
 
-        crossPoint = landerState.getPosition().getY() - distanceToCrossPoint;
+        crossPoint = Math.max(0,crossPoint = landerState.getPosition().getY() - distanceToCrossPoint);
         return crossPoint;
     }
 
