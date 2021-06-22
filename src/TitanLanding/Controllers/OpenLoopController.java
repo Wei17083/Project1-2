@@ -26,7 +26,7 @@ public class OpenLoopController {
         this.timeStep = 1;
         this.lander = lander;
         this.landingPadPos = landingPadPos;
-        WindValues w = WindSimulator.getBaseValues();
+        WindValues w = TitanLanding.WindSimulation.WindSimulator.getBaseValues();
         this.windSpeeds = w.getSpeeds();
         this.altitudes = w.getAltitudes();
         this.mainThrusts = new ArrayList<>();
