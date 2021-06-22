@@ -1,5 +1,6 @@
 package TitanLanding.Controllers;
 
+import TitanLanding.Lander.Lander;
 import TitanLanding.Lander.LanderState;
 import titan.Vector3dInterface;
 

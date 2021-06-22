@@ -1,5 +1,6 @@
 package TitanLanding.WindSimulation;
 
+import TitanLanding.WindSimulator;
 import titan.Vector;
 import titan.Vector3dInterface;
 
