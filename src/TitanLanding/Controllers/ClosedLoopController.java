@@ -4,7 +4,8 @@ import TitanLanding.Lander.Lander;
 import TitanLanding.Lander.LanderState;
 import TitanLanding.LandingPhysics.LanderForceCalculator;
 import TitanLanding.LandingPhysics.LanderSolver;
-import TitanLanding.WindSimulation.WindSimulator;
+import TitanLanding.WindSimulation.*;
+import TitanLanding.WindSimulator;
 import titan.Vector;
 import titan.Vector3dInterface;
 
@@ -16,7 +17,7 @@ public class ClosedLoopController {
     private final LanderState initialState;
     double gravConst = -1.352;
     private boolean reachable;
-    private final boolean WIND = false;
+    private final boolean WIND = true;
 
     private double thrustRequired;
     private double crossPoint;

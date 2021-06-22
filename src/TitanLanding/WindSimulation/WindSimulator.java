@@ -1,5 +1,6 @@
 package TitanLanding;
 
+import TitanLanding.WindSimulation.WindValues;
 import titan.*;
 
 import java.util.Random;
