@@ -4,6 +4,10 @@ import java.awt.event.KeyEvent;
 import java.util.*;
 
 import System.SolarSystem;
+import TitanLanding.Lander.Lander;
+import TitanLanding.Lander.LanderState;
+
+import static titan.StdDraw.filledSquare;
 
 public class GUI {
     // has to be more than 100 000
@@ -15,13 +19,19 @@ public class GUI {
     private static int skipSize = 50;
     private static int skip = skipSize;
 
-    public static void main(String[] args) {
-        visualiseLander();
-    }
+    private static Vector3dInterface currentPosOfLander;
+    private static double angOfLander;
+    private static LanderState lander;
+
+    // public static void main(String[] args) {visualiseLander(); }
 
     // animation for landing on titan
-    public static void visualiseLander(){
-        double AU = SolarSystem.getAU();
+    public static void createLander(Vector3dInterface positionOfShip){
+        Vector3dInterface v = new Vector(0,0,0);
+        lander = new LanderState(positionOfShip, v, 0, 0);
+
+
+       /* double AU = SolarSystem.getAU();
         StdDraw.enableDoubleBuffering(); // things are only drawn on next show()
         StdDraw.setCanvasSize(750, 750);
         scale = 1;
@@ -30,11 +40,11 @@ public class GUI {
         StdDraw.text(-0.8 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, "yo test est");
 
         StdDraw.clear(StdDraw.BLACK);
-/*        StdDraw.co;*/
+       StdDraw.co;
         StdDraw.text(-0.8 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, "yo test est");
         StdDraw.show();
         StdDraw.text(-0.8 * scale * SolarSystem.AU, +0.9 * scale * SolarSystem.AU, "yo test est");
-
+        */
 
     }
 
@@ -84,9 +94,17 @@ public class GUI {
 
         // start animation loop (animation starts paused)
         for (int i = 0; i < allPositions.get(0).size(); i += skip) {
+            int a=0;
             //slow down around titan
             if (i > titanApproachPosition * 0.99 - skipSize && i < titanApproachPosition * 1.02) {
-                skip = 1;
+                if (a==0) {
+                    createLander(bodies[11].getPosition());
+                    skip = 1;
+                    a++;
+                } else {
+                    filledSquare(lander.getPosition().getX(),lander.getPosition().getY(),//?);
+
+                }
             } else if (i >= finalPos - 3 * skipSize) {
                 skip = 1; // slow down for last frames
                 if (i > finalPos - 1)
