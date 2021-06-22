@@ -75,11 +75,8 @@ public class OpenLoopController {
             double angleStop = getAngle(thrusterVector2, verticalAxis);
 
             rotations.add(angleStop);
-            mainThrusts.add(thrustVectorStop);
+            mainThrusts.add(getClone(thrustVectorStop));
             updateState(thrustVectorStop);
-            rotations.add(0.0);
-            mainThrusts.add(thrusterVector);
-
         }
         else if(landerX > destX){
 
@@ -97,7 +94,7 @@ public class OpenLoopController {
             double angle = getAngle(thrusterVector2, verticalAxis);
 
             rotations.add(angle);
-            mainThrusts.add(thrusterVector2);
+            mainThrusts.add(getClone(thrusterVector2));
             updateState(thrusterVector2);
 
             //2
@@ -112,10 +109,8 @@ public class OpenLoopController {
             double angleStop = -1*getAngle(thrusterVector2, verticalAxis);
 
             rotations.add(angleStop);
-            mainThrusts.add(thrustVectorStop);
+            mainThrusts.add(getClone(thrustVectorStop));
             updateState(thrustVectorStop);
-            rotations.add(0.0);
-            mainThrusts.add(thrusterVector);
 
         }
     }
@@ -132,15 +127,13 @@ public class OpenLoopController {
             if(getWindDirection())
                 angle = -1*angle;
             rotations.add(angle);
-            mainThrusts.add(nullifyForce);
+            mainThrusts.add(getClone(nullifyForce));
             updateState(nullifyForce);
         }
     }
 
     private void goDownKeepingSameVelocity(){
         Vector3dInterface verticalAxis = new Vector(0, -1, 0);
-
-        int count = 1;
         while(lander.getState().getPosition().getY() > 0){
             Vector3dInterface resultant = getResultantForce();
             Vector3dInterface nullForce = new Vector(-1* resultant.getX(), -1* resultant.getY(), 0);
@@ -149,9 +142,8 @@ public class OpenLoopController {
                 angle = -1*angle;
 
             rotations.add(angle);
-            mainThrusts.add(nullForce);
+            mainThrusts.add(getClone(nullForce));
             updateState(nullForce);
-
         }
     }
 
@@ -165,7 +157,6 @@ public class OpenLoopController {
     private Vector3dInterface getWindForce(){
         return LanderForceCalculator.calculateWindForce(this.lander, getWindAtCurrentPosition());
     }
-
 
     private Vector3dInterface getWindAtCurrentPosition(){
         double landerAltitude = lander.getState().getPosition().getY();
@@ -242,5 +233,9 @@ public class OpenLoopController {
         for(Vector3dInterface thrust : controller.mainThrusts) {
             controller.updateState(thrust);
         }
+    }
+
+    private Vector3dInterface getClone(Vector3dInterface force){
+        return new Vector(force.getX(), force.getY(), force.getZ());
     }
 }
