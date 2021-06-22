@@ -102,7 +102,7 @@ public class Vector implements Vector3dInterface {
 
     @Override
     public String toString() {
-        return "( " + x + ", " + y + ", " + z + ")";
+        return "(" + x + "," + y + "," + z + ")";
     }
 
 }

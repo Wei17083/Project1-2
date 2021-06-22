@@ -40,6 +40,8 @@ public class ThrustCalculator {
         return(ts);
     }
 
+
+
     public static double getVe() {
         return Ve;
     }
