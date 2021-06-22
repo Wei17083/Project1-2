@@ -36,6 +36,7 @@ public class LanderSolver {
     private double calculateNewAngle(double angle, double angularVelocity, double stepSize) {
         return angle + angularVelocity*stepSize;
     }
+
     private double calculateNewAngularVelocity(double angularVelocity, double stepSize) {
         return angularVelocity + stepSize*torque/lander.getMOMENT();
     }

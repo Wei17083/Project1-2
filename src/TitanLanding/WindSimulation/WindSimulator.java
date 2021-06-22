@@ -77,12 +77,12 @@ public class WindSimulator {
         }
         arr[17] = 6000;
         arr[18] = 700;
-        arr[19] = 0;
+        arr[19] = -5; //accuracy reasons
         return arr;
     }
 
     private static Vector3dInterface[] createSpeeds() {
-        Vector3dInterface[] arr = new Vector3dInterface[19];
+        Vector3dInterface[] arr = new Vector3dInterface[20];
         Vector v = new Vector(0, 0, 0);
         arr[0] = v.setXandReturnNewVector(200);
         arr[1] = v.setXandReturnNewVector(150);
