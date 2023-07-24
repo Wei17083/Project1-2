@@ -1,5 +1,5 @@
 # Project 1-2
-## Group 19: Adrian Dammers, Collin Makuza, Elena Perego, Enders Turkers, Mathias Verschueren, Eric Weindorfer (i6235783)
+## Group 19: Adrian Dammers, Collin Makuza, Elena Perego, Enders Turkers, Mathias Verschueren, Eric Weindorfer
 
 * Our Animation runs off the data stored in .csv files
 
